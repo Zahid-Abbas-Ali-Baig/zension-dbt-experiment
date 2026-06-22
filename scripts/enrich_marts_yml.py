@@ -289,11 +289,15 @@ def enrich_column(
     if not col.get("description"):
         col["description"] = COLUMN_HINTS.get(name, "")
     pks = pk if isinstance(pk, list) else [pk]
+    is_composite_pk = isinstance(pk, list)
     tests: list = list(col.get("data_tests", col.get("tests", [])))
     if name in pks:
-        for t in ("unique", "not_null"):
-            if t not in tests and not any(isinstance(x, dict) and t in x for x in tests):
-                tests.append(t)
+        if not is_composite_pk:
+            for t in ("unique", "not_null"):
+                if t not in tests and not any(isinstance(x, dict) and t in x for x in tests):
+                    tests.append(t)
+        elif "not_null" not in tests:
+            tests.append("not_null")
     if name == "full_date" and fks == {} and "granularity" not in col:
         col["granularity"] = "day"
     if name in fks:

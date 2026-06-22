@@ -22,6 +22,7 @@ select
     subscriptions.is_churned,
     subscriptions.is_upgraded,
     subscriptions.has_valid_subscription_pricing,
+    subscriptions.has_valid_order,
     subscriptions.has_valid_customer,
     subscriptions.monthly_subscription_amount_sar as monthly_recurring_amount_sar,
     subscriptions.subscription_term_months
