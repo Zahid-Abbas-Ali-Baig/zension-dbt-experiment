@@ -1,0 +1,1631 @@
+version: 2
+models:
+- name: fct_orders
+  description: 'Order-level sales fact. One row per commercial order with GMV, partner/program
+    context, and fulfillment flags. KPI linkage: order_count, gmv_sar, preorder_order_share,
+    avg_days_payment_to_delivery, median_order_to_delivery_days.'
+  columns:
+  - name: order_id
+    data_type: character
+    description: Natural key for the commercial order.
+    data_tests:
+    - unique
+    - not_null
+  - name: order_date
+    data_type: date
+    description: ''
+  - name: customer_id
+    data_type: text
+    description: FK to dim_customers.
+    data_tests:
+    - relationships:
+        to: ref('dim_customers')
+        field: customer_id
+  - name: program_id
+    data_type: text
+    description: FK to dim_programs.
+    data_tests:
+    - relationships:
+        to: ref('dim_programs')
+        field: program_id
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+    data_tests:
+    - relationships:
+        to: ref('dim_channel_partners')
+        field: channel_partner_id
+  - name: order_number
+    data_type: text
+    description: ''
+  - name: order_status
+    data_type: text
+    description: ''
+  - name: order_type
+    data_type: text
+    description: ''
+  - name: sales_channel
+    data_type: text
+    description: ''
+  - name: delivered_at
+    data_type: date
+    description: ''
+  - name: is_preorder
+    data_type: boolean
+    description: ''
+  - name: is_voided
+    data_type: boolean
+    description: ''
+  - name: is_gmv_eligible
+    data_type: boolean
+    description: True when order is not voided/cancelled/rejected/expired.
+  - name: has_valid_customer
+    data_type: boolean
+    description: ''
+  - name: has_valid_program
+    data_type: boolean
+    description: ''
+  - name: gmv_amount_sar
+    data_type: numeric
+    description: Gross merchandise value in SAR (tax inclusive).
+  - name: total_discount_amount
+    data_type: numeric
+    description: ''
+  - name: total_amount_incl_vat
+    data_type: numeric
+    description: ''
+- name: fct_order_items
+  description: 'Order line-item fact with resolved device SKU attributes for product
+    mix analysis. KPI linkage: order_item_count.'
+  columns:
+  - name: order_item_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: order_id
+    data_type: text
+    description: Natural key for the commercial order.
+    data_tests:
+    - relationships:
+        to: ref('fct_orders')
+        field: order_id
+  - name: customer_id
+    data_type: text
+    description: FK to dim_customers.
+    data_tests:
+    - relationships:
+        to: ref('dim_customers')
+        field: customer_id
+  - name: program_id
+    data_type: text
+    description: FK to dim_programs.
+    data_tests:
+    - relationships:
+        to: ref('dim_programs')
+        field: program_id
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+    data_tests:
+    - relationships:
+        to: ref('dim_channel_partners')
+        field: channel_partner_id
+  - name: master_sku_id
+    data_type: text
+    description: ''
+    data_tests:
+    - relationships:
+        to: ref('dim_device_skus')
+        field: master_sku_id
+  - name: zaam_sku_id
+    data_type: text
+    description: ''
+  - name: device_sku_key
+    data_type: text
+    description: ''
+  - name: order_item_date
+    data_type: date
+    description: ''
+  - name: quantity
+    data_type: numeric
+    description: ''
+  - name: unit_price_vat_inclusive
+    data_type: numeric
+    description: ''
+  - name: total_price_vat_inclusive
+    data_type: numeric
+    description: ''
+  - name: device_purchase_price_vat_inclusive
+    data_type: numeric
+    description: ''
+  - name: discount_amount
+    data_type: numeric
+    description: ''
+  - name: product_type
+    data_type: text
+    description: ''
+  - name: order_line_item_type
+    data_type: text
+    description: ''
+  - name: brand
+    data_type: text
+    description: ''
+  - name: model
+    data_type: text
+    description: ''
+  - name: memory
+    data_type: text
+    description: ''
+  - name: color
+    data_type: text
+    description: ''
+  - name: has_valid_order
+    data_type: boolean
+    description: ''
+  - name: has_valid_resolved_sku
+    data_type: boolean
+    description: ''
+- name: dim_customers
+  description: 'Customer dimension with Nafath/mobile verification, CEP employer link,
+    and device counts. KPI linkage: verified_customer_count, avg_devices_per_customer.'
+  columns:
+  - name: customer_id
+    data_type: character
+    description: FK to dim_customers.
+    data_tests:
+    - unique
+    - not_null
+  - name: customer_name
+    data_type: text
+    description: ''
+  - name: created_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: updated_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: national_id
+    data_type: text
+    description: ''
+  - name: is_nafath_verified
+    data_type: boolean
+    description: ''
+  - name: is_mobile_verified
+    data_type: boolean
+    description: ''
+  - name: is_fully_verified
+    data_type: boolean
+    description: Customer passed Nafath and mobile OTP verification.
+  - name: corporate_company_id
+    data_type: text
+    description: ''
+    data_tests:
+    - relationships:
+        to: ref('dim_corporate_companies')
+        field: corporate_company_id
+  - name: corporate_company_name
+    data_type: text
+    description: ''
+  - name: zoho_customer_id
+    data_type: text
+    description: ''
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+  - name: program_id
+    data_type: text
+    description: FK to dim_programs.
+  - name: customer_uid
+    data_type: text
+    description: ''
+  - name: phone_number
+    data_type: text
+    description: ''
+  - name: mobile_number
+    data_type: text
+    description: ''
+  - name: personal_email_address
+    data_type: text
+    description: ''
+  - name: customer_status
+    data_type: text
+    description: ''
+  - name: customer_verification_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: nafath_verified_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: allowed_email_domains
+    data_type: text
+    description: ''
+  - name: company_status
+    data_type: text
+    description: ''
+  - name: company_type
+    data_type: text
+    description: ''
+  - name: has_valid_corporate_company
+    data_type: boolean
+    description: ''
+  - name: device_count
+    data_type: bigint
+    description: ''
+  - name: first_device_purchase_date
+    data_type: date
+    description: ''
+  - name: latest_device_delivery_date
+    data_type: date
+    description: ''
+  - name: customer_verification_segment
+    data_type: text
+    description: ''
+- name: dim_channel_partners
+  description: 'Channel partner dimension (Jarir, ZAAM, Axiom, etc.) with API operations
+    rollups. KPI linkage: supporting.'
+  columns:
+  - name: channel_partner_id
+    data_type: character
+    description: FK to dim_channel_partners.
+    data_tests:
+    - unique
+    - not_null
+  - name: partner_name
+    data_type: text
+    description: ''
+  - name: created_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: updated_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: legal_name
+    data_type: text
+    description: ''
+  - name: partner_type
+    data_type: text
+    description: ''
+  - name: vat_trn_number
+    data_type: text
+    description: ''
+  - name: channel_partner_uid
+    data_type: text
+    description: ''
+  - name: partner_status
+    data_type: text
+    description: ''
+  - name: country_id
+    data_type: text
+    description: ''
+  - name: api_call_count
+    data_type: bigint
+    description: ''
+  - name: api_failure_count
+    data_type: bigint
+    description: ''
+  - name: partner_api_failure_rate
+    data_type: numeric
+    description: ''
+  - name: partner_operations_segment
+    data_type: text
+    description: ''
+- name: dim_programs
+  description: 'Commercial program dimension with subscription limits and utilization.
+    KPI linkage: program_subscription_utilization_pct, programs_over_limit_count.'
+  columns:
+  - name: program_id
+    data_type: character
+    description: FK to dim_programs.
+    data_tests:
+    - unique
+    - not_null
+  - name: program_name
+    data_type: text
+    description: ''
+  - name: created_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: updated_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: program_status
+    data_type: text
+    description: ''
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+    data_tests:
+    - relationships:
+        to: ref('dim_channel_partners')
+        field: channel_partner_id
+  - name: program_uid
+    data_type: text
+    description: ''
+  - name: subscription_limit
+    data_type: integer
+    description: ''
+  - name: payment_methods_limit
+    data_type: integer
+    description: ''
+  - name: program_start_date
+    data_type: character
+    description: ''
+  - name: program_end_date
+    data_type: character
+    description: ''
+  - name: is_fnf_program
+    data_type: boolean
+    description: ''
+  - name: partner_name
+    data_type: text
+    description: ''
+  - name: partner_type
+    data_type: text
+    description: ''
+  - name: active_subscription_count
+    data_type: bigint
+    description: ''
+  - name: waiting_for_delivery_subscription_count
+    data_type: bigint
+    description: ''
+  - name: utilization_subscription_count
+    data_type: bigint
+    description: ''
+  - name: program_subscription_utilization_pct
+    data_type: numeric
+    description: ''
+  - name: is_over_subscription_limit
+    data_type: boolean
+    description: Program active subs exceed subscription_limit.
+  - name: is_disabled_program
+    data_type: boolean
+    description: ''
+  - name: has_valid_channel_partner
+    data_type: boolean
+    description: ''
+  - name: program_limit_segment
+    data_type: text
+    description: ''
+- name: dim_corporate_companies
+  description: 'CEP employer dimension with verified customer rollups. KPI linkage:
+    verified_customer_count.'
+  columns:
+  - name: corporate_company_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: company_name
+    data_type: text
+    description: ''
+  - name: created_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: updated_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: allowed_email_domains
+    data_type: text
+    description: ''
+  - name: company_status
+    data_type: text
+    description: ''
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+  - name: company_type
+    data_type: text
+    description: ''
+  - name: verified_customer_count
+    data_type: bigint
+    description: ''
+  - name: customer_count
+    data_type: bigint
+    description: ''
+  - name: cep_verification_segment
+    data_type: text
+    description: ''
+- name: dim_device_skus
+  description: 'Master device SKU dimension (brand, model, memory, color). KPI linkage:
+    order_item_count.'
+  columns:
+  - name: master_sku_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: master_sku_name
+    data_type: text
+    description: ''
+  - name: created_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: updated_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: brand
+    data_type: text
+    description: ''
+  - name: model
+    data_type: text
+    description: ''
+  - name: memory
+    data_type: text
+    description: ''
+  - name: color
+    data_type: text
+    description: ''
+  - name: category
+    data_type: text
+    description: ''
+  - name: sku_master_uid
+    data_type: text
+    description: ''
+  - name: device_sku_key
+    data_type: text
+    description: ''
+  - name: order_item_count
+    data_type: bigint
+    description: ''
+  - name: units_ordered
+    data_type: numeric
+    description: ''
+  - name: order_item_revenue_sar
+    data_type: numeric
+    description: ''
+  - name: sku_sales_segment
+    data_type: text
+    description: ''
+- name: dim_dates
+  description: 'Calendar dimension generated via dbt_utils.date_spine for time-based
+    reporting. KPI linkage: supporting.'
+  time_spine:
+    standard_granularity_column: full_date
+  columns:
+  - name: date_key
+    data_type: timestamp without time zone
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: full_date
+    data_type: timestamp without time zone
+    description: Base date column for MetricFlow daily time spine.
+    granularity: day
+  - name: year_number
+    data_type: integer
+    description: ''
+  - name: quarter_number
+    data_type: integer
+    description: ''
+  - name: month_number
+    data_type: integer
+    description: ''
+  - name: day_of_month
+    data_type: integer
+    description: ''
+  - name: day_of_week
+    data_type: integer
+    description: ''
+  - name: year_month
+    data_type: text
+    description: ''
+  - name: year_quarter
+    data_type: text
+    description: ''
+  - name: is_weekend
+    data_type: boolean
+    description: ''
+- name: fct_subscriptions
+  description: 'Subscription lifecycle fact with MRR eligibility and term months.
+    KPI linkage: subscription_count, active_subscription_count, mrr_sar, avg_subscription_term_months,
+    upgrade_rate.'
+  columns:
+  - name: subscription_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: customer_id
+    data_type: text
+    description: FK to dim_customers.
+    data_tests:
+    - relationships:
+        to: ref('dim_customers')
+        field: customer_id
+  - name: order_id
+    data_type: text
+    description: Natural key for the commercial order.
+    data_tests:
+    - relationships:
+        to: ref('fct_orders')
+        field: order_id
+  - name: order_item_id
+    data_type: text
+    description: ''
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+    data_tests:
+    - relationships:
+        to: ref('dim_channel_partners')
+        field: channel_partner_id
+  - name: program_id
+    data_type: text
+    description: FK to dim_programs.
+    data_tests:
+    - relationships:
+        to: ref('dim_programs')
+        field: program_id
+  - name: subscription_pricing_id
+    data_type: text
+    description: ''
+    data_tests:
+    - relationships:
+        to: ref('dim_subscription_pricing')
+        field: subscription_pricing_id
+  - name: subscription_date
+    data_type: date
+    description: ''
+  - name: subscription_status
+    data_type: text
+    description: ''
+  - name: service_started_at
+    data_type: date
+    description: ''
+  - name: service_ended_at
+    data_type: date
+    description: ''
+  - name: subscription_close_date
+    data_type: date
+    description: ''
+  - name: is_active_subscription
+    data_type: boolean
+    description: ''
+  - name: is_mrr_eligible
+    data_type: boolean
+    description: Active subscription with service start and valid pricing.
+  - name: is_churned
+    data_type: boolean
+    description: ''
+  - name: is_upgraded
+    data_type: boolean
+    description: ''
+  - name: has_valid_subscription_pricing
+    data_type: boolean
+    description: ''
+  - name: has_valid_customer
+    data_type: boolean
+    description: ''
+  - name: monthly_recurring_amount_sar
+    data_type: numeric
+    description: Monthly subscription amount in SAR from pricing dimension.
+  - name: subscription_term_months
+    data_type: integer
+    description: ''
+- name: fct_subscription_monthly_snapshots
+  description: 'Month-end subscription status snapshots for churn and cohort analysis.
+    KPI linkage: churn_rate.'
+  columns:
+  - name: subscription_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+    - relationships:
+        to: ref('fct_subscriptions')
+        field: subscription_id
+  - name: snapshot_month
+    data_type: date
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+    data_tests:
+    - relationships:
+        to: ref('dim_channel_partners')
+        field: channel_partner_id
+  - name: program_id
+    data_type: text
+    description: FK to dim_programs.
+    data_tests:
+    - relationships:
+        to: ref('dim_programs')
+        field: program_id
+  - name: subscription_status
+    data_type: text
+    description: ''
+  - name: service_started_at
+    data_type: date
+    description: ''
+  - name: service_ended_at
+    data_type: date
+    description: ''
+  - name: subscription_close_date
+    data_type: date
+    description: ''
+  - name: monthly_subscription_amount_sar
+    data_type: numeric
+    description: ''
+  - name: is_mrr_eligible
+    data_type: boolean
+    description: Active subscription with service start and valid pricing.
+  - name: is_active
+    data_type: boolean
+    description: ''
+  - name: is_churned
+    data_type: boolean
+    description: ''
+  - name: is_upgraded
+    data_type: boolean
+    description: ''
+  data_tests:
+  - dbt_utils.unique_combination_of_columns:
+      combination_of_columns:
+      - subscription_id
+      - snapshot_month
+- name: dim_subscription_pricing
+  description: 'Subscription price list dimension with MRR rollups. KPI linkage: mrr_sar.'
+  columns:
+  - name: subscription_pricing_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: subscription_pricing_name
+    data_type: text
+    description: ''
+  - name: created_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: updated_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: monthly_subscription_amount_sar
+    data_type: numeric
+    description: ''
+  - name: zaam_sku_id
+    data_type: text
+    description: ''
+  - name: subscription_duration_id
+    data_type: text
+    description: ''
+  - name: subscription_pricing_status
+    data_type: text
+    description: ''
+  - name: subscription_pricing_start_date
+    data_type: date
+    description: ''
+  - name: subscription_pricing_end_date
+    data_type: date
+    description: ''
+  - name: mrr_eligible_subscription_count
+    data_type: bigint
+    description: ''
+  - name: total_mrr_sar
+    data_type: numeric
+    description: ''
+  - name: pricing_utilization_segment
+    data_type: text
+    description: ''
+- name: dim_subscription_durations
+  description: 'Subscription term option dimension in months. KPI linkage: avg_subscription_term_months.'
+  columns:
+  - name: subscription_duration_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: subscription_duration_name
+    data_type: text
+    description: ''
+  - name: created_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: updated_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: duration_months
+    data_type: integer
+    description: ''
+  - name: duration_status
+    data_type: text
+    description: ''
+  - name: program_id
+    data_type: text
+    description: FK to dim_programs.
+    data_tests:
+    - relationships:
+        to: ref('dim_programs')
+        field: program_id
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+    data_tests:
+    - relationships:
+        to: ref('dim_channel_partners')
+        field: channel_partner_id
+  - name: duration_start_date
+    data_type: date
+    description: ''
+  - name: duration_end_date
+    data_type: date
+    description: ''
+  - name: subscription_count
+    data_type: bigint
+    description: ''
+  - name: mrr_eligible_subscription_count
+    data_type: bigint
+    description: ''
+  - name: avg_subscription_term_months
+    data_type: numeric
+    description: ''
+  - name: duration_utilization_segment
+    data_type: text
+    description: ''
+- name: fct_payments
+  description: 'CRM payment fact unified with PSP reconciliation status. KPI linkage:
+    collected_revenue_sar, avg_days_payment_to_delivery.'
+  columns:
+  - name: payment_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: order_id
+    data_type: text
+    description: Natural key for the commercial order.
+    data_tests:
+    - relationships:
+        to: ref('fct_orders')
+        field: order_id
+  - name: invoice_id
+    data_type: text
+    description: ''
+    data_tests:
+    - relationships:
+        to: ref('fct_invoices')
+        field: invoice_id
+  - name: customer_id
+    data_type: text
+    description: FK to dim_customers.
+    data_tests:
+    - relationships:
+        to: ref('dim_customers')
+        field: customer_id
+  - name: subscription_id
+    data_type: text
+    description: ''
+    data_tests:
+    - relationships:
+        to: ref('fct_subscriptions')
+        field: subscription_id
+  - name: program_id
+    data_type: text
+    description: FK to dim_programs.
+    data_tests:
+    - relationships:
+        to: ref('dim_programs')
+        field: program_id
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+    data_tests:
+    - relationships:
+        to: ref('dim_channel_partners')
+        field: channel_partner_id
+  - name: psp_payment_id
+    data_type: text
+    description: ''
+  - name: payment_date
+    data_type: date
+    description: ''
+  - name: payment_timestamp
+    data_type: timestamp with time zone
+    description: ''
+  - name: payment_status
+    data_type: text
+    description: ''
+  - name: payment_type
+    data_type: text
+    description: ''
+  - name: refund_status
+    data_type: text
+    description: ''
+  - name: is_collected
+    data_type: boolean
+    description: ''
+  - name: is_failed
+    data_type: boolean
+    description: ''
+  - name: is_refunded
+    data_type: boolean
+    description: ''
+  - name: has_valid_order
+    data_type: boolean
+    description: ''
+  - name: has_valid_customer
+    data_type: boolean
+    description: ''
+  - name: is_psp_reconciled
+    data_type: boolean
+    description: ''
+  - name: psp_reconciliation_status
+    data_type: text
+    description: ''
+  - name: collected_amount_sar
+    data_type: numeric
+    description: Tax-inclusive collected payment amount in SAR.
+  - name: refund_amount_sar
+    data_type: numeric
+    description: Refund amount in SAR.
+  - name: psp_payment_amount
+    data_type: numeric
+    description: ''
+- name: fct_payment_attempts
+  description: 'Payment attempt / card capture fact for failure and retry analysis.
+    KPI linkage: payment_failure_rate, customers_with_outstanding_payments.'
+  columns:
+  - name: payment_history_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: payment_id
+    data_type: text
+    description: ''
+    data_tests:
+    - relationships:
+        to: ref('fct_payments')
+        field: payment_id
+  - name: payment_method_id
+    data_type: text
+    description: ''
+  - name: order_id
+    data_type: text
+    description: Natural key for the commercial order.
+    data_tests:
+    - relationships:
+        to: ref('fct_orders')
+        field: order_id
+  - name: customer_id
+    data_type: text
+    description: FK to dim_customers.
+    data_tests:
+    - relationships:
+        to: ref('dim_customers')
+        field: customer_id
+  - name: program_id
+    data_type: text
+    description: FK to dim_programs.
+    data_tests:
+    - relationships:
+        to: ref('dim_programs')
+        field: program_id
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+    data_tests:
+    - relationships:
+        to: ref('dim_channel_partners')
+        field: channel_partner_id
+  - name: attempt_date
+    data_type: date
+    description: ''
+  - name: payment_attempt_status
+    data_type: text
+    description: ''
+  - name: error_code
+    data_type: text
+    description: ''
+  - name: error_reason
+    data_type: text
+    description: ''
+  - name: card_last_four
+    data_type: text
+    description: ''
+  - name: expiry_month
+    data_type: integer
+    description: ''
+  - name: expiry_year
+    data_type: integer
+    description: ''
+  - name: action
+    data_type: text
+    description: ''
+  - name: funding_type
+    data_type: text
+    description: ''
+  - name: is_successful_attempt
+    data_type: boolean
+    description: ''
+  - name: is_failed_attempt
+    data_type: boolean
+    description: ''
+  - name: has_valid_payment
+    data_type: boolean
+    description: ''
+  - name: psp_reconciliation_status
+    data_type: text
+    description: ''
+  - name: psp_is_retry_queue
+    data_type: boolean
+    description: ''
+  - name: is_retry_indicator
+    data_type: integer
+    description: ''
+- name: fct_psp_transactions
+  description: 'Payment Service transaction fact with retry-queue segmentation. KPI
+    linkage: customers_on_retry_count.'
+  columns:
+  - name: transaction_id
+    data_type: uuid
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: subscriber_id
+    data_type: text
+    description: ''
+  - name: payment_intent_id
+    data_type: text
+    description: ''
+  - name: transaction_date
+    data_type: date
+    description: ''
+  - name: process_status
+    data_type: text
+    description: ''
+  - name: request_status
+    data_type: text
+    description: ''
+  - name: transaction_type
+    data_type: text
+    description: ''
+  - name: is_scheduled
+    data_type: boolean
+    description: ''
+  - name: is_successful
+    data_type: boolean
+    description: ''
+  - name: is_retry_queue
+    data_type: boolean
+    description: ''
+  - name: psp_payment_id
+    data_type: character varying
+    description: ''
+  - name: payment_amount
+    data_type: numeric
+    description: ''
+  - name: psp_subscription_id
+    data_type: character varying
+    description: ''
+  - name: transaction_outcome_segment
+    data_type: text
+    description: ''
+- name: dim_payment_methods
+  description: 'Conformed CRM and PSP payment methods with expiry health. KPI linkage:
+    expired_payment_method_count.'
+  columns:
+  - name: payment_method_key
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: payment_method_source
+    data_type: text
+    description: ''
+  - name: payment_method_id
+    data_type: character
+    description: ''
+  - name: psp_payment_method_id
+    data_type: text
+    description: ''
+  - name: customer_id
+    data_type: text
+    description: FK to dim_customers.
+  - name: subscriber_id
+    data_type: text
+    description: ''
+  - name: payment_method_name
+    data_type: text
+    description: ''
+  - name: payment_method_status
+    data_type: text
+    description: ''
+  - name: payment_method_type
+    data_type: text
+    description: ''
+  - name: card_last_four
+    data_type: text
+    description: ''
+  - name: expiry_year
+    data_type: integer
+    description: ''
+  - name: expiry_month
+    data_type: integer
+    description: ''
+  - name: is_default
+    data_type: boolean
+    description: ''
+  - name: card_brand
+    data_type: text
+    description: ''
+  - name: funding_type
+    data_type: text
+    description: ''
+  - name: is_expired
+    data_type: boolean
+    description: ''
+  - name: created_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: updated_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: payment_method_health_segment
+    data_type: text
+    description: ''
+- name: fct_invoices
+  description: 'Zoho-synced invoice fact (CRM-sourced). KPI linkage: invoiced_revenue_sar,
+    customers_with_outstanding_payments.'
+  columns:
+  - name: invoice_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: customer_id
+    data_type: text
+    description: FK to dim_customers.
+    data_tests:
+    - relationships:
+        to: ref('dim_customers')
+        field: customer_id
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+    data_tests:
+    - relationships:
+        to: ref('dim_channel_partners')
+        field: channel_partner_id
+  - name: program_id
+    data_type: text
+    description: FK to dim_programs.
+    data_tests:
+    - relationships:
+        to: ref('dim_programs')
+        field: program_id
+  - name: billing_account_id
+    data_type: text
+    description: ''
+  - name: invoice_date
+    data_type: date
+    description: ''
+  - name: invoice_due_date
+    data_type: date
+    description: ''
+  - name: settlement_date
+    data_type: date
+    description: ''
+  - name: invoice_status
+    data_type: text
+    description: ''
+  - name: zoho_invoice_number
+    data_type: text
+    description: ''
+  - name: is_paid
+    data_type: boolean
+    description: ''
+  - name: has_valid_customer
+    data_type: boolean
+    description: ''
+  - name: invoice_amount_sar
+    data_type: numeric
+    description: Total invoice amount in SAR (CRM/Zoho-synced).
+  - name: vat_amount_sar
+    data_type: numeric
+    description: ''
+  - name: amount_ex_vat_sar
+    data_type: numeric
+    description: ''
+- name: fct_invoice_line_items
+  description: 'Invoice line-item fact linked to subscriptions. KPI linkage: supporting.'
+  columns:
+  - name: invoice_line_item_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: invoice_id
+    data_type: text
+    description: ''
+    data_tests:
+    - relationships:
+        to: ref('fct_invoices')
+        field: invoice_id
+  - name: subscription_id
+    data_type: text
+    description: ''
+    data_tests:
+    - relationships:
+        to: ref('fct_subscriptions')
+        field: subscription_id
+  - name: order_item_id
+    data_type: text
+    description: ''
+  - name: customer_id
+    data_type: text
+    description: FK to dim_customers.
+    data_tests:
+    - relationships:
+        to: ref('dim_customers')
+        field: customer_id
+  - name: invoice_date
+    data_type: date
+    description: ''
+  - name: invoice_status
+    data_type: text
+    description: ''
+  - name: is_paid
+    data_type: boolean
+    description: ''
+  - name: has_valid_invoice
+    data_type: boolean
+    description: ''
+  - name: has_valid_subscription
+    data_type: boolean
+    description: ''
+  - name: quantity
+    data_type: numeric
+    description: ''
+  - name: product_type
+    data_type: text
+    description: ''
+  - name: line_amount_sar
+    data_type: numeric
+    description: ''
+  - name: line_amount_ex_vat_sar
+    data_type: numeric
+    description: ''
+  - name: vat_amount_sar
+    data_type: numeric
+    description: ''
+  - name: line_amount_incl_vat_sar
+    data_type: numeric
+    description: ''
+- name: fct_credit_notes
+  description: 'Credit note fact synced from Zoho via CRM. KPI linkage: credit_note_count.'
+  columns:
+  - name: credit_note_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: invoice_id
+    data_type: text
+    description: ''
+    data_tests:
+    - relationships:
+        to: ref('fct_invoices')
+        field: invoice_id
+  - name: customer_id
+    data_type: text
+    description: FK to dim_customers.
+    data_tests:
+    - relationships:
+        to: ref('dim_customers')
+        field: customer_id
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+    data_tests:
+    - relationships:
+        to: ref('dim_channel_partners')
+        field: channel_partner_id
+  - name: program_id
+    data_type: text
+    description: FK to dim_programs.
+    data_tests:
+    - relationships:
+        to: ref('dim_programs')
+        field: program_id
+  - name: credit_note_date
+    data_type: date
+    description: ''
+  - name: zoho_credit_note_id
+    data_type: text
+    description: ''
+  - name: zoho_status
+    data_type: text
+    description: ''
+  - name: credit_note_zoho_url
+    data_type: text
+    description: ''
+  - name: has_valid_invoice
+    data_type: boolean
+    description: ''
+  - name: related_invoice_amount_sar
+    data_type: numeric
+    description: ''
+  - name: credit_value_sar
+    data_type: numeric
+    description: ''
+- name: fct_finance_reconciliation_monthly
+  description: 'Monthly finance reconciliation of collected vs invoiced revenue. KPI
+    linkage: finance_variance_sar, collected_revenue_sar, invoiced_revenue_sar.'
+  columns:
+  - name: reconciliation_month
+    data_type: date
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: collected_revenue_sar
+    data_type: numeric
+    description: ''
+  - name: invoiced_revenue_sar
+    data_type: numeric
+    description: ''
+  - name: finance_variance_sar
+    data_type: numeric
+    description: ''
+  - name: collected_payment_count
+    data_type: bigint
+    description: ''
+  - name: paid_invoice_count
+    data_type: bigint
+    description: ''
+  - name: unpaid_invoice_amount_sar
+    data_type: numeric
+    description: ''
+  - name: crm_refund_amount_sar
+    data_type: numeric
+    description: ''
+  - name: credit_note_count
+    data_type: bigint
+    description: ''
+- name: fct_devices
+  description: 'Physical device asset fact for fulfillment and per-customer device
+    analytics. KPI linkage: avg_devices_per_customer.'
+  columns:
+  - name: device_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: order_item_id
+    data_type: text
+    description: ''
+    data_tests:
+    - relationships:
+        to: ref('fct_order_items')
+        field: order_item_id
+  - name: order_id
+    data_type: text
+    description: Natural key for the commercial order.
+    data_tests:
+    - relationships:
+        to: ref('fct_orders')
+        field: order_id
+  - name: customer_id
+    data_type: text
+    description: FK to dim_customers.
+    data_tests:
+    - relationships:
+        to: ref('dim_customers')
+        field: customer_id
+  - name: subscription_id
+    data_type: character
+    description: ''
+    data_tests:
+    - relationships:
+        to: ref('fct_subscriptions')
+        field: subscription_id
+  - name: program_id
+    data_type: text
+    description: FK to dim_programs.
+    data_tests:
+    - relationships:
+        to: ref('dim_programs')
+        field: program_id
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+    data_tests:
+    - relationships:
+        to: ref('dim_channel_partners')
+        field: channel_partner_id
+  - name: zaam_sku_id
+    data_type: text
+    description: ''
+  - name: purchase_date
+    data_type: date
+    description: ''
+  - name: delivery_date
+    data_type: date
+    description: ''
+  - name: brand
+    data_type: text
+    description: ''
+  - name: model
+    data_type: text
+    description: ''
+  - name: device_memory
+    data_type: text
+    description: ''
+  - name: color
+    data_type: text
+    description: ''
+  - name: device_type
+    data_type: text
+    description: ''
+  - name: device_condition
+    data_type: text
+    description: ''
+  - name: has_valid_order_item
+    data_type: boolean
+    description: ''
+  - name: has_valid_subscription
+    data_type: boolean
+    description: ''
+  - name: is_active_subscription
+    data_type: boolean
+    description: ''
+  - name: purchase_price
+    data_type: numeric
+    description: ''
+- name: fct_device_journey_events
+  description: 'Sparse device journey milestone events supplementing delivery SLA.
+    KPI linkage: supporting.'
+  columns:
+  - name: device_journey_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: device_id
+    data_type: text
+    description: ''
+    data_tests:
+    - relationships:
+        to: ref('fct_devices')
+        field: device_id
+  - name: order_item_id
+    data_type: text
+    description: ''
+  - name: order_id
+    data_type: text
+    description: Natural key for the commercial order.
+    data_tests:
+    - relationships:
+        to: ref('fct_orders')
+        field: order_id
+  - name: customer_id
+    data_type: text
+    description: FK to dim_customers.
+    data_tests:
+    - relationships:
+        to: ref('dim_customers')
+        field: customer_id
+  - name: subscription_id
+    data_type: character
+    description: ''
+    data_tests:
+    - relationships:
+        to: ref('fct_subscriptions')
+        field: subscription_id
+  - name: program_id
+    data_type: text
+    description: FK to dim_programs.
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+  - name: movement_date
+    data_type: date
+    description: ''
+  - name: device_movement
+    data_type: text
+    description: ''
+  - name: event_recorded_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: has_valid_device
+    data_type: boolean
+    description: ''
+- name: fct_partner_api_events
+  description: 'Partner webhook / API proxy event fact. KPI linkage: partner_api_failure_rate.'
+  columns:
+  - name: api_log_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+    data_tests:
+    - relationships:
+        to: ref('dim_channel_partners')
+        field: channel_partner_id
+  - name: event_date
+    data_type: date
+    description: ''
+  - name: api_status
+    data_type: text
+    description: ''
+  - name: api_source
+    data_type: text
+    description: ''
+  - name: parent_type
+    data_type: text
+    description: ''
+  - name: parent_id
+    data_type: text
+    description: ''
+  - name: error_details
+    data_type: text
+    description: ''
+  - name: is_failure
+    data_type: boolean
+    description: API call returned failure status.
+  - name: has_partner_attribution
+    data_type: boolean
+    description: ''
+  - name: failure_count
+    data_type: integer
+    description: ''
+- name: bridge_cp_skus
+  description: 'Bridge table mapping channel-partner SKUs to Zaam and master SKUs.
+    KPI linkage: supporting.'
+  columns:
+  - name: cp_sku_id
+    data_type: character
+    description: ''
+    data_tests:
+    - unique
+    - not_null
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+    data_tests:
+    - relationships:
+        to: ref('dim_channel_partners')
+        field: channel_partner_id
+  - name: zaam_sku_id
+    data_type: text
+    description: ''
+  - name: master_sku_id
+    data_type: text
+    description: ''
+    data_tests:
+    - relationships:
+        to: ref('dim_device_skus')
+        field: master_sku_id
+  - name: cp_sku_name
+    data_type: text
+    description: ''
+  - name: cp_item_code
+    data_type: text
+    description: ''
+  - name: cp_sku_uid
+    data_type: text
+    description: ''
+  - name: category
+    data_type: text
+    description: ''
+  - name: purchase_price
+    data_type: numeric
+    description: ''
+  - name: created_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: updated_at
+    data_type: timestamp with time zone
+    description: ''
+  - name: partner_name
+    data_type: text
+    description: ''
+  - name: partner_type
+    data_type: text
+    description: ''
+  - name: brand
+    data_type: text
+    description: ''
+  - name: model
+    data_type: text
+    description: ''
+  - name: memory
+    data_type: text
+    description: ''
+  - name: color
+    data_type: text
+    description: ''
+  - name: device_sku_key
+    data_type: text
+    description: ''
+  - name: master_sku_name
+    data_type: text
+    description: ''
+  - name: has_valid_channel_partner
+    data_type: boolean
+    description: ''
+  - name: has_valid_zaam_sku
+    data_type: boolean
+    description: ''
+- name: fct_refunds
+  description: 'Unified CRM and PSP refund events with deduplication key. KPI linkage:
+    refund_amount_sar.'
+  columns:
+  - name: refund_id
+    data_type: text
+    description: Surrogate primary key (refund dedup hash).
+    data_tests:
+    - unique
+    - not_null
+  - name: refund_event_id
+    data_type: text
+    description: Source-system refund event identifier.
+  - name: refund_source
+    data_type: text
+    description: 'Origin system: crm or psp.'
+  - name: refund_amount_sar
+    data_type: numeric
+    description: Refund amount in SAR.
+  - name: refund_date
+    data_type: date
+    description: Refund event date.
+  - name: refunded_at
+    data_type: timestamp with time zone
+    description: Refund timestamp.
+  - name: customer_id
+    data_type: text
+    description: FK to dim_customers.
+    data_tests:
+    - relationships:
+        to: ref('dim_customers')
+        field: customer_id
+  - name: order_id
+    data_type: text
+    description: FK to fct_orders.
+    data_tests:
+    - relationships:
+        to: ref('fct_orders')
+        field: order_id
+  - name: channel_partner_id
+    data_type: text
+    description: FK to dim_channel_partners.
+    data_tests:
+    - relationships:
+        to: ref('dim_channel_partners')
+        field: channel_partner_id
+  - name: program_id
+    data_type: text
+    description: FK to dim_programs.
+    data_tests:
+    - relationships:
+        to: ref('dim_programs')
+        field: program_id
+  - name: partner_name
+    data_type: text
+    description: Partner name at time of refund.

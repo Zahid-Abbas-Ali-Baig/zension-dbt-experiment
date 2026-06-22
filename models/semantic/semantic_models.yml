@@ -1,0 +1,1197 @@
+version: 2
+
+semantic_models:
+  - name: orders
+    description: Commercial orders with GMV and fulfillment attributes.
+    model: ref('fct_orders')
+    defaults:
+      agg_time_dimension: order_date
+    entities:
+      - name: order
+        type: primary
+        expr: order_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+      - name: program
+        type: foreign
+        expr: program_id
+      - name: channel_partner
+        type: foreign
+        expr: channel_partner_id
+    dimensions:
+      - name: order_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: order_status
+        type: categorical
+      - name: order_type
+        type: categorical
+      - name: sales_channel
+        type: categorical
+      - name: is_preorder
+        type: categorical
+      - name: is_voided
+        type: categorical
+      - name: is_gmv_eligible
+        type: categorical
+      - name: has_valid_customer
+        type: categorical
+      - name: delivered_at
+        type: time
+        type_params:
+          time_granularity: day
+    measures:
+      - name: orders_total_count
+        description: Count of all orders.
+        agg: sum
+        expr: "1"
+      - name: gmv_eligible_order_count
+        description: Count of GMV-eligible orders.
+        agg: sum
+        expr: "case when is_gmv_eligible then 1 else 0 end"
+      - name: preorder_order_count
+        description: Count of pre-order type orders.
+        agg: sum
+        expr: "case when is_preorder then 1 else 0 end"
+      - name: gmv_amount_total
+        description: Sum of GMV in SAR.
+        agg: sum
+        expr: gmv_amount_sar
+      - name: days_order_to_delivery
+        description: Days from order date to delivery date.
+        agg: average
+        expr: "extract(day from (delivered_at::timestamp - order_date::timestamp))"
+      - name: median_days_order_to_delivery
+        description: Median days from order date to delivery.
+        agg: median
+        expr: "extract(day from (delivered_at::timestamp - order_date::timestamp))"
+
+  - name: order_items
+    description: Order line items with device SKU attributes.
+    model: ref('fct_order_items')
+    defaults:
+      agg_time_dimension: order_item_date
+    entities:
+      - name: order_item
+        type: primary
+        expr: order_item_id
+      - name: order
+        type: foreign
+        expr: order_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+      - name: program
+        type: foreign
+        expr: program_id
+      - name: channel_partner
+        type: foreign
+        expr: channel_partner_id
+      - name: device_sku
+        type: foreign
+        expr: master_sku_id
+    dimensions:
+      - name: order_item_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: brand
+        type: categorical
+      - name: model
+        type: categorical
+      - name: memory
+        type: categorical
+      - name: color
+        type: categorical
+      - name: product_type
+        type: categorical
+    measures:
+      - name: order_items_total_count
+        description: Count of order line items.
+        agg: sum
+        expr: "1"
+
+  - name: customers
+    description: Customer accounts with identity verification status.
+    model: ref('dim_customers')
+    defaults:
+      agg_time_dimension: created_at
+    entities:
+      - name: customer
+        type: primary
+        expr: customer_id
+      - name: corporate_company
+        type: foreign
+        expr: corporate_company_id
+      - name: channel_partner
+        type: foreign
+        expr: channel_partner_id
+      - name: program
+        type: foreign
+        expr: program_id
+    dimensions:
+      - name: created_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: is_nafath_verified
+        type: categorical
+      - name: is_mobile_verified
+        type: categorical
+      - name: is_fully_verified
+        type: categorical
+      - name: customer_verification_segment
+        type: categorical
+      - name: corporate_company_id
+        type: categorical
+    measures:
+      - name: customers_total_count
+        description: Count of customer records.
+        agg: sum
+        expr: "1"
+      - name: verified_customers_count
+        description: Count of fully verified customers.
+        agg: sum
+        expr: "case when is_fully_verified then 1 else 0 end"
+      - name: total_device_count
+        description: Sum of devices across customers.
+        agg: sum
+        expr: device_count
+
+  - name: channel_partners
+    description: Channel partner dimension.
+    model: ref('dim_channel_partners')
+    defaults:
+      agg_time_dimension: created_at
+    entities:
+      - name: channel_partner
+        type: primary
+        expr: channel_partner_id
+    dimensions:
+      - name: created_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: partner_name
+        type: categorical
+      - name: partner_type
+        type: categorical
+      - name: partner_status
+        type: categorical
+
+  - name: programs
+    description: Commercial programs with subscription limit utilization.
+    model: ref('dim_programs')
+    defaults:
+      agg_time_dimension: created_at
+    entities:
+      - name: program
+        type: primary
+        expr: program_id
+      - name: channel_partner
+        type: foreign
+        expr: channel_partner_id
+    dimensions:
+      - name: created_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: program_name
+        type: categorical
+      - name: program_status
+        type: categorical
+      - name: is_fnf_program
+        type: categorical
+      - name: is_over_subscription_limit
+        type: categorical
+      - name: is_disabled_program
+        type: categorical
+      - name: program_limit_segment
+        type: categorical
+    measures:
+      - name: programs_total_count
+        description: Count of programs.
+        agg: sum
+        expr: "1"
+      - name: programs_over_limit_count_measure
+        description: Programs exceeding subscription limit.
+        agg: sum
+        expr: "case when is_over_subscription_limit then 1 else 0 end"
+      - name: utilization_subscription_total
+        description: Sum of utilization subscription counts.
+        agg: sum
+        expr: utilization_subscription_count
+      - name: subscription_limit_total
+        description: Sum of program subscription limits.
+        agg: sum
+        expr: subscription_limit
+      - name: avg_program_utilization_pct
+        description: Average precomputed program utilization percentage.
+        agg: average
+        expr: program_subscription_utilization_pct
+
+  - name: corporate_companies
+    description: CEP employer companies.
+    model: ref('dim_corporate_companies')
+    defaults:
+      agg_time_dimension: created_at
+    entities:
+      - name: corporate_company
+        type: primary
+        expr: corporate_company_id
+    dimensions:
+      - name: created_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: company_name
+        type: categorical
+      - name: cep_verification_segment
+        type: categorical
+
+  - name: device_skus
+    description: Master device SKU catalog.
+    model: ref('dim_device_skus')
+    defaults:
+      agg_time_dimension: created_at
+    entities:
+      - name: device_sku
+        type: primary
+        expr: master_sku_id
+    dimensions:
+      - name: created_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: brand
+        type: categorical
+      - name: model
+        type: categorical
+      - name: memory
+        type: categorical
+      - name: color
+        type: categorical
+
+  - name: dates
+    description: Calendar dimension for time-based analysis.
+    model: ref('dim_dates')
+    defaults:
+      agg_time_dimension: full_date
+    entities:
+      - name: date
+        type: primary
+        expr: date_key
+    dimensions:
+      - name: full_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: year_month
+        type: categorical
+      - name: year_quarter
+        type: categorical
+      - name: is_weekend
+        type: categorical
+
+  - name: subscriptions
+    description: Device subscription lifecycle fact.
+    model: ref('fct_subscriptions')
+    defaults:
+      agg_time_dimension: subscription_date
+    entities:
+      - name: subscription
+        type: primary
+        expr: subscription_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+      - name: order
+        type: foreign
+        expr: order_id
+      - name: channel_partner
+        type: foreign
+        expr: channel_partner_id
+      - name: program
+        type: foreign
+        expr: program_id
+    dimensions:
+      - name: subscription_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: subscription_status
+        type: categorical
+      - name: is_active_subscription
+        type: categorical
+      - name: is_mrr_eligible
+        type: categorical
+      - name: is_churned
+        type: categorical
+      - name: is_upgraded
+        type: categorical
+    measures:
+      - name: subscriptions_total_count
+        description: Count of subscriptions.
+        agg: sum
+        expr: "1"
+      - name: active_subscriptions_count
+        description: Count of active subscriptions.
+        agg: sum
+        expr: "case when is_active_subscription then 1 else 0 end"
+      - name: upgraded_subscriptions_count
+        description: Count of upgraded subscriptions.
+        agg: sum
+        expr: "case when is_upgraded then 1 else 0 end"
+      - name: mrr_amount_total
+        description: Sum of monthly recurring revenue in SAR.
+        agg: sum
+        expr: monthly_recurring_amount_sar
+      - name: subscription_term_months_avg
+        description: Average subscription term in months.
+        agg: average
+        expr: subscription_term_months
+
+  - name: subscription_monthly_snapshots
+    description: Month-end subscription status for churn analysis.
+    model: ref('fct_subscription_monthly_snapshots')
+    defaults:
+      agg_time_dimension: snapshot_month
+    entities:
+      - name: subscription_snapshot
+        type: primary
+        expr: "subscription_id || '-' || snapshot_month::text"
+      - name: subscription
+        type: foreign
+        expr: subscription_id
+      - name: channel_partner
+        type: foreign
+        expr: channel_partner_id
+      - name: program
+        type: foreign
+        expr: program_id
+    dimensions:
+      - name: snapshot_month
+        type: time
+        type_params:
+          time_granularity: month
+      - name: subscription_status
+        type: categorical
+      - name: is_active
+        type: categorical
+      - name: is_churned
+        type: categorical
+      - name: is_upgraded
+        type: categorical
+    measures:
+      - name: snapshot_subscriptions_count
+        description: Subscription snapshot row count.
+        agg: sum
+        expr: "1"
+      - name: churned_in_month_count
+        description: Subscriptions churned in snapshot month.
+        agg: sum
+        expr: "case when is_churned then 1 else 0 end"
+      - name: active_at_month_end_count
+        description: Active subscriptions at month end.
+        agg: sum
+        expr: "case when is_active then 1 else 0 end"
+
+  - name: subscription_pricing
+    description: Subscription price list dimension.
+    model: ref('dim_subscription_pricing')
+    defaults:
+      agg_time_dimension: created_at
+    entities:
+      - name: subscription_pricing
+        type: primary
+        expr: subscription_pricing_id
+    dimensions:
+      - name: created_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: subscription_pricing_status
+        type: categorical
+
+  - name: subscription_durations
+    description: Subscription term options in months.
+    model: ref('dim_subscription_durations')
+    defaults:
+      agg_time_dimension: created_at
+    entities:
+      - name: subscription_duration
+        type: primary
+        expr: subscription_duration_id
+      - name: program
+        type: foreign
+        expr: program_id
+      - name: channel_partner
+        type: foreign
+        expr: channel_partner_id
+    dimensions:
+      - name: created_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: duration_months
+        type: categorical
+    measures:
+      - name: duration_term_months_avg
+        description: Average duration months from dimension rollups.
+        agg: average
+        expr: duration_months
+
+  - name: payments
+    description: CRM payments unified with PSP reconciliation.
+    model: ref('fct_payments')
+    defaults:
+      agg_time_dimension: payment_date
+    entities:
+      - name: payment
+        type: primary
+        expr: payment_id
+      - name: order
+        type: foreign
+        expr: order_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+      - name: invoice
+        type: foreign
+        expr: invoice_id
+      - name: subscription
+        type: foreign
+        expr: subscription_id
+      - name: program
+        type: foreign
+        expr: program_id
+      - name: channel_partner
+        type: foreign
+        expr: channel_partner_id
+    dimensions:
+      - name: payment_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: payment_status
+        type: categorical
+      - name: is_collected
+        type: categorical
+      - name: is_failed
+        type: categorical
+      - name: is_refunded
+        type: categorical
+      - name: is_psp_reconciled
+        type: categorical
+    measures:
+      - name: collected_amount_total
+        description: Sum of collected payment amounts in SAR.
+        agg: sum
+        expr: collected_amount_sar
+
+  - name: payment_attempts
+    description: Card capture and payment attempt events.
+    model: ref('fct_payment_attempts')
+    defaults:
+      agg_time_dimension: attempt_date
+    entities:
+      - name: payment_attempt
+        type: primary
+        expr: payment_history_id
+      - name: payment
+        type: foreign
+        expr: payment_id
+      - name: order
+        type: foreign
+        expr: order_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+      - name: program
+        type: foreign
+        expr: program_id
+      - name: channel_partner
+        type: foreign
+        expr: channel_partner_id
+    dimensions:
+      - name: attempt_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: payment_attempt_status
+        type: categorical
+      - name: is_successful_attempt
+        type: categorical
+      - name: is_failed_attempt
+        type: categorical
+    measures:
+      - name: payment_attempts_total_count
+        description: Total payment attempts.
+        agg: sum
+        expr: "1"
+      - name: failed_payment_attempts_count
+        description: Failed payment attempts.
+        agg: sum
+        expr: "case when is_failed_attempt then 1 else 0 end"
+      - name: customers_with_failed_attempts_count
+        description: Distinct customers with failed payment attempts.
+        agg: count_distinct
+        expr: customer_id
+
+  - name: psp_transactions
+    description: Payment Service transactions including retry queue.
+    model: ref('fct_psp_transactions')
+    defaults:
+      agg_time_dimension: transaction_date
+    entities:
+      - name: psp_transaction
+        type: primary
+        expr: transaction_id
+      - name: subscriber
+        type: foreign
+        expr: subscriber_id
+    dimensions:
+      - name: transaction_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: is_retry_queue
+        type: categorical
+      - name: is_successful
+        type: categorical
+      - name: transaction_outcome_segment
+        type: categorical
+    measures:
+      - name: subscribers_on_retry_count
+        description: Distinct subscribers with queued retry transactions.
+        agg: count_distinct
+        expr: "case when is_retry_queue then subscriber_id else null end"
+
+  - name: payment_methods
+    description: Conformed CRM and PSP payment methods.
+    model: ref('dim_payment_methods')
+    defaults:
+      agg_time_dimension: created_at
+    entities:
+      - name: payment_method
+        type: primary
+        expr: payment_method_key
+      - name: customer
+        type: foreign
+        expr: customer_id
+      - name: subscriber
+        type: foreign
+        expr: subscriber_id
+    dimensions:
+      - name: created_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: payment_method_source
+        type: categorical
+      - name: is_expired
+        type: categorical
+      - name: payment_method_health_segment
+        type: categorical
+    measures:
+      - name: payment_methods_total_count
+        description: Count of payment methods.
+        agg: sum
+        expr: "1"
+      - name: expired_payment_methods_count
+        description: Count of expired payment methods.
+        agg: sum
+        expr: "case when is_expired then 1 else 0 end"
+
+  - name: invoices
+    description: Zoho-synced invoices (CRM-sourced).
+    model: ref('fct_invoices')
+    defaults:
+      agg_time_dimension: invoice_date
+    entities:
+      - name: invoice
+        type: primary
+        expr: invoice_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+      - name: program
+        type: foreign
+        expr: program_id
+      - name: channel_partner
+        type: foreign
+        expr: channel_partner_id
+    dimensions:
+      - name: invoice_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: invoice_status
+        type: categorical
+      - name: is_paid
+        type: categorical
+    measures:
+      - name: invoice_amount_total
+        description: Sum of invoice amounts in SAR.
+        agg: sum
+        expr: invoice_amount_sar
+      - name: customers_with_unpaid_invoices_count
+        description: Distinct customers with unpaid invoices.
+        agg: count_distinct
+        expr: "case when not is_paid then customer_id else null end"
+
+  - name: invoice_line_items
+    description: Invoice line items linked to subscriptions.
+    model: ref('fct_invoice_line_items')
+    defaults:
+      agg_time_dimension: invoice_date
+    entities:
+      - name: invoice_line_item
+        type: primary
+        expr: invoice_line_item_id
+      - name: invoice
+        type: foreign
+        expr: invoice_id
+      - name: subscription
+        type: foreign
+        expr: subscription_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+    dimensions:
+      - name: invoice_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: product_type
+        type: categorical
+
+  - name: credit_notes
+    description: Credit notes synced from Zoho via CRM.
+    model: ref('fct_credit_notes')
+    defaults:
+      agg_time_dimension: credit_note_date
+    entities:
+      - name: credit_note
+        type: primary
+        expr: credit_note_id
+      - name: invoice
+        type: foreign
+        expr: invoice_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+      - name: channel_partner
+        type: foreign
+        expr: channel_partner_id
+      - name: program
+        type: foreign
+        expr: program_id
+    dimensions:
+      - name: credit_note_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: zoho_status
+        type: categorical
+    measures:
+      - name: credit_notes_total_count
+        description: Count of credit notes.
+        agg: sum
+        expr: "1"
+
+  - name: finance_reconciliation_monthly
+    description: Monthly collected vs invoiced revenue reconciliation.
+    model: ref('fct_finance_reconciliation_monthly')
+    defaults:
+      agg_time_dimension: reconciliation_month
+    entities:
+      - name: reconciliation_month_entity
+        type: primary
+        expr: reconciliation_month
+    dimensions:
+      - name: reconciliation_month
+        type: time
+        type_params:
+          time_granularity: month
+    measures:
+      - name: collected_revenue_monthly_total
+        description: Monthly collected revenue in SAR.
+        agg: sum
+        expr: collected_revenue_sar
+      - name: invoiced_revenue_monthly_total
+        description: Monthly invoiced revenue in SAR.
+        agg: sum
+        expr: invoiced_revenue_sar
+      - name: finance_variance_monthly_total
+        description: Monthly finance variance in SAR.
+        agg: sum
+        expr: finance_variance_sar
+
+  - name: devices
+    description: Physical device assets per customer.
+    model: ref('fct_devices')
+    defaults:
+      agg_time_dimension: purchase_date
+    entities:
+      - name: device
+        type: primary
+        expr: device_id
+      - name: order_item
+        type: foreign
+        expr: order_item_id
+      - name: order
+        type: foreign
+        expr: order_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+      - name: subscription
+        type: foreign
+        expr: subscription_id
+      - name: program
+        type: foreign
+        expr: program_id
+      - name: channel_partner
+        type: foreign
+        expr: channel_partner_id
+    dimensions:
+      - name: purchase_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: brand
+        type: categorical
+      - name: model
+        type: categorical
+    measures:
+      - name: devices_total_count
+        description: Count of device assets.
+        agg: sum
+        expr: "1"
+      - name: customers_with_devices_count
+        description: Distinct customers with at least one device.
+        agg: count_distinct
+        expr: customer_id
+
+  - name: device_journey_events
+    description: Device journey milestone events.
+    model: ref('fct_device_journey_events')
+    defaults:
+      agg_time_dimension: movement_date
+    entities:
+      - name: device_journey_event
+        type: primary
+        expr: device_journey_id
+      - name: device
+        type: foreign
+        expr: device_id
+      - name: order
+        type: foreign
+        expr: order_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+    dimensions:
+      - name: movement_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: device_movement
+        type: categorical
+
+  - name: partner_api_events
+    description: Partner webhook and API proxy events.
+    model: ref('fct_partner_api_events')
+    defaults:
+      agg_time_dimension: event_date
+    entities:
+      - name: api_event
+        type: primary
+        expr: api_log_id
+      - name: channel_partner
+        type: foreign
+        expr: channel_partner_id
+    dimensions:
+      - name: event_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: api_status
+        type: categorical
+      - name: is_failure
+        type: categorical
+    measures:
+      - name: api_events_total_count
+        description: Total partner API events.
+        agg: sum
+        expr: "1"
+      - name: api_failure_events_count
+        description: Failed partner API events.
+        agg: sum
+        expr: "case when is_failure then 1 else 0 end"
+
+  - name: refunds
+    description: Unified CRM and PSP refund events.
+    model: ref('fct_refunds')
+    defaults:
+      agg_time_dimension: refund_date
+    entities:
+      - name: refund
+        type: primary
+        expr: refund_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+      - name: order
+        type: foreign
+        expr: order_id
+      - name: channel_partner
+        type: foreign
+        expr: channel_partner_id
+      - name: program
+        type: foreign
+        expr: program_id
+    dimensions:
+      - name: refund_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: refund_source
+        type: categorical
+    measures:
+      - name: refund_amount_total
+        description: Total refund amount in SAR.
+        agg: sum
+        expr: refund_amount_sar
+
+metrics:
+  - name: order_count
+    description: Count of GMV-eligible commercial orders. Excludes voided, cancelled, rejected, and expired orders.
+    type: simple
+    label: Order Count
+    type_params:
+      measure:
+        name: gmv_eligible_order_count
+        filter: "{{ Dimension('order__is_gmv_eligible') }} = true"
+
+  - name: gmv_sar
+    description: Gross merchandise value in SAR for GMV-eligible orders.
+    type: simple
+    label: GMV (SAR)
+    type_params:
+      measure:
+        name: gmv_amount_total
+        filter: "{{ Dimension('order__is_gmv_eligible') }} = true"
+
+  - name: preorder_order_share
+    description: Share of orders that are pre-order type versus all orders.
+    type: ratio
+    label: Pre-order Order Share
+    type_params:
+      numerator: preorder_order_count
+      denominator: orders_total_count
+
+  - name: preorder_order_count
+    description: Count of pre-order type orders.
+    type: simple
+    label: Pre-order Count
+    type_params:
+      measure: preorder_order_count
+
+  - name: orders_total_count
+    description: Total count of orders regardless of eligibility.
+    type: simple
+    label: Total Orders
+    type_params:
+      measure: orders_total_count
+
+  - name: avg_days_payment_to_delivery
+    description: Average days from order date to delivery for fulfilled GMV-eligible orders. Use with payment facts in BI for first-paid-at precision.
+    type: simple
+    label: Avg Days Payment to Delivery
+    type_params:
+      measure:
+        name: days_order_to_delivery
+        filter: "{{ Dimension('order__is_gmv_eligible') }} = true and {{ Dimension('order__delivered_at') }} is not null"
+
+  - name: median_order_to_delivery_days
+    description: Median days from order date to delivery for orders with a delivery date.
+    type: simple
+    label: Median Order-to-Delivery Days
+    type_params:
+      measure:
+        name: median_days_order_to_delivery
+        filter: "{{ Dimension('order__delivered_at') }} is not null"
+
+  - name: order_item_count
+    description: Count of order line items for product mix analysis.
+    type: simple
+    label: Order Item Count
+    type_params:
+      measure: order_items_total_count
+
+  - name: subscription_count
+    description: Count of subscriptions, sliceable by subscription status and partner.
+    type: simple
+    label: Subscription Count
+    type_params:
+      measure: subscriptions_total_count
+
+  - name: active_subscription_count
+    description: Count of active subscriptions with service start date set.
+    type: simple
+    label: Active Subscription Count
+    type_params:
+      measure:
+        name: active_subscriptions_count
+        filter: "{{ Dimension('subscription__is_active_subscription') }} = true"
+
+  - name: mrr_sar
+    description: Monthly recurring revenue in SAR for MRR-eligible active subscriptions.
+    type: simple
+    label: MRR (SAR)
+    type_params:
+      measure:
+        name: mrr_amount_total
+        filter: "{{ Dimension('subscription__is_mrr_eligible') }} = true"
+
+  - name: avg_subscription_term_months
+    description: Average subscription term in months for MRR-eligible subscriptions.
+    type: simple
+    label: Avg Subscription Term (Months)
+    type_params:
+      measure:
+        name: subscription_term_months_avg
+        filter: "{{ Dimension('subscription__is_mrr_eligible') }} = true"
+
+  - name: churn_rate
+    description: Churned subscriptions in period divided by active subscriptions at month end.
+    type: derived
+    label: Churn Rate
+    type_params:
+      expr: churned_in_month_count / active_at_month_end_count
+      metrics:
+        - name: churned_subscriptions_in_month
+          alias: churned_in_month_count
+        - name: active_subscriptions_at_month_end
+          alias: active_at_month_end_count
+
+  - name: churned_subscriptions_in_month
+    description: Subscriptions churned in the snapshot month.
+    type: simple
+    label: Churned Subscriptions (Month)
+    type_params:
+      measure: churned_in_month_count
+
+  - name: active_subscriptions_at_month_end
+    description: Active subscriptions at month end from monthly snapshots.
+    type: simple
+    label: Active Subscriptions (Month End)
+    type_params:
+      measure: active_at_month_end_count
+
+  - name: upgrade_rate
+    description: Upgraded subscriptions as a share of all subscriptions.
+    type: ratio
+    label: Upgrade Rate
+    type_params:
+      numerator: upgraded_subscription_count
+      denominator: subscription_count
+
+  - name: upgraded_subscription_count
+    description: Count of subscriptions in upgraded status.
+    type: simple
+    label: Upgraded Subscription Count
+    type_params:
+      measure: upgraded_subscriptions_count
+
+  - name: collected_revenue_sar
+    description: Collected payment revenue in SAR from paid CRM payments.
+    type: simple
+    label: Collected Revenue (SAR)
+    type_params:
+      measure:
+        name: collected_amount_total
+        filter: "{{ Dimension('payment__is_collected') }} = true"
+
+  - name: invoiced_revenue_sar
+    description: Invoiced revenue in SAR from paid Zoho-synced invoices (CRM-sourced).
+    type: simple
+    label: Invoiced Revenue (SAR)
+    type_params:
+      measure:
+        name: invoice_amount_total
+        filter: "{{ Dimension('invoice__is_paid') }} = true"
+
+  - name: finance_variance_sar
+    description: Collected minus invoiced revenue by reconciliation month.
+    type: simple
+    label: Finance Variance (SAR)
+    type_params:
+      measure: finance_variance_monthly_total
+
+  - name: payment_failure_rate
+    description: Failed payment attempts divided by total payment attempts.
+    type: ratio
+    label: Payment Failure Rate
+    type_params:
+      numerator: failed_payment_attempts
+      denominator: payment_attempts_total
+
+  - name: failed_payment_attempts
+    description: Count of failed payment attempts.
+    type: simple
+    label: Failed Payment Attempts
+    type_params:
+      measure: failed_payment_attempts_count
+
+  - name: payment_attempts_total
+    description: Total payment attempt count.
+    type: simple
+    label: Payment Attempts Total
+    type_params:
+      measure: payment_attempts_total_count
+
+  - name: customers_on_retry_count
+    description: Distinct PSP subscribers with transactions in retry queue.
+    type: simple
+    label: Customers on Retry
+    type_params:
+      measure: subscribers_on_retry_count
+
+  - name: refund_amount_sar
+    description: Total refund amount in SAR across CRM and PSP sources.
+    type: simple
+    label: Refund Amount (SAR)
+    type_params:
+      measure: refund_amount_total
+
+  - name: credit_note_count
+    description: Count of Zoho-synced credit notes.
+    type: simple
+    label: Credit Note Count
+    type_params:
+      measure: credit_notes_total_count
+
+  - name: verified_customer_count
+    description: Customers with both Nafath and mobile OTP verification.
+    type: simple
+    label: Verified Customer Count
+    type_params:
+      measure:
+        name: verified_customers_count
+        filter: "{{ Dimension('customer__is_fully_verified') }} = true"
+
+  - name: avg_devices_per_customer
+    description: Average devices per customer with at least one device.
+    type: derived
+    label: Avg Devices per Customer
+    type_params:
+      expr: devices_total / customers_with_devices
+      metrics:
+        - name: devices_total
+        - name: customers_with_devices
+
+  - name: devices_total
+    description: Total device count.
+    type: simple
+    label: Devices Total
+    type_params:
+      measure: devices_total_count
+
+  - name: customers_with_devices
+    description: Distinct customers with device assets.
+    type: simple
+    label: Customers With Devices
+    type_params:
+      measure: customers_with_devices_count
+
+  - name: program_subscription_utilization_pct
+    description: Active and waiting subscriptions divided by program subscription limit.
+    type: ratio
+    label: Program Subscription Utilization %
+    type_params:
+      numerator: program_utilization_subscriptions
+      denominator: program_subscription_limits
+
+  - name: program_utilization_subscriptions
+    description: Sum of utilization subscription counts across programs.
+    type: simple
+    label: Program Utilization Subscriptions
+    type_params:
+      measure: utilization_subscription_total
+
+  - name: program_subscription_limits
+    description: Sum of program subscription limits.
+    type: simple
+    label: Program Subscription Limits
+    type_params:
+      measure: subscription_limit_total
+
+  - name: expired_payment_method_count
+    description: Payment methods past card expiry date.
+    type: simple
+    label: Expired Payment Method Count
+    type_params:
+      measure:
+        name: expired_payment_methods_count
+        filter: "{{ Dimension('payment_method__is_expired') }} = true"
+
+  - name: customers_with_outstanding_payments
+    description: Distinct customers with unpaid invoices or failed payment attempts.
+    type: derived
+    label: Customers With Outstanding Payments
+    type_params:
+      expr: customers_unpaid_invoices + customers_failed_attempts
+      metrics:
+        - name: customers_unpaid_invoices
+        - name: customers_failed_payment_attempts
+          alias: customers_failed_attempts
+
+  - name: customers_unpaid_invoices
+    description: Customers with unpaid invoices.
+    type: simple
+    label: Customers With Unpaid Invoices
+    type_params:
+      measure: customers_with_unpaid_invoices_count
+
+  - name: customers_failed_payment_attempts
+    description: Customers with failed payment attempts.
+    type: simple
+    label: Customers With Failed Attempts
+    type_params:
+      measure: customers_with_failed_attempts_count
+
+  - name: partner_api_failure_rate
+    description: Partner API failures as a share of total API calls.
+    type: ratio
+    label: Partner API Failure Rate
+    type_params:
+      numerator: partner_api_failures
+      denominator: partner_api_calls_total
+
+  - name: partner_api_failures
+    description: Count of failed partner API events.
+    type: simple
+    label: Partner API Failures
+    type_params:
+      measure: api_failure_events_count
+
+  - name: partner_api_calls_total
+    description: Total partner API events.
+    type: simple
+    label: Partner API Calls Total
+    type_params:
+      measure: api_events_total_count
+
+  - name: programs_over_limit_count
+    description: Programs where active subscriptions exceed the configured subscription limit.
+    type: simple
+    label: Programs Over Limit Count
+    type_params:
+      measure:
+        name: programs_over_limit_count_measure
+        filter: "{{ Dimension('program__is_over_subscription_limit') }} = true"
