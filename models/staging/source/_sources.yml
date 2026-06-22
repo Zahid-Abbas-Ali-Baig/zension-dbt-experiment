@@ -1,0 +1,3578 @@
+# Source definitions for SuiteCRM and Payment Service tables.
+# Generated from codegen batches; status values profiled from warehouse.
+
+version: 2
+sources:
+- name: source
+  description: Operational data replicated from SuiteCRM (tos-ksa) and the Payment
+    Service into the zension warehouse. Supports order, subscription, payment, and
+    finance analytics for KSA channel partner programs.
+  database: zension
+  schema: source
+  tables:
+  - name: crm_accounts
+    description: Customer accounts in SuiteCRM. Each row is one end customer with
+      identity verification status, corporate employer link, and Zoho customer reference.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the customer account.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: account_type
+      data_type: character
+      description: Account type.
+    - name: industry
+      data_type: character
+      description: Industry.
+    - name: annual_revenue
+      data_type: character
+      description: Annual revenue.
+    - name: phone_fax
+      data_type: character
+      description: Phone fax.
+    - name: billing_address_street
+      data_type: character
+      description: Billing address street.
+    - name: billing_address_city
+      data_type: character
+      description: Billing address city.
+    - name: billing_address_state
+      data_type: character
+      description: Billing address state.
+    - name: billing_address_postalcode
+      data_type: character
+      description: Billing address postalcode.
+    - name: billing_address_country
+      data_type: character
+      description: Billing address country.
+    - name: rating
+      data_type: character
+      description: Rating.
+    - name: phone_office
+      data_type: character
+      description: Phone office.
+    - name: phone_alternate
+      data_type: character
+      description: Phone alternate.
+    - name: website
+      data_type: character
+      description: Website.
+    - name: ownership
+      data_type: character
+      description: Ownership.
+    - name: employees
+      data_type: character
+      description: Employees.
+    - name: ticker_symbol
+      data_type: character
+      description: Ticker symbol.
+    - name: shipping_address_street
+      data_type: character
+      description: Shipping address street.
+    - name: shipping_address_city
+      data_type: character
+      description: Shipping address city.
+    - name: shipping_address_state
+      data_type: character
+      description: Shipping address state.
+    - name: shipping_address_postalcode
+      data_type: character
+      description: Shipping address postalcode.
+    - name: shipping_address_country
+      data_type: character
+      description: Shipping address country.
+    - name: parent_id
+      data_type: character
+      description: Parent id.
+    - name: sic_code
+      data_type: character
+      description: Sic code.
+    - name: campaign_id
+      data_type: character
+      description: Campaign id.
+    - name: bank_account_type
+      data_type: character
+      description: Bank account type.
+    - name: dds_full_name
+      data_type: character
+      description: Dds full name.
+    - name: available_credit_limit
+      data_type: numeric
+      description: Available credit limit.
+    - name: registered_emirate
+      data_type: character
+      description: Registered emirate.
+    - name: cl_from_crbdm
+      data_type: character
+      description: Cl from crbdm.
+    - name: share_po_subscription_agreement
+      data_type: character
+      description: Share po subscription agreement.
+    - name: country_id
+      data_type: character
+      description: Country id.
+    - name: direct_debit_signed_by_customer
+      data_type: character
+      description: Direct debit signed by customer.
+    - name: customer_provided_smaller_basket
+      data_type: character
+      description: Customer provided smaller basket.
+    - name: documents_reviewed
+      data_type: character
+      description: Documents reviewed.
+    - name: last_name_english
+      data_type: character
+      description: Last name english.
+    - name: exceptionally_approved
+      data_type: boolean
+      description: Exceptionally approved.
+    - name: bank_name
+      data_type: character
+      description: Bank name.
+    - name: last_name_arabic
+      data_type: character
+      description: Last name arabic.
+    - name: sub_agreement_signed_by_customer
+      data_type: character
+      description: Sub agreement signed by customer.
+    - name: first_name_english
+      data_type: character
+      description: First name english.
+    - name: first_name_arabic
+      data_type: character
+      description: First name arabic.
+    - name: max_credit_limit
+      data_type: numeric
+      description: Max credit limit.
+    - name: dob
+      data_type: character
+      description: Dob.
+    - name: nafat_jason_data
+      data_type: text
+      description: Nafat jason data.
+    - name: id_expiry_date
+      data_type: character
+      description: Id expiry date.
+    - name: dds_city
+      data_type: character
+      description: Dds city.
+    - name: phone_number
+      data_type: character
+      description: Phone number.
+    - name: bank_account_number
+      data_type: character
+      description: Bank account number.
+    - name: office_apartment_no
+      data_type: integer
+      description: Office apartment no.
+    - name: trading_license_number
+      data_type: character
+      description: Trading license number.
+    - name: sd_full_name
+      data_type: character
+      description: Sd full name.
+    - name: gender
+      data_type: character
+      description: Gender.
+    - name: dds_mobile_number
+      data_type: character
+      description: Dds mobile number.
+    - name: unique_customer_no
+      data_type: character
+      description: Unique customer no.
+    - name: sd_mobile_number
+      data_type: character
+      description: Sd mobile number.
+    - name: dds_date_of_birth
+      data_type: date
+      description: Dds date of birth.
+    - name: national_id
+      data_type: character
+      description: Saudi national ID used as primary customer identifier.
+    - name: sd_emirates_id_number
+      data_type: character
+      description: Sd emirates id number.
+    - name: notify_discrepant_docs
+      data_type: character
+      description: Notify discrepant docs.
+    - name: last_exceptionally_approved_check_date
+      data_type: date
+      description: Last exceptionally approved check date.
+    - name: sd_email_id
+      data_type: character
+      description: Sd email id.
+    - name: third_name_arabic
+      data_type: character
+      description: Third name arabic.
+    - name: invoice_days
+      data_type: character
+      description: Invoice days.
+    - name: dds_email_id
+      data_type: character
+      description: Dds email id.
+    - name: subscription_approved
+      data_type: character
+      description: Subscription approved.
+    - name: dds_emirates_id_number
+      data_type: character
+      description: Dds emirates id number.
+    - name: same_details
+      data_type: boolean
+      description: Same details.
+    - name: customer_type
+      data_type: character
+      description: Customer type.
+    - name: zoho_customer_id
+      data_type: character
+      description: Customer identifier in Zoho Books for finance reconciliation.
+    - name: nafat_address
+      data_type: text
+      description: Nafat address.
+    - name: emirate
+      data_type: character
+      description: Emirate.
+    - name: registered_country_id
+      data_type: character
+      description: Registered country id.
+    - name: sd_date_of_birth
+      data_type: date
+      description: Sd date of birth.
+    - name: ask_customer_for_smaller_basket
+      data_type: character
+      description: Ask customer for smaller basket.
+    - name: building_name
+      data_type: character
+      description: Building name.
+    - name: provided_correct_documents
+      data_type: character
+      description: Provided correct documents.
+    - name: subscription_creation
+      data_type: character
+      description: Subscription creation.
+    - name: no_of_employee
+      data_type: character
+      description: No of employee.
+    - name: nationality
+      data_type: character
+      description: Nationality.
+    - name: form_submission
+      data_type: character
+      description: Form submission.
+    - name: recipient_name
+      data_type: character
+      description: Recipient name.
+    - name: set_customer_direct_debit
+      data_type: character
+      description: Set customer direct debit.
+    - name: sd_city
+      data_type: character
+      description: Sd city.
+    - name: send_direct_debit_mandate
+      data_type: character
+      description: Send direct debit mandate.
+    - name: second_name_arabic
+      data_type: character
+      description: Second name arabic.
+    - name: second_name_english
+      data_type: character
+      description: Second name english.
+    - name: community_neighborhood
+      data_type: character
+      description: Community neighborhood.
+    - name: iban_number
+      data_type: character
+      description: Iban number.
+    - name: third_name_english
+      data_type: character
+      description: Third name english.
+    - name: mobile_number
+      data_type: character
+      description: Mobile number.
+    - name: bank_account_title
+      data_type: character
+      description: Bank account title.
+    - name: id_issue_date
+      data_type: character
+      description: Id issue date.
+    - name: send_subscription_agreement
+      data_type: character
+      description: Send subscription agreement.
+    - name: customer_status
+      data_type: character
+      description: Customer status.
+    - name: contract_id
+      data_type: character
+      description: Contract id.
+    - name: programs_customer_id
+      data_type: character
+      description: Programs customer id.
+    - name: channel_partner_id
+      data_type: character
+      description: Channel partner id.
+    - name: id_number
+      data_type: character
+      description: Id number.
+    - name: invoice_date
+      data_type: date
+      description: Invoice date.
+    - name: credit_check_passed
+      data_type: boolean
+      description: Credit check passed.
+    - name: bank_code
+      data_type: character
+      description: Bank code.
+    - name: addresses_customer_id
+      data_type: character
+      description: Addresses customer id.
+    - name: is_mobile_verified
+      data_type: character
+      description: Mobile OTP verification flag stored as Yes/No text.
+    - name: office_extension
+      data_type: character
+      description: Office extension.
+    - name: is_email_verified
+      data_type: character
+      description: Is email verified.
+    - name: national_id_copy
+      data_type: character
+      description: National id copy.
+    - name: customer_uid
+      data_type: character
+      description: Customer uid.
+    - name: personal_email_address
+      data_type: character
+      description: Personal email address.
+    - name: corporate_company_id
+      data_type: character
+      description: Foreign key to the CEP corporate employer when applicable.
+      data_tests:
+      - relationships:
+          to: source('source', 'crm_tos_corporate_company')
+          field: id
+    - name: title_position
+      data_type: character
+      description: Title position.
+    - name: employee_id
+      data_type: character
+      description: Employee id.
+    - name: status
+      data_type: character
+      description: Status.
+    - name: otp_consumed
+      data_type: boolean
+      description: Otp consumed.
+    - name: otp_send_datetime
+      data_type: timestamp with time zone
+      description: Otp send datetime.
+    - name: is_created_on_paymentservice
+      data_type: boolean
+      description: Is created on paymentservice.
+    - name: email_otp
+      data_type: character
+      description: Email otp.
+    - name: is_verification_blocked
+      data_type: boolean
+      description: Is verification blocked.
+    - name: is_sms_otp_generation_blocked
+      data_type: boolean
+      description: Is sms otp generation blocked.
+    - name: is_email_otp_generation_blocked
+      data_type: boolean
+      description: Is email otp generation blocked.
+    - name: order_placed
+      data_type: boolean
+      description: Order placed.
+    - name: email_verified_at
+      data_type: timestamp with time zone
+      description: Email verified at.
+    - name: customer_verification_at
+      data_type: timestamp with time zone
+      description: Customer verification at.
+    - name: email_verification_expires_at
+      data_type: timestamp with time zone
+      description: Email verification expires at.
+    - name: nafath_verified_at
+      data_type: timestamp with time zone
+      description: Nafath verified at.
+    - name: new_order_email_verified
+      data_type: boolean
+      description: New order email verified.
+    - name: nafath_verified
+      data_type: boolean
+      description: Whether the customer passed Nafath identity verification.
+    - name: transaction_id
+      data_type: character
+      description: Transaction id.
+    - name: customer_verification_attempts
+      data_type: integer
+      description: Customer verification attempts.
+    - name: customer_verification_blocked
+      data_type: boolean
+      description: Customer verification blocked.
+    - name: user_id
+      data_type: character
+      description: User id.
+    - name: customer_verification_count
+      data_type: integer
+      description: Customer verification count.
+    - name: is_collectible
+      data_type: boolean
+      description: Is collectible.
+    - name: collectible_reason
+      data_type: text
+      description: Collectible reason.
+    - name: last_collectible_updated_timestamp
+      data_type: timestamp with time zone
+      description: Last collectible updated timestamp.
+    - name: temp_mobile_number
+      data_type: character
+      description: Temp mobile number.
+    - name: temp_primary_email
+      data_type: character
+      description: Temp primary email.
+    - name: temp_secondary_email
+      data_type: character
+      description: Temp secondary email.
+    - name: primary_email_otp
+      data_type: character
+      description: Primary email otp.
+    - name: secondary_email_otp
+      data_type: character
+      description: Secondary email otp.
+    - name: primary_email_otp_consumed
+      data_type: boolean
+      description: Primary email otp consumed.
+    - name: secondary_email_otp_consumed
+      data_type: boolean
+      description: Secondary email otp consumed.
+    - name: primary_email_otp_send_datetime
+      data_type: timestamp with time zone
+      description: Primary email otp send datetime.
+    - name: secondary_email_otp_send_datetime
+      data_type: timestamp with time zone
+      description: Secondary email otp send datetime.
+    - name: preferred_language
+      data_type: character
+      description: Preferred language.
+    - name: is_crdm_synced
+      data_type: boolean
+      description: Is crdm synced.
+    - name: nafath_raw_response
+      data_type: text
+      description: Nafath raw response.
+    - name: verified_email_type
+      data_type: character
+      description: Verified email type.
+    - name: do_not_retry
+      data_type: boolean
+      description: Do not retry.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_channel_partners
+    description: Channel partners selling through the Zension platform (e.g. Jarir,
+      ZAAM, Axiom). Each row defines one partner organization and partner type.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the channel partner.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Display name of the channel partner (e.g. Jarir, Axiom).
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: legal_name
+      data_type: character
+      description: Legal name.
+    - name: channel_partner_type
+      data_type: character
+      description: Partner classification such as Retailer or ecommerce.
+      data_tests:
+      - accepted_values:
+          values:
+          - ecommerce
+          - Retailer
+    - name: vat_trn_number
+      data_type: character
+      description: Vat trn number.
+    - name: external_sender_id
+      data_type: character
+      description: External sender id.
+    - name: bank_name
+      data_type: character
+      description: Bank name.
+    - name: iban_number
+      data_type: character
+      description: Iban number.
+    - name: branch_code
+      data_type: character
+      description: Branch code.
+    - name: bank_account_title
+      data_type: character
+      description: Bank account title.
+    - name: bank_account_number
+      data_type: character
+      description: Bank account number.
+    - name: channel_partner_description
+      data_type: text
+      description: Channel partner description.
+    - name: registered_address
+      data_type: text
+      description: Registered address.
+    - name: country_id
+      data_type: character
+      description: Country id.
+    - name: channel_partner_uid
+      data_type: character
+      description: Channel partner uid.
+    - name: status
+      data_type: character
+      description: Status.
+    - name: cp_logo_url
+      data_type: character
+      description: Cp logo url.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_programs
+    description: Commercial programs offered by channel partners (CEP, Jarir, FnF,
+      Tradeling). Each row configures subscription limits, status, and program rules.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the commercial program.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Program name (CEP, Jarir, FnF, Tradeling, etc.).
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: program_start_date
+      data_type: character
+      description: Program start date.
+    - name: program_end_date
+      data_type: character
+      description: Program end date.
+    - name: program_description
+      data_type: text
+      description: Program description.
+    - name: program_status
+      data_type: character
+      description: Whether the program is active and accepting orders.
+      data_tests:
+      - accepted_values:
+          values:
+          - ACTIVE
+    - name: channel_partner_id
+      data_type: character
+      description: Foreign key to the owning channel partner.
+      data_tests:
+      - not_null
+      - relationships:
+          to: source('source', 'crm_tos_channel_partners')
+          field: id
+    - name: program_uid
+      data_type: character
+      description: Program uid.
+    - name: starting_counter
+      data_type: integer
+      description: Starting counter.
+    - name: account
+      data_type: character
+      description: Account.
+    - name: payment_methods_limit
+      data_type: integer
+      description: Payment methods limit.
+    - name: subscription_limit
+      data_type: integer
+      description: Maximum allowed active subscriptions for the program.
+    - name: zoho_chart_of_account_id
+      data_type: character
+      description: Zoho chart of account id.
+    - name: liability_account
+      data_type: character
+      description: Liability account.
+    - name: zoho_liability_chart_of_account_id
+      data_type: character
+      description: Zoho liability chart of account id.
+    - name: income_account
+      data_type: character
+      description: Income account.
+    - name: zoho_income_account_id
+      data_type: character
+      description: Zoho income account id.
+    - name: protection_liability_account
+      data_type: character
+      description: Protection liability account.
+    - name: protection_liability_account_id
+      data_type: character
+      description: Protection liability account id.
+    - name: program_wehooks
+      data_type: text
+      description: Program wehooks.
+    - name: program_webhook_headers
+      data_type: text
+      description: Program webhook headers.
+    - name: program_webhook_enabled
+      data_type: boolean
+      description: Program webhook enabled.
+    - name: program_webhook_type
+      data_type: character
+      description: Program webhook type.
+    - name: program_valid_until_interval
+      data_type: character
+      description: Program valid until interval.
+    - name: email_verification_not_required
+      data_type: boolean
+      description: Email verification not required.
+    - name: crdm_program_id
+      data_type: character
+      description: Crdm program id.
+    - name: enable_customer_list_check
+      data_type: boolean
+      description: Enable customer list check.
+    - name: allowed_white_list_only
+      data_type: boolean
+      description: Allowed white list only.
+    - name: risk_score
+      data_type: integer
+      description: Risk score.
+    - name: pick_custom_pricing
+      data_type: boolean
+      description: Pick custom pricing.
+    - name: skip_item_types
+      data_type: text
+      description: Skip item types.
+    - name: shipping_liability_account
+      data_type: character
+      description: Shipping liability account.
+    - name: shipping_liability_account_id
+      data_type: character
+      description: Shipping liability account id.
+    - name: program_website_url
+      data_type: character
+      description: Program website url.
+    - name: program_terms_of_use_url
+      data_type: character
+      description: Program terms of use url.
+    - name: program_phone
+      data_type: character
+      description: Program phone.
+    - name: program_email
+      data_type: character
+      description: Program email.
+    - name: order_limit_per_day
+      data_type: integer
+      description: Order limit per day.
+    - name: should_call_basic_decision
+      data_type: boolean
+      description: Should call basic decision.
+    - name: program_address_not_required
+      data_type: boolean
+      description: Program address not required.
+    - name: agreement_content_en
+      data_type: text
+      description: Agreement content en.
+    - name: agreement_content_ar
+      data_type: text
+      description: Agreement content ar.
+    - name: email_verification_type
+      data_type: character
+      description: Email verification type.
+    - name: program_privacy_policy_url
+      data_type: character
+      description: Program privacy policy url.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_orders
+    description: Commercial orders placed through Zaam channel partners. Each row
+      is one order covering device purchase, subscription bundling, and checkout lifecycle
+      from payment through delivery or cancellation.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the order record in SuiteCRM.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: SuiteCRM soft-delete flag; exclude from analytics when true.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: order_number
+      data_type: character
+      description: Order number.
+    - name: order_status
+      data_type: character
+      description: Current lifecycle status of the order (e.g. delivered, cancelled).
+      data_tests:
+      - accepted_values:
+          values:
+          - cancelled
+          - delivered
+          - expired
+          - rejected
+          - waiting_for_delivery
+    - name: valid_until
+      data_type: timestamp with time zone
+      description: Valid until.
+    - name: total_subscription_value
+      data_type: double precision
+      description: Total subscription value.
+    - name: total_device_purchase_price
+      data_type: double precision
+      description: Total device purchase price.
+    - name: phone_number
+      data_type: character
+      description: Phone number.
+    - name: customer_id
+      data_type: character
+      description: Foreign key to the customer account that placed the order.
+      data_tests:
+      - relationships:
+          to: source('source', 'crm_accounts')
+          field: id
+    - name: programs_order_id
+      data_type: character
+      description: Foreign key to the commercial program under which the order was
+        placed.
+      data_tests:
+      - not_null
+      - relationships:
+          to: source('source', 'crm_tos_programs')
+          field: id
+    - name: store_id
+      data_type: character
+      description: Store id.
+    - name: bitly_short_link
+      data_type: character
+      description: Bitly short link.
+    - name: payment_method_id
+      data_type: character
+      description: Foreign key to the CRM payment method used at checkout.
+      data_tests:
+      - relationships:
+          to: source('source', 'crm_tos_payment_methods')
+          field: id
+    - name: addresses_street
+      data_type: character
+      description: Addresses street.
+    - name: addresses_building_number_and_name
+      data_type: character
+      description: Addresses building number and name.
+    - name: addresses_city
+      data_type: character
+      description: Addresses city.
+    - name: addresses_area
+      data_type: character
+      description: Addresses area.
+    - name: addresses_landmark
+      data_type: character
+      description: Addresses landmark.
+    - name: addresses_country_id
+      data_type: character
+      description: Addresses country id.
+    - name: order_type
+      data_type: character
+      description: Commercial order type distinguishing standard orders from pre-orders.
+      data_tests:
+      - accepted_values:
+          values:
+          - order
+          - pre-order
+          config:
+            where: order_type is not null
+    - name: partner_order_id
+      data_type: character
+      description: Partner order id.
+    - name: partner_account_reference
+      data_type: character
+      description: Partner account reference.
+    - name: sales_channel
+      data_type: character
+      description: Sales channel identifier for partner attribution.
+    - name: store_name
+      data_type: character
+      description: Store name.
+    - name: employee_id
+      data_type: character
+      description: Employee id.
+    - name: imei_1
+      data_type: character
+      description: Imei 1.
+    - name: imei_2
+      data_type: character
+      description: Imei 2.
+    - name: serial_no
+      data_type: character
+      description: Serial no.
+    - name: refund_reason
+      data_type: text
+      description: Refund reason.
+    - name: delivered_on
+      data_type: date
+      description: Date the order was delivered to the customer.
+    - name: redirect_url_success
+      data_type: character
+      description: Redirect url success.
+    - name: redirect_url_failure
+      data_type: character
+      description: Redirect url failure.
+    - name: total_amount_incl_vat
+      data_type: double precision
+      description: Total amount incl vat.
+    - name: store_credits
+      data_type: double precision
+      description: Store credits.
+    - name: down_payment
+      data_type: double precision
+      description: Down payment.
+    - name: total_discount_amount
+      data_type: double precision
+      description: Total discount amount.
+    - name: total_tos_amount_incl_vat
+      data_type: double precision
+      description: Total order amount including VAT in SAR used for GMV.
+    - name: total_non_tos_amount_incl_vat
+      data_type: double precision
+      description: Total non tos amount incl vat.
+    - name: refund_amount
+      data_type: double precision
+      description: Refund amount.
+    - name: delivered_by
+      data_type: character
+      description: Delivered by.
+    - name: delivery_reference
+      data_type: character
+      description: Delivery reference.
+    - name: shipping_refunded_amount
+      data_type: double precision
+      description: Shipping refunded amount.
+    - name: shipping_refunded
+      data_type: boolean
+      description: Shipping refunded.
+    - name: has_custom_price
+      data_type: boolean
+      description: Has custom price.
+    - name: subscription_agreement_consent_given
+      data_type: character
+      description: Subscription agreement consent given.
+    - name: total_refund_amount
+      data_type: double precision
+      description: Total refund amount.
+    - name: district
+      data_type: character
+      description: District.
+    - name: postal_code
+      data_type: character
+      description: Postal code.
+    - name: additional_postal_code
+      data_type: character
+      description: Additional postal code.
+    - name: short_national_address
+      data_type: character
+      description: Short national address.
+    - name: coordinates
+      data_type: character
+      description: Coordinates.
+    - name: additional_address_fields
+      data_type: text
+      description: Additional address fields.
+    - name: is_partner_address
+      data_type: boolean
+      description: Is partner address.
+    - name: rejection_reason
+      data_type: text
+      description: Rejection reason.
+    - name: rejection_code
+      data_type: character
+      description: Rejection code.
+    - name: subscribed_device_id
+      data_type: character
+      description: Subscribed device id.
+    - name: redirect_url_cancel
+      data_type: character
+      description: Redirect url cancel.
+    - name: agreements_order_id
+      data_type: character
+      description: Agreements order id.
+    - name: agreement_date
+      data_type: timestamp with time zone
+      description: Agreement date.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_order_items
+    description: Line items on commercial orders. Each row is one product line (device,
+      subscription component, or add-on) with pricing, SKU references, and quantity.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the order line item.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: quantity
+      data_type: integer
+      description: Number of units on the line.
+    - name: subscription_term
+      data_type: character
+      description: Subscription term.
+    - name: order_number
+      data_type: character
+      description: Order number.
+    - name: unit_price
+      data_type: double precision
+      description: Unit price.
+    - name: total_price
+      data_type: double precision
+      description: Total price.
+    - name: cashback
+      data_type: double precision
+      description: Cashback.
+    - name: discount
+      data_type: double precision
+      description: Discount.
+    - name: device_purchase_price
+      data_type: double precision
+      description: Device purchase price.
+    - name: product_type
+      data_type: character
+      description: Product type.
+    - name: advance_payment
+      data_type: boolean
+      description: Advance payment.
+    - name: order_id
+      data_type: character
+      description: Foreign key to the parent commercial order.
+      data_tests:
+      - not_null
+      - relationships:
+          to: source('source', 'crm_tos_orders')
+          field: id
+    - name: zaam_sku_id
+      data_type: character
+      description: Foreign key to the Zaam program SKU when the line references catalog
+        pricing.
+      data_tests:
+      - relationships:
+          to: source('source', 'crm_tos_zaam_skus')
+          field: id
+    - name: cp_sku_id
+      data_type: character
+      description: Foreign key to the channel-partner SKU mapping when partner catalog
+        is used.
+    - name: order_item_id
+      data_type: character
+      description: Order item id.
+    - name: programs_order_item_id
+      data_type: character
+      description: Programs order item id.
+    - name: unit_price_vat_inclusive
+      data_type: double precision
+      description: Unit price vat inclusive.
+    - name: total_price_vat_inclusive
+      data_type: double precision
+      description: Line total including VAT in SAR.
+    - name: device_purchase_price_vat_inclusive
+      data_type: double precision
+      description: Device purchase price vat inclusive.
+    - name: customer_id
+      data_type: character
+      description: Foreign key to the customer account on the line item.
+      data_tests:
+      - relationships:
+          to: source('source', 'crm_accounts')
+          field: id
+    - name: is_recurring
+      data_type: boolean
+      description: Is recurring.
+    - name: discount_amount
+      data_type: double precision
+      description: Discount amount.
+    - name: non_tos_sku_id
+      data_type: character
+      description: Non tos sku id.
+    - name: sku_image_url
+      data_type: character
+      description: Sku image url.
+    - name: imei_1
+      data_type: character
+      description: Imei 1.
+    - name: imei_2
+      data_type: character
+      description: Imei 2.
+    - name: serial_no
+      data_type: character
+      description: Serial no.
+    - name: order_line_item_type
+      data_type: character
+      description: Order line item type.
+    - name: refund_amount
+      data_type: double precision
+      description: Refund amount.
+    - name: paid_amount
+      data_type: double precision
+      description: Paid amount.
+    - name: zoho_item_sync_type
+      data_type: character
+      description: Zoho item sync type.
+    - name: selling_price_bd
+      data_type: double precision
+      description: Selling price bd.
+    - name: selling_price_ad
+      data_type: double precision
+      description: Selling price ad.
+    - name: monthly_subscription_percentage
+      data_type: double precision
+      description: Monthly subscription percentage.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_subscriptions
+    description: Device subscription contracts tied to orders. Each row tracks subscription
+      lifecycle from waiting for delivery through active recurring billing, upgrade,
+      or cancellation.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the subscription record.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: subscription_uid
+      data_type: character
+      description: External subscription identifier used for PSP reconciliation.
+    - name: installment_due_day
+      data_type: integer
+      description: Installment due day.
+    - name: subscription_status
+      data_type: character
+      description: Lifecycle status (Active, Waiting_For_Delivery, Cancelled, Upgraded).
+      data_tests:
+      - accepted_values:
+          values:
+          - Active
+          - Cancelled
+          - Upgraded
+          - Waiting_For_Delivery
+    - name: service_start_date
+      data_type: date
+      description: Date recurring service began; required for active MRR eligibility.
+    - name: service_end_date
+      data_type: date
+      description: Date recurring service ended if closed.
+    - name: subscription_close_date
+      data_type: date
+      description: Subscription close date.
+    - name: pop_number
+      data_type: character
+      description: Pop number.
+    - name: order_cancellation_date
+      data_type: date
+      description: Order cancellation date.
+    - name: customer_completed_subscription
+      data_type: boolean
+      description: Customer completed subscription.
+    - name: exceptionally_approved
+      data_type: boolean
+      description: Exceptionally approved.
+    - name: subscription_price
+      data_type: numeric
+      description: Subscription price.
+    - name: payment_due_day
+      data_type: integer
+      description: Payment due day.
+    - name: serial_number
+      data_type: character
+      description: Serial number.
+    - name: order_item_id
+      data_type: character
+      description: Foreign key to the order line item that created this subscription.
+      data_tests:
+      - relationships:
+          to: source('source', 'crm_tos_order_items')
+          field: id
+    - name: subscription_pricing_id
+      data_type: character
+      description: Foreign key to the price list entry for monthly recurring amount.
+      data_tests:
+      - relationships:
+          to: source('source', 'crm_tos_subscription_pricing')
+          field: id
+    - name: subscription_id
+      data_type: character
+      description: Subscription id.
+    - name: program_subscription_id
+      data_type: character
+      description: Program subscription id.
+    - name: devices_subscription_id
+      data_type: character
+      description: Devices subscription id.
+    - name: channel_partner_id
+      data_type: character
+      description: Foreign key to the channel partner selling the subscription.
+      data_tests:
+      - not_null
+      - relationships:
+          to: source('source', 'crm_tos_channel_partners')
+          field: id
+    - name: store_id
+      data_type: character
+      description: Store id.
+    - name: store_name
+      data_type: character
+      description: Store name.
+    - name: store_employee_id
+      data_type: character
+      description: Store employee id.
+    - name: auto_kif_month
+      data_type: character
+      description: Auto kif month.
+    - name: pop_invoice_date
+      data_type: date
+      description: Pop invoice date.
+    - name: subscription_due_date
+      data_type: date
+      description: Subscription due date.
+    - name: order_id
+      data_type: character
+      description: Foreign key to the originating commercial order.
+      data_tests:
+      - not_null
+      - relationships:
+          to: source('source', 'crm_tos_orders')
+          field: id
+    - name: subscription_closure_reason
+      data_type: text
+      description: Subscription closure reason.
+    - name: latest_payment_status
+      data_type: character
+      description: Latest payment status.
+    - name: cp_device_purchase_price
+      data_type: real
+      description: Cp device purchase price.
+    - name: replaced_device_id
+      data_type: character
+      description: Replaced device id.
+    - name: upgraded_subscription_id
+      data_type: character
+      description: Upgraded subscription id.
+    - name: product_type
+      data_type: character
+      description: Product type.
+    - name: protection_pricing_id
+      data_type: character
+      description: Protection pricing id.
+    - name: customer_id
+      data_type: character
+      description: Foreign key to the subscribing customer account.
+      data_tests:
+      - relationships:
+          to: source('source', 'crm_accounts')
+          field: id
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_devices
+    description: Physical device assets fulfilled to customers. Each row is one device
+      with brand, model, serial/IMEI identifiers linked to an order line item.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the device asset.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: serial_number
+      data_type: character
+      description: Serial number.
+    - name: purchase_order_number
+      data_type: character
+      description: Purchase order number.
+    - name: purchase_price
+      data_type: numeric
+      description: Purchase price.
+    - name: purchase_date
+      data_type: date
+      description: Purchase date.
+    - name: device_location
+      data_type: character
+      description: Device location.
+    - name: imei2
+      data_type: character
+      description: Imei2.
+    - name: brand
+      data_type: character
+      description: Device manufacturer brand.
+    - name: model
+      data_type: character
+      description: Device model name.
+    - name: device_memory
+      data_type: character
+      description: Storage capacity of the device.
+    - name: color
+      data_type: character
+      description: Device color variant.
+    - name: delivery_date
+      data_type: date
+      description: Delivery date.
+    - name: device_grade
+      data_type: character
+      description: Device grade.
+    - name: devices_type
+      data_type: character
+      description: Devices type.
+    - name: order_item_id
+      data_type: character
+      description: Foreign key to the order line item that fulfilled this device.
+      data_tests:
+      - relationships:
+          to: source('source', 'crm_tos_order_items')
+          field: id
+    - name: device_id
+      data_type: character
+      description: Device id.
+    - name: subscription_device_id
+      data_type: character
+      description: Subscription device id.
+    - name: device_condition
+      data_type: character
+      description: Device condition.
+    - name: zaam_sku_id
+      data_type: character
+      description: Zaam sku id.
+    - name: imei1
+      data_type: character
+      description: Imei1.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_payments
+    description: CRM payment records for order collections and refunds. Each row links
+      an order to amounts collected and the external Payment Service payment identifier.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the CRM payment record.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: accounting_type
+      data_type: character
+      description: Accounting type.
+    - name: payment_status
+      data_type: character
+      description: Collection status (paid, failed, refunded, etc.).
+      data_tests:
+      - accepted_values:
+          values:
+          - cancelled
+          - failed
+          - not_invoiced
+          - paid
+          - refunded
+    - name: payment_due_date
+      data_type: timestamp with time zone
+      description: Payment due date.
+    - name: scheduled_date
+      data_type: timestamp with time zone
+      description: Scheduled date.
+    - name: payment_amount
+      data_type: numeric
+      description: Payment amount.
+    - name: payment_amount_tax_inclusive
+      data_type: numeric
+      description: Amount collected including tax in SAR.
+    - name: payment_type
+      data_type: character
+      description: Payment type.
+    - name: subscription_month
+      data_type: integer
+      description: Subscription month.
+    - name: payment_settlement_date
+      data_type: timestamp with time zone
+      description: Payment settlement date.
+    - name: transaction_reference
+      data_type: character
+      description: Transaction reference.
+    - name: payment_intent
+      data_type: character
+      description: Payment intent.
+    - name: payment_id
+      data_type: character
+      description: Foreign key to the Payment Service payment intent (text UUID).
+      data_tests:
+      - relationships:
+          to: source('source', 'payments_payments')
+          field: id
+    - name: refund_reference
+      data_type: character
+      description: Refund reference.
+    - name: customer_payment_id
+      data_type: character
+      description: Customer payment id.
+    - name: subscription_payment_id
+      data_type: character
+      description: Subscription payment id.
+    - name: receipt_id
+      data_type: character
+      description: Receipt id.
+    - name: order_id
+      data_type: character
+      description: Foreign key to the order being paid.
+      data_tests:
+      - not_null
+      - relationships:
+          to: source('source', 'crm_tos_orders')
+          field: id
+    - name: invoice_id
+      data_type: character
+      description: Invoice id.
+    - name: payment_timestamp
+      data_type: timestamp with time zone
+      description: Payment timestamp.
+    - name: failed_reason
+      data_type: text
+      description: Failed reason.
+    - name: payment_service_amount
+      data_type: character
+      description: Payment service amount.
+    - name: account
+      data_type: character
+      description: Account.
+    - name: is_halted
+      data_type: boolean
+      description: Is halted.
+    - name: is_outstanding_payment_retry
+      data_type: boolean
+      description: Is outstanding payment retry.
+    - name: last_payment_attempt
+      data_type: timestamp with time zone
+      description: Last payment attempt.
+    - name: last_sync
+      data_type: timestamp with time zone
+      description: Last sync.
+    - name: failed_attempt_count
+      data_type: integer
+      description: Failed attempt count.
+    - name: total_tos_amount_incl_vat
+      data_type: double precision
+      description: Total tos amount incl vat.
+    - name: total_non_tos_amount_incl_vat
+      data_type: double precision
+      description: Total non tos amount incl vat.
+    - name: total_discount_amount
+      data_type: double precision
+      description: Total discount amount.
+    - name: refund_amount
+      data_type: double precision
+      description: Refund amount in SAR when payment was refunded.
+    - name: refund_status
+      data_type: character
+      description: Refund status.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_payment_history
+    description: Card capture and payment attempt events. Each row records one authorization
+      or charge attempt including failure codes for retry analysis.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the payment attempt event.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: payment_history_id
+      data_type: character
+      description: Payment history id.
+    - name: payment_method_id
+      data_type: character
+      description: Payment method id.
+    - name: transaction_id
+      data_type: character
+      description: Transaction id.
+    - name: finger_print
+      data_type: character
+      description: Finger print.
+    - name: error_code
+      data_type: character
+      description: Processor error code when the attempt failed.
+    - name: error_reason
+      data_type: text
+      description: Human-readable failure reason from the payment processor.
+    - name: last_four
+      data_type: character
+      description: Last four.
+    - name: expiry_month
+      data_type: integer
+      description: Expiry month.
+    - name: expiry_year
+      data_type: integer
+      description: Expiry year.
+    - name: card_bin
+      data_type: character
+      description: Card bin.
+    - name: action
+      data_type: character
+      description: Action.
+    - name: status
+      data_type: character
+      description: Outcome of the card capture attempt (paid, failed, Approved, etc.).
+      data_tests:
+      - accepted_values:
+          values:
+          - Approved
+          - failed
+          - paid
+          - Paid
+          - success
+    - name: funding_type
+      data_type: character
+      description: Funding type.
+    - name: attempted_at
+      data_type: timestamp with time zone
+      description: Attempted at.
+    - name: payment_id
+      data_type: character
+      description: Foreign key to the parent CRM payment record.
+      data_tests:
+      - relationships:
+          to: source('source', 'crm_tos_payments')
+          field: id
+    - name: action_payment
+      data_type: character
+      description: Action payment.
+    - name: acquirer_reference_number
+      data_type: character
+      description: Acquirer reference number.
+    - name: reference_status
+      data_type: character
+      description: Reference status.
+    - name: refund_reason
+      data_type: text
+      description: Refund reason.
+    - name: refund_id
+      data_type: character
+      description: Refund id.
+    - name: source_data
+      data_type: text
+      description: Source data.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_cp_skus
+    description: Bridge mapping channel partners to Zaam SKUs. Each row links a partner
+      catalog entry to a Zaam SKU for partner-specific device offerings.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the channel-partner SKU mapping.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: purchase_price
+      data_type: double precision
+      description: Purchase price.
+    - name: category
+      data_type: character
+      description: Category.
+    - name: cp_sku_description
+      data_type: text
+      description: Cp sku description.
+    - name: channel_partner_id
+      data_type: character
+      description: Foreign key to the channel partner owning this catalog entry.
+      data_tests:
+      - not_null
+      - relationships:
+          to: source('source', 'crm_tos_channel_partners')
+          field: id
+    - name: zaam_sku_id
+      data_type: character
+      description: Foreign key to the Zaam SKU being offered by the partner.
+      data_tests:
+      - relationships:
+          to: source('source', 'crm_tos_zaam_skus')
+          field: id
+    - name: master_sku_id
+      data_type: character
+      description: Master sku id.
+    - name: cp_skus_uid
+      data_type: character
+      description: Cp skus uid.
+    - name: cp_item_code
+      data_type: character
+      description: Cp item code.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_subscription_pricing
+    description: Subscription price list entries with monthly recurring amounts used
+      for MRR calculations.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the subscription price list entry.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: monthly_subscription_amount
+      data_type: double precision
+      description: Monthly recurring charge in SAR used for MRR.
+    - name: auto_kif_months
+      data_type: integer
+      description: Auto kif months.
+    - name: subscription_pricing_status
+      data_type: character
+      description: Subscription pricing status.
+    - name: subscription_pricing_start_date
+      data_type: date
+      description: Subscription pricing start date.
+    - name: subscription_pricing_end_date
+      data_type: date
+      description: Subscription pricing end date.
+    - name: zaam_sku_id
+      data_type: character
+      description: Foreign key to the Zaam SKU this price applies to.
+      data_tests:
+      - relationships:
+          to: source('source', 'crm_tos_zaam_skus')
+          field: id
+    - name: tos_subscription_durations_id
+      data_type: character
+      description: Foreign key to the subscription term option in months.
+      data_tests:
+      - relationships:
+          to: source('source', 'crm_tos_subscription_durations')
+          field: id
+    - name: subscription_pricing_uid
+      data_type: character
+      description: Subscription pricing uid.
+    - name: monthly_subscription_percentage
+      data_type: double precision
+      description: Monthly subscription percentage.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_subscription_durations
+    description: Subscription term options in months linked to programs and pricing
+      records.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the subscription duration option.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: duration
+      data_type: character
+      description: Subscription term length in months.
+    - name: duration_status
+      data_type: character
+      description: Duration status.
+    - name: duration_start_date
+      data_type: date
+      description: Duration start date.
+    - name: duration_end_date
+      data_type: date
+      description: Duration end date.
+    - name: tos_programs_id
+      data_type: character
+      description: Tos programs id.
+    - name: subscription_duration_uid
+      data_type: character
+      description: Subscription duration uid.
+    - name: pid
+      data_type: character
+      description: Pid.
+    - name: tos_channel_partners_id
+      data_type: character
+      description: Foreign key to the channel partner offering this term.
+      data_tests:
+      - not_null
+      - relationships:
+          to: source('source', 'crm_tos_channel_partners')
+          field: id
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_corporate_company
+    description: Corporate employer entities for CEP employee programs. Each row is
+      one company with allowed email domains for employee eligibility.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the corporate employer entity.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: tos_corporate_company_type
+      data_type: character
+      description: Tos corporate company type.
+    - name: industry
+      data_type: character
+      description: Industry.
+    - name: annual_revenue
+      data_type: character
+      description: Annual revenue.
+    - name: phone_fax
+      data_type: character
+      description: Phone fax.
+    - name: billing_address_street
+      data_type: character
+      description: Billing address street.
+    - name: billing_address_city
+      data_type: character
+      description: Billing address city.
+    - name: billing_address_state
+      data_type: character
+      description: Billing address state.
+    - name: billing_address_postalcode
+      data_type: character
+      description: Billing address postalcode.
+    - name: billing_address_country
+      data_type: character
+      description: Billing address country.
+    - name: rating
+      data_type: character
+      description: Rating.
+    - name: phone_office
+      data_type: character
+      description: Phone office.
+    - name: phone_alternate
+      data_type: character
+      description: Phone alternate.
+    - name: website
+      data_type: character
+      description: Website.
+    - name: ownership
+      data_type: character
+      description: Ownership.
+    - name: employees
+      data_type: character
+      description: Employees.
+    - name: ticker_symbol
+      data_type: character
+      description: Ticker symbol.
+    - name: shipping_address_street
+      data_type: character
+      description: Shipping address street.
+    - name: shipping_address_city
+      data_type: character
+      description: Shipping address city.
+    - name: shipping_address_state
+      data_type: character
+      description: Shipping address state.
+    - name: shipping_address_postalcode
+      data_type: character
+      description: Shipping address postalcode.
+    - name: shipping_address_country
+      data_type: character
+      description: Shipping address country.
+    - name: allowed_email_domains
+      data_type: character
+      description: Comma-separated email domains eligible for CEP employee signup.
+    - name: status
+      data_type: character
+      description: Status.
+    - name: tos_channel_partners_id
+      data_type: character
+      description: Tos channel partners id.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_master_skus
+    description: Master device SKU catalog with brand, model, memory, and color attributes.
+      Each row is one canonical hardware SKU for sales analytics.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the master device SKU.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: brand
+      data_type: character
+      description: Device manufacturer brand.
+    - name: model
+      data_type: character
+      description: Device model name.
+    - name: memory
+      data_type: character
+      description: Storage capacity attribute.
+    - name: color
+      data_type: character
+      description: Color variant attribute.
+    - name: case_size
+      data_type: character
+      description: Case size.
+    - name: case_material
+      data_type: character
+      description: Case material.
+    - name: strap_design
+      data_type: character
+      description: Strap design.
+    - name: memory_type
+      data_type: character
+      description: Memory type.
+    - name: connectivity
+      data_type: character
+      description: Connectivity.
+    - name: size
+      data_type: character
+      description: Size.
+    - name: display_type
+      data_type: character
+      description: Display type.
+    - name: os
+      data_type: character
+      description: Os.
+    - name: hdr
+      data_type: character
+      description: Hdr.
+    - name: display_backlight
+      data_type: character
+      description: Display backlight.
+    - name: processor_type
+      data_type: character
+      description: Processor type.
+    - name: processor_speed
+      data_type: character
+      description: Processor speed.
+    - name: os_architecture
+      data_type: character
+      description: Os architecture.
+    - name: graphics_card
+      data_type: character
+      description: Graphics card.
+    - name: ram
+      data_type: character
+      description: Ram.
+    - name: ports
+      data_type: character
+      description: Ports.
+    - name: cpu
+      data_type: character
+      description: Cpu.
+    - name: keyboard_type
+      data_type: character
+      description: Keyboard type.
+    - name: sku_master_id
+      data_type: character
+      description: Sku master id.
+    - name: series
+      data_type: character
+      description: Series.
+    - name: base_color
+      data_type: character
+      description: Base color.
+    - name: category
+      data_type: character
+      description: Category.
+    - name: sku_master_uid
+      data_type: character
+      description: Sku master uid.
+    - name: master_sku_image
+      data_type: character
+      description: Master sku image.
+    - name: s3_url
+      data_type: character
+      description: S3 url.
+    - name: bundle
+      data_type: character
+      description: Bundle.
+    - name: additional_specs
+      data_type: character
+      description: Additional specs.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_zaam_skus
+    description: Zaam program-specific SKUs mapped to master SKUs. Each row is one
+      sellable SKU in a program catalog with pricing context.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the Zaam program SKU.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: barcode
+      data_type: character
+      description: Barcode.
+    - name: launch_date
+      data_type: date
+      description: Launch date.
+    - name: launch_rrp
+      data_type: double precision
+      description: Launch rrp.
+    - name: global_model_number
+      data_type: character
+      description: Global model number.
+    - name: tos_master_skus_id
+      data_type: character
+      description: Foreign key to the canonical master SKU attributes.
+      data_tests:
+      - not_null
+      - relationships:
+          to: source('source', 'crm_tos_master_skus')
+          field: id
+    - name: zaam_skus_type
+      data_type: character
+      description: Zaam skus type.
+    - name: item_sku
+      data_type: character
+      description: Item sku.
+    - name: category
+      data_type: character
+      description: Category.
+    - name: country_id
+      data_type: character
+      description: Country id.
+    - name: currency_id
+      data_type: character
+      description: Currency id.
+    - name: zaam_skus_uid
+      data_type: character
+      description: Zaam skus uid.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_aos_invoices
+    description: Zoho Books synced invoices from SuiteCRM. Each row is one invoice
+      with VAT amounts and synced Zoho invoice identifiers for finance reconciliation.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the synced invoice.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: billing_account_id
+      data_type: character
+      description: Foreign key to the customer account billed on the invoice.
+      data_tests:
+      - relationships:
+          to: source('source', 'crm_accounts')
+          field: id
+    - name: billing_contact_id
+      data_type: character
+      description: Billing contact id.
+    - name: billing_address_street
+      data_type: character
+      description: Billing address street.
+    - name: billing_address_city
+      data_type: character
+      description: Billing address city.
+    - name: billing_address_state
+      data_type: character
+      description: Billing address state.
+    - name: billing_address_postalcode
+      data_type: character
+      description: Billing address postalcode.
+    - name: billing_address_country
+      data_type: character
+      description: Billing address country.
+    - name: shipping_address_street
+      data_type: character
+      description: Shipping address street.
+    - name: shipping_address_city
+      data_type: character
+      description: Shipping address city.
+    - name: shipping_address_state
+      data_type: character
+      description: Shipping address state.
+    - name: shipping_address_postalcode
+      data_type: character
+      description: Shipping address postalcode.
+    - name: shipping_address_country
+      data_type: character
+      description: Shipping address country.
+    - name: number
+      data_type: integer
+      description: Number.
+    - name: total_amt
+      data_type: numeric
+      description: Total amt.
+    - name: total_amt_usdollar
+      data_type: numeric
+      description: Total amt usdollar.
+    - name: subtotal_amount
+      data_type: numeric
+      description: Subtotal amount.
+    - name: subtotal_amount_usdollar
+      data_type: numeric
+      description: Subtotal amount usdollar.
+    - name: discount_amount
+      data_type: numeric
+      description: Discount amount.
+    - name: discount_amount_usdollar
+      data_type: numeric
+      description: Discount amount usdollar.
+    - name: tax_amount
+      data_type: numeric
+      description: Tax amount.
+    - name: tax_amount_usdollar
+      data_type: numeric
+      description: Tax amount usdollar.
+    - name: shipping_amount
+      data_type: numeric
+      description: Shipping amount.
+    - name: shipping_amount_usdollar
+      data_type: numeric
+      description: Shipping amount usdollar.
+    - name: shipping_tax
+      data_type: character
+      description: Shipping tax.
+    - name: shipping_tax_amt
+      data_type: numeric
+      description: Shipping tax amt.
+    - name: shipping_tax_amt_usdollar
+      data_type: numeric
+      description: Shipping tax amt usdollar.
+    - name: total_amount
+      data_type: numeric
+      description: Invoice total amount in SAR.
+    - name: total_amount_usdollar
+      data_type: numeric
+      description: Total amount usdollar.
+    - name: currency_id
+      data_type: character
+      description: Currency id.
+    - name: quote_number
+      data_type: integer
+      description: Quote number.
+    - name: quote_date
+      data_type: date
+      description: Quote date.
+    - name: invoice_date
+      data_type: date
+      description: Invoice date.
+    - name: due_date
+      data_type: date
+      description: Due date.
+    - name: status
+      data_type: character
+      description: Status.
+    - name: template_ddown_c
+      data_type: text
+      description: Template ddown c.
+    - name: subtotal_tax_amount
+      data_type: numeric
+      description: Subtotal tax amount.
+    - name: subtotal_tax_amount_usdollar
+      data_type: numeric
+      description: Subtotal tax amount usdollar.
+    - name: invoice_amount
+      data_type: real
+      description: Invoice amount.
+    - name: settlement_date
+      data_type: date
+      description: Settlement date.
+    - name: external_invoice_id
+      data_type: character
+      description: External invoice id.
+    - name: invoice_type
+      data_type: character
+      description: Invoice type.
+    - name: invoice_up_to
+      data_type: date
+      description: Invoice up to.
+    - name: invoice_status
+      data_type: character
+      description: Invoice collection status in Zoho (paid or unpaid).
+      data_tests:
+      - accepted_values:
+          values:
+          - paid
+          - unpaid
+    - name: invoice_due_date
+      data_type: date
+      description: Invoice due date.
+    - name: vat_percentage
+      data_type: real
+      description: Vat percentage.
+    - name: vat_amount
+      data_type: real
+      description: VAT portion of the invoice in SAR.
+    - name: invoice_id
+      data_type: character
+      description: Invoice id.
+    - name: customer_id
+      data_type: character
+      description: Customer id.
+    - name: channel_partner_id
+      data_type: character
+      description: Channel partner id.
+    - name: programs_id
+      data_type: character
+      description: Programs id.
+    - name: amount_ex_vat
+      data_type: real
+      description: Amount ex vat.
+    - name: zoho_invoice_number
+      data_type: character
+      description: Invoice number assigned in Zoho Books.
+    - name: external_journal_id
+      data_type: character
+      description: External journal id.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_invoice_line_items
+    description: Invoice line items linked to subscriptions. Each row is one billed
+      line with amounts exclusive and inclusive of VAT.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the invoice line.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: tos_invoice_line_items_type
+      data_type: character
+      description: Tos invoice line items type.
+    - name: lead_source
+      data_type: character
+      description: Lead source.
+    - name: amount
+      data_type: double precision
+      description: Amount.
+    - name: amount_usdollar
+      data_type: double precision
+      description: Amount usdollar.
+    - name: currency_id
+      data_type: character
+      description: Currency id.
+    - name: date_closed
+      data_type: date
+      description: Date closed.
+    - name: next_step
+      data_type: character
+      description: Next step.
+    - name: sales_stage
+      data_type: character
+      description: Sales stage.
+    - name: probability
+      data_type: double precision
+      description: Probability.
+    - name: line_item_id
+      data_type: character
+      description: Line item id.
+    - name: quantity
+      data_type: integer
+      description: Quantity.
+    - name: vat
+      data_type: integer
+      description: Vat.
+    - name: discount
+      data_type: numeric
+      description: Discount.
+    - name: amount_ex_vat
+      data_type: numeric
+      description: Amount ex vat.
+    - name: vat_amount
+      data_type: numeric
+      description: Vat amount.
+    - name: total_inc_vat
+      data_type: numeric
+      description: Total inc vat.
+    - name: net_amount
+      data_type: numeric
+      description: Net amount.
+    - name: invoice_line_item_id
+      data_type: character
+      description: Invoice line item id.
+    - name: account
+      data_type: character
+      description: Account.
+    - name: tos_subscriptions_id
+      data_type: character
+      description: Foreign key to the subscription billed on this line.
+      data_tests:
+      - relationships:
+          to: source('source', 'crm_tos_subscriptions')
+          field: id
+    - name: product_type
+      data_type: character
+      description: Product type.
+    - name: tos_order_item_id
+      data_type: character
+      description: Tos order item id.
+    - name: zoho_item_sync_type
+      data_type: character
+      description: Zoho item sync type.
+    - name: zoho_line_item_id
+      data_type: character
+      description: Zoho line item id.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_credit_notes
+    description: Credit notes issued against invoices and synced to Zoho Books. Each
+      row represents one refund or adjustment document for finance reporting.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the credit note.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: invoice_id
+      data_type: character
+      description: Invoice id.
+    - name: credit_note_zoho_url
+      data_type: character
+      description: Credit note zoho url.
+    - name: zoho_status
+      data_type: character
+      description: Sync status of the credit note in Zoho.
+    - name: zoho_credit_note_id
+      data_type: character
+      description: Credit note identifier in Zoho Books.
+    - name: credit_id
+      data_type: character
+      description: Credit id.
+    - name: external_journal_id
+      data_type: character
+      description: External journal id.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_addresses
+    description: Customer and partner delivery addresses including region fields used
+      for fulfillment SLA.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the address record.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: addresses_status
+      data_type: character
+      description: Addresses status.
+    - name: addresses_address
+      data_type: text
+      description: Addresses address.
+    - name: addresses_city
+      data_type: character
+      description: Addresses city.
+    - name: addresses_country
+      data_type: character
+      description: Addresses country.
+    - name: addresses_street
+      data_type: character
+      description: Addresses street.
+    - name: addresses_landmark
+      data_type: character
+      description: Addresses landmark.
+    - name: addresses_type
+      data_type: character
+      description: Addresses type.
+    - name: address_id
+      data_type: character
+      description: Address id.
+    - name: addresses_country_id
+      data_type: character
+      description: Addresses country id.
+    - name: addresses_area
+      data_type: character
+      description: Addresses area.
+    - name: addresses_building_number_and_name
+      data_type: character
+      description: Addresses building number and name.
+    - name: customer_id
+      data_type: character
+      description: Customer id.
+    - name: addresses_default_address
+      data_type: boolean
+      description: Addresses default address.
+    - name: district
+      data_type: character
+      description: District.
+    - name: postal_code
+      data_type: character
+      description: Postal code.
+    - name: additional_postal_code
+      data_type: character
+      description: Additional postal code.
+    - name: short_national_address
+      data_type: character
+      description: Short national address.
+    - name: coordinates
+      data_type: character
+      description: Coordinates.
+    - name: additional_address_fields
+      data_type: text
+      description: Additional address fields.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_payment_methods
+    description: Stored payment methods on file in CRM including card expiry for outstanding
+      payment monitoring.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the stored CRM payment method.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: status
+      data_type: character
+      description: Status.
+    - name: is_default
+      data_type: boolean
+      description: Is default.
+    - name: type
+      data_type: character
+      description: Type.
+    - name: ending_digits
+      data_type: character
+      description: Ending digits.
+    - name: expiry_year
+      data_type: integer
+      description: Expiry year.
+    - name: expiry_month
+      data_type: integer
+      description: Expiry month.
+    - name: finger_print
+      data_type: character
+      description: Finger print.
+    - name: bin
+      data_type: character
+      description: Bin.
+    - name: customer_id
+      data_type: character
+      description: Customer id.
+    - name: payment_method_id
+      data_type: character
+      description: Payment method id.
+    - name: payment_method_brand
+      data_type: character
+      description: Payment method brand.
+    - name: payment_gateway
+      data_type: character
+      description: Payment gateway.
+    - name: issuer_country
+      data_type: character
+      description: Issuer country.
+    - name: reason
+      data_type: character
+      description: Reason.
+    - name: reason_data
+      data_type: character
+      description: Reason data.
+    - name: cardholder_name
+      data_type: character
+      description: Cardholder name.
+    - name: marked_primary_at
+      data_type: timestamp with time zone
+      description: Marked primary at.
+    - name: expiry_email_sent_at
+      data_type: date
+      description: Expiry email sent at.
+    - name: product_type
+      data_type: character
+      description: Product type.
+    - name: product_id
+      data_type: character
+      description: Product id.
+    - name: card_issuer
+      data_type: character
+      description: Card issuer.
+    - name: scheme
+      data_type: character
+      description: Scheme.
+    - name: avs_check
+      data_type: character
+      description: Avs check.
+    - name: cvv_check
+      data_type: character
+      description: Cvv check.
+    - name: card_category
+      data_type: character
+      description: Card category.
+    - name: funding_type
+      data_type: character
+      description: Funding type.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_countries
+    description: Country reference data including Zoho tax identifiers for KSA VAT
+      configuration.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the country reference row.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: country_code
+      data_type: character
+      description: Country code.
+    - name: time_zone
+      data_type: character
+      description: Time zone.
+    - name: country_uid
+      data_type: character
+      description: Country uid.
+    - name: country_currency
+      data_type: character
+      description: Country currency.
+    - name: vat_rate
+      data_type: integer
+      description: Vat rate.
+    - name: country_currency_name
+      data_type: character
+      description: Country currency name.
+    - name: country_currency_symbol
+      data_type: character
+      description: Country currency symbol.
+    - name: country_currency_iso4217
+      data_type: character
+      description: Country currency iso4217.
+    - name: zoho_tax_id
+      data_type: character
+      description: Zoho Books tax identifier configured for this country.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_api_logs
+    description: Partner and API integration call log. Each row is one outbound API
+      request with success or failure status for webhook reliability metrics.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the API call log entry.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: parent_type
+      data_type: character
+      description: Parent type.
+    - name: parent_id
+      data_type: character
+      description: Parent id.
+    - name: source_data
+      data_type: text
+      description: Source data.
+    - name: error_details
+      data_type: text
+      description: Error details.
+    - name: trace_log
+      data_type: text
+      description: Trace log.
+    - name: status
+      data_type: character
+      description: Outcome of the API call (success or failure).
+      data_tests:
+      - accepted_values:
+          values:
+          - failure
+          - success
+    - name: source
+      data_type: character
+      description: Source.
+    - name: unique_id
+      data_type: character
+      description: Unique id.
+    - name: exception_email_sent
+      data_type: boolean
+      description: Exception email sent.
+    - name: scheduler_information
+      data_type: text
+      description: Scheduler information.
+    - name: header
+      data_type: text
+      description: Header.
+    - name: fingerprint_id
+      data_type: character
+      description: Fingerprint id.
+    - name: ip
+      data_type: character
+      description: Ip.
+    - name: browser
+      data_type: character
+      description: Browser.
+    - name: platform
+      data_type: character
+      description: Platform.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: crm_tos_devices_journey
+    description: Device fulfillment journey milestones. Each row captures a delivery
+      or handover event supplementing order delivery timestamps.
+    columns:
+    - name: id
+      data_type: character
+      description: Primary key for the device journey milestone.
+      data_tests:
+      - unique
+      - not_null
+    - name: name
+      data_type: character
+      description: Name.
+    - name: date_entered
+      data_type: timestamp with time zone
+      description: Date entered.
+    - name: date_modified
+      data_type: timestamp with time zone
+      description: Date modified.
+    - name: modified_user_id
+      data_type: character
+      description: Modified user id.
+    - name: created_by
+      data_type: character
+      description: Created by.
+    - name: description
+      data_type: text
+      description: Description.
+    - name: deleted
+      data_type: boolean
+      description: Deleted.
+    - name: assigned_user_id
+      data_type: character
+      description: Assigned user id.
+    - name: device_movement
+      data_type: character
+      description: Device movement.
+    - name: movement_date
+      data_type: date
+      description: Movement date.
+    - name: devices_tos_devices_journey_id
+      data_type: character
+      description: Devices tos devices journey id.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: payments_payments
+    description: Payment Service payment intents. Each row is one PSP payment linked
+      to a subscriber and optional PSP subscription.
+    columns:
+    - name: id
+      data_type: character varying
+      description: Primary key for the PSP payment intent.
+      data_tests:
+      - unique
+      - not_null
+    - name: payment_type
+      data_type: character varying
+      description: Payment type.
+    - name: notes
+      data_type: text
+      description: Notes.
+    - name: amount
+      data_type: double precision
+      description: Amount.
+    - name: due_date
+      data_type: timestamp without time zone
+      description: Due date.
+    - name: cp_amount
+      data_type: double precision
+      description: Cp amount.
+    - name: cp_id
+      data_type: character varying
+      description: Cp id.
+    - name: subscriber_id
+      data_type: character varying
+      description: Foreign key to the Payment Service subscriber.
+      data_tests:
+      - not_null
+      - relationships:
+          to: source('source', 'payments_subscribers')
+          field: id
+    - name: subscription_id
+      data_type: character varying
+      description: Foreign key to the PSP recurring subscription when applicable.
+      data_tests:
+      - relationships:
+          to: source('source', 'payments_subscriptions')
+          field: id
+    - name: transaction_id
+      data_type: uuid
+      description: Transaction id.
+    - name: return_url
+      data_type: text
+      description: Return url.
+    - name: payment_intent_id
+      data_type: character varying
+      description: Payment intent id.
+    - name: link_type
+      data_type: character varying
+      description: Link type.
+    - name: created_at
+      data_type: timestamp without time zone
+      description: Created at.
+    - name: updated_at
+      data_type: timestamp without time zone
+      description: Updated at.
+    - name: deleted_at
+      data_type: timestamp without time zone
+      description: Deleted at.
+    - name: payment_link
+      data_type: character varying
+      description: Payment link.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: payments_transactions
+    description: Payment Service transaction outcomes. Each row records process and
+      request status for card processing success, failure, and retry queue analysis.
+    columns:
+    - name: id
+      data_type: uuid
+      description: Primary key for the PSP transaction.
+      data_tests:
+      - unique
+      - not_null
+    - name: idempotency_key
+      data_type: character varying
+      description: Idempotency key.
+    - name: payment_intent_id
+      data_type: character varying
+      description: Payment intent id.
+    - name: process_status
+      data_type: character varying
+      description: Processing pipeline status (completed, queued, failed, in_progress).
+      data_tests:
+      - accepted_values:
+          values:
+          - completed
+          - failed
+          - in_progress
+          - queued
+    - name: request_status
+      data_type: character varying
+      description: Authorization or capture request outcome from the processor.
+      data_tests:
+      - accepted_values:
+          values:
+          - authorized
+          - failed
+          - internal_error
+          - required_authentication
+          - success
+          - voided
+          config:
+            where: request_status is not null
+    - name: same_day_schedule_hash
+      data_type: character varying
+      description: Same day schedule hash.
+    - name: type
+      data_type: character varying
+      description: Type.
+    - name: request_data
+      data_type: jsonb
+      description: Request data.
+    - name: min_process_time
+      data_type: integer
+      description: Min process time.
+    - name: response_data
+      data_type: jsonb
+      description: Response data.
+    - name: reference_status
+      data_type: character varying
+      description: Reference status.
+    - name: subscriber_id
+      data_type: character varying
+      description: Foreign key to the subscriber who initiated the transaction.
+      data_tests:
+      - not_null
+      - relationships:
+          to: source('source', 'payments_subscribers')
+          field: id
+    - name: is_scheduled
+      data_type: boolean
+      description: Is scheduled.
+    - name: due_date
+      data_type: timestamp without time zone
+      description: Due date.
+    - name: created_at
+      data_type: timestamp without time zone
+      description: Created at.
+    - name: updated_at
+      data_type: timestamp without time zone
+      description: Updated at.
+    - name: session_id
+      data_type: character varying
+      description: Session id.
+    - name: payment_link
+      data_type: character varying
+      description: Payment link.
+    - name: psp_metadata
+      data_type: jsonb
+      description: Psp metadata.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: payments_refunds
+    description: Payment Service refund events. Each row is one refund amount and
+      approval status.
+    columns:
+    - name: id
+      data_type: character varying
+      description: Primary key for the PSP refund.
+      data_tests:
+      - unique
+      - not_null
+    - name: refund_id
+      data_type: character varying
+      description: Refund id.
+    - name: payment_intent_id
+      data_type: character varying
+      description: Payment intent id.
+    - name: data
+      data_type: jsonb
+      description: Data.
+    - name: amount
+      data_type: integer
+      description: Refunded amount.
+    - name: status
+      data_type: character varying
+      description: Refund approval status from the payment processor.
+      data_tests:
+      - accepted_values:
+          values:
+          - Approved
+    - name: currency
+      data_type: character varying
+      description: Currency.
+    - name: acquirer_reference_number
+      data_type: character varying
+      description: Acquirer reference number.
+    - name: reference_status
+      data_type: character varying
+      description: Reference status.
+    - name: created_at
+      data_type: timestamp without time zone
+      description: Created at.
+    - name: updated_at
+      data_type: timestamp without time zone
+      description: Updated at.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: payments_subscribers
+    description: Payment Service subscriber profiles. Each row is one payer identity
+      with external Stripe identifier.
+    columns:
+    - name: id
+      data_type: character varying
+      description: Primary key for the PSP subscriber profile.
+      data_tests:
+      - unique
+      - not_null
+    - name: stripe_id
+      data_type: character varying
+      description: External Stripe customer identifier.
+    - name: default_payment_method_id
+      data_type: character varying
+      description: Default payment method id.
+    - name: subscriptions
+      data_type: character varying
+      description: Subscriptions.
+    - name: data
+      data_type: jsonb
+      description: Data.
+    - name: disputed
+      data_type: boolean
+      description: Disputed.
+    - name: created_at
+      data_type: timestamp without time zone
+      description: Created at.
+    - name: updated_at
+      data_type: timestamp without time zone
+      description: Updated at.
+    - name: deleted_at
+      data_type: timestamp without time zone
+      description: Deleted at.
+    - name: collectible
+      data_type: boolean
+      description: Collectible.
+    - name: collectible_updated_timestamp
+      data_type: timestamp without time zone
+      description: Collectible updated timestamp.
+    - name: stripe_metadata
+      data_type: jsonb
+      description: Stripe metadata.
+    - name: checkout_id
+      data_type: character varying
+      description: Checkout id.
+    - name: checkout_metadata
+      data_type: jsonb
+      description: Checkout metadata.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: payments_subscriptions
+    description: Payment Service recurring billing subscriptions. Each row is one
+      PSP subscription entity.
+    columns:
+    - name: id
+      data_type: character varying
+      description: Primary key for the PSP subscription entity.
+      data_tests:
+      - unique
+      - not_null
+    - name: currency
+      data_type: character varying
+      description: Currency.
+    - name: locked
+      data_type: boolean
+      description: Locked.
+    - name: subscriber_id
+      data_type: character varying
+      description: Subscriber id.
+    - name: created_at
+      data_type: timestamp without time zone
+      description: Created at.
+    - name: updated_at
+      data_type: timestamp without time zone
+      description: Updated at.
+    - name: deleted_at
+      data_type: timestamp without time zone
+      description: Deleted at.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.
+  - name: payments_payment_methods
+    description: Payment methods stored at the Payment Service including card-on-file
+      details.
+    columns:
+    - name: id
+      data_type: character varying
+      description: Primary key for the PSP stored payment method.
+      data_tests:
+      - unique
+      - not_null
+    - name: details
+      data_type: jsonb
+      description: Details.
+    - name: is_enabled
+      data_type: boolean
+      description: Is enabled.
+    - name: expiry_month
+      data_type: integer
+      description: Expiry month.
+    - name: expiry_year
+      data_type: integer
+      description: Expiry year.
+    - name: payment_gateway
+      data_type: character varying
+      description: Payment gateway.
+    - name: last4
+      data_type: character varying
+      description: Last4.
+    - name: subscriber_id
+      data_type: character varying
+      description: Subscriber id.
+    - name: created_at
+      data_type: timestamp without time zone
+      description: Created at.
+    - name: updated_at
+      data_type: timestamp without time zone
+      description: Updated at.
+    - name: deleted_at
+      data_type: timestamp without time zone
+      description: Deleted at.
+    - name: expired
+      data_type: boolean
+      description: Expired.
+    - name: fingerprint
+      data_type: character varying
+      description: Fingerprint.
+    - name: payment_intent_id
+      data_type: character varying
+      description: Payment intent id.
+    - name: _etl_synced_at
+      data_type: timestamp with time zone
+      description: Etl synced at.
+    - name: _etl_batch_id
+      data_type: character varying
+      description: Etl batch id.
+    - name: _etl_source_system
+      data_type: character varying
+      description: Etl source system.
+    - name: _etl_deleted_at
+      data_type: timestamp with time zone
+      description: Etl deleted at.

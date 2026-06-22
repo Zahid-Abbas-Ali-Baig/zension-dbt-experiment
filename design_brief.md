@@ -1,6 +1,6 @@
 # Design Brief — Zension
 
-**Status:** pending approval
+**Status:** approved
 
 > Generated from [`requirements.md`](requirements.md) and live schema discovery against `zension.source` (PostgreSQL).
 >
