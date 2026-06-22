@@ -1,0 +1,183 @@
+version: 2
+
+models:
+  - name: int_channel_partners
+    description: Conformed channel partner dimension for partner-scoped analytics.
+    columns:
+      - name: channel_partner_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_customers
+    description: Customer accounts enriched with CEP corporate company attributes.
+    columns:
+      - name: customer_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_device_skus
+    description: Zaam SKU grain with resolved master device attributes.
+    columns:
+      - name: zaam_sku_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_programs
+    description: Programs with channel partner context and subscription limit utilization.
+    columns:
+      - name: program_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_orders
+    description: Orders enriched with program, partner, and customer; orphan FKs flagged.
+    columns:
+      - name: order_id
+        data_tests:
+          - unique
+          - not_null
+      - name: has_valid_customer
+        description: False when customer_id does not resolve to a CRM account (1,441 orphans).
+
+  - name: int_order_items
+    description: Order line items with order context and coalesced Zaam/CP SKU resolution.
+    columns:
+      - name: order_item_id
+        data_tests:
+          - unique
+          - not_null
+      - name: has_valid_order
+        description: False for 213 order items with orphan order_id FK.
+
+  - name: int_subscriptions
+    description: Subscriptions with pricing MRR, term months, and order/program context.
+    columns:
+      - name: subscription_id
+        data_tests:
+          - unique
+          - not_null
+      - name: has_valid_customer
+        description: False for 601 subscription/customer orphan FK rows.
+
+  - name: int_devices
+    description: Physical devices linked to order items and subscriptions.
+    columns:
+      - name: device_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_subscription_snapshots_monthly
+    description: Month-end subscription status spine for churn and upgrade rate KPIs.
+    columns:
+      - name: subscription_id
+        data_tests:
+          - not_null
+      - name: snapshot_month
+        data_tests:
+          - not_null
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - subscription_id
+            - snapshot_month
+
+  - name: int_customer_device_counts
+    description: Device count rollup per customer for devices-per-customer KPI.
+    columns:
+      - name: customer_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_payments_crm
+    description: CRM payments with order and customer context.
+    columns:
+      - name: payment_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_payments_psp
+    description: PSP payment intents with latest transaction outcome.
+    columns:
+      - name: psp_payment_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_payments_unified
+    description: CRM-to-PSP payment reconciliation at CRM payment grain.
+    columns:
+      - name: payment_id
+        data_tests:
+          - unique
+          - not_null
+      - name: psp_reconciliation_status
+        data_tests:
+          - accepted_values:
+              values:
+                - no_psp_reference
+                - missing_in_psp
+                - amount_mismatch
+                - reconciled
+
+  - name: int_payment_attempts
+    description: Payment history attempts enriched with unified payment context.
+    columns:
+      - name: payment_history_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_invoices
+    description: Zoho-synced invoices enriched with customer attributes.
+    columns:
+      - name: invoice_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_invoice_line_items
+    description: Invoice lines linked to subscriptions and invoice headers.
+    columns:
+      - name: invoice_line_item_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_credit_notes
+    description: Credit notes with parent invoice and customer context.
+    columns:
+      - name: credit_note_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_refunds
+    description: CRM and PSP refund events unioned with deduplication key.
+    columns:
+      - name: refund_dedup_key
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_finance_reconciliation
+    description: Monthly collected vs invoiced revenue reconciliation for finance KPIs.
+    columns:
+      - name: reconciliation_month
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_partner_api_events
+    description: Partner API logs with channel partner attribution.
+    columns:
+      - name: api_log_id
+        data_tests:
+          - unique
+          - not_null
