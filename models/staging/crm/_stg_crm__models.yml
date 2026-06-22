@@ -1,0 +1,1171 @@
+version: 2
+models:
+- name: stg_crm__accounts
+  description: SuiteCRM customer accounts with Nafath and mobile verification for
+    KSA identity onboarding.
+  columns:
+  - name: select
+    description: Select.
+  - name: customer_id
+    description: Customer id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: customer_name
+    description: Customer name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: national_id
+    description: National id.
+  - name: is_nafath_verified
+    description: Is nafath verified.
+  - name: is_mobile_verified
+    description: Is mobile verified.
+  - name: corporate_company_id
+    description: Corporate company id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_corporate_company')
+        field: corporate_company_id
+  - name: zoho_customer_id
+    description: Zoho customer id.
+  - name: channel_partner_id
+    description: Channel partner id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_channel_partners')
+        field: channel_partner_id
+  - name: program_id
+    description: Program id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_programs')
+        field: program_id
+  - name: customer_uid
+    description: Customer uid.
+  - name: phone_number
+    description: Phone number.
+  - name: mobile_number
+    description: Mobile number.
+  - name: personal_email_address
+    description: Personal email address.
+  - name: customer_status
+    description: Customer status.
+  - name: customer_verification_at
+    description: Customer verification at.
+  - name: nafath_verified_at
+    description: Nafath verified at.
+  - name: is_fully_verified
+    description: Customer has both Nafath and mobile OTP verification per program
+      rules.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__aos_invoices
+  description: Zoho-synced CRM invoices for collected vs invoiced revenue reconciliation.
+  columns:
+  - name: select
+    description: Select.
+  - name: invoice_id
+    description: Invoice id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: invoice_name
+    description: Invoice name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: invoice_status
+    description: Invoice status.
+    data_tests:
+    - accepted_values:
+        values:
+        - paid
+        - unpaid
+  - name: invoice_amount_sar
+    description: Invoice amount sar.
+  - name: vat_amount_sar
+    description: Vat amount sar.
+  - name: amount_ex_vat_sar
+    description: Amount ex vat sar.
+  - name: zoho_invoice_number
+    description: Zoho invoice number.
+  - name: billing_account_id
+    description: Billing account id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__accounts')
+        field: customer_id
+  - name: customer_id
+    description: Customer id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__accounts')
+        field: customer_id
+  - name: channel_partner_id
+    description: Channel partner id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_channel_partners')
+        field: channel_partner_id
+  - name: program_id
+    description: Program id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_programs')
+        field: program_id
+  - name: invoice_date
+    description: Invoice date.
+  - name: invoice_due_date
+    description: Invoice due date.
+  - name: settlement_date
+    description: Settlement date.
+  - name: is_paid
+    description: Is paid.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_addresses
+  description: Customer addresses for regional order-to-delivery SLA analysis.
+  columns:
+  - name: select
+    description: Select.
+  - name: address_id
+    description: Address id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: address_name
+    description: Address name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: customer_id
+    description: Customer id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__accounts')
+        field: customer_id
+  - name: address_type
+    description: Address type.
+  - name: city
+    description: City.
+  - name: area
+    description: Area.
+  - name: country
+    description: Country.
+  - name: street
+    description: Street.
+  - name: district
+    description: District.
+  - name: postal_code
+    description: Postal code.
+  - name: is_default_address
+    description: Is default address.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_api_logs
+  description: Partner API and webhook call logs for operational failure monitoring.
+  columns:
+  - name: select
+    description: Select.
+  - name: api_log_id
+    description: Api log id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: api_log_name
+    description: Api log name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: api_status
+    description: Api status.
+    data_tests:
+    - accepted_values:
+        values:
+        - failure
+        - success
+  - name: api_source
+    description: Api source.
+  - name: parent_type
+    description: Parent type.
+  - name: parent_id
+    description: Parent id.
+  - name: error_details
+    description: Error details.
+  - name: is_failure
+    description: Is failure.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_channel_partners
+  description: B2B channel partners (Jarir, ZAAM, Axiom) governing partner-scoped
+    analytics.
+  columns:
+  - name: select
+    description: Select.
+  - name: channel_partner_id
+    description: Channel partner id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: partner_name
+    description: Partner name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: legal_name
+    description: Legal name.
+  - name: partner_type
+    description: Partner type.
+    data_tests:
+    - accepted_values:
+        values:
+        - ecommerce
+        - retailer
+  - name: vat_trn_number
+    description: Vat trn number.
+  - name: channel_partner_uid
+    description: Channel partner uid.
+  - name: partner_status
+    description: Partner status.
+  - name: country_id
+    description: Country id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_countries')
+        field: country_id
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_corporate_company
+  description: CEP employer entities with allowed email domains for employee verification.
+  columns:
+  - name: select
+    description: Select.
+  - name: corporate_company_id
+    description: Corporate company id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: company_name
+    description: Company name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: allowed_email_domains
+    description: Allowed email domains.
+  - name: company_status
+    description: Company status.
+  - name: channel_partner_id
+    description: Channel partner id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_channel_partners')
+        field: channel_partner_id
+  - name: company_type
+    description: Company type.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_countries
+  description: Country reference with VAT rate and Zoho tax IDs for KSA finance compliance.
+  columns:
+  - name: select
+    description: Select.
+  - name: country_id
+    description: Country id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: country_name
+    description: Country name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: country_code
+    description: Country code.
+  - name: country_currency
+    description: Country currency.
+  - name: vat_rate
+    description: Vat rate.
+  - name: zoho_tax_id
+    description: Zoho tax id.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_cp_skus
+  description: Channel-partner to Zaam SKU bridge for partner-specific catalog pricing.
+  columns:
+  - name: select
+    description: Select.
+  - name: cp_sku_id
+    description: Cp sku id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: cp_sku_name
+    description: Cp sku name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: channel_partner_id
+    description: Channel partner id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_channel_partners')
+        field: channel_partner_id
+  - name: zaam_sku_id
+    description: Zaam sku id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_zaam_skus')
+        field: zaam_sku_id
+  - name: master_sku_id
+    description: Master sku id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_master_skus')
+        field: master_sku_id
+  - name: purchase_price
+    description: Purchase price.
+  - name: category
+    description: Category.
+  - name: cp_item_code
+    description: Cp item code.
+  - name: cp_sku_uid
+    description: Cp sku uid.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_credit_notes
+  description: Credit notes synced to Zoho Books for refund and adjustment reporting.
+  columns:
+  - name: select
+    description: Select.
+  - name: credit_note_id
+    description: Credit note id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: credit_note_name
+    description: Credit note name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: zoho_credit_note_id
+    description: Zoho credit note id.
+  - name: zoho_status
+    description: Zoho status.
+  - name: credit_note_zoho_url
+    description: Credit note zoho url.
+  - name: invoice_id
+    description: Invoice id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__aos_invoices')
+        field: invoice_id
+  - name: credit_id
+    description: Credit id.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_devices
+  description: Physical device assets with brand, model, memory, and color for fulfillment
+    analytics.
+  columns:
+  - name: select
+    description: Select.
+  - name: device_id
+    description: Device id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: device_name
+    description: Device name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: serial_number
+    description: Serial number.
+  - name: purchase_price
+    description: Purchase price.
+  - name: purchase_date
+    description: Purchase date.
+  - name: delivery_date
+    description: Delivery date.
+  - name: brand
+    description: Brand.
+  - name: model
+    description: Model.
+  - name: device_memory
+    description: Device memory.
+  - name: color
+    description: Color.
+  - name: order_item_id
+    description: Order item id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_order_items')
+        field: order_item_id
+  - name: zaam_sku_id
+    description: Zaam sku id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_zaam_skus')
+        field: zaam_sku_id
+  - name: imei1
+    description: Imei1.
+  - name: imei2
+    description: Imei2.
+  - name: device_type
+    description: Device type.
+  - name: device_condition
+    description: Device condition.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_devices_journey
+  description: Device movement milestones supplementing fulfillment SLA metrics.
+  columns:
+  - name: select
+    description: Select.
+  - name: device_journey_id
+    description: Device journey id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: device_journey_name
+    description: Device journey name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: device_movement
+    description: Device movement.
+  - name: movement_date
+    description: Movement date.
+  - name: device_id
+    description: Device id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_devices')
+        field: device_id
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_invoice_line_items
+  description: Invoice line items with VAT amounts linked to subscriptions.
+  columns:
+  - name: select
+    description: Select.
+  - name: invoice_line_item_id
+    description: Invoice line item id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: invoice_line_item_name
+    description: Invoice line item name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: subscription_id
+    description: Subscription id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_subscriptions')
+        field: subscription_id
+  - name: order_item_id
+    description: Order item id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_order_items')
+        field: order_item_id
+        config:
+          severity: warn
+  - name: line_item_id
+    description: Line item id.
+  - name: parent_invoice_line_item_id
+    description: Parent invoice line item id.
+  - name: line_amount_sar
+    description: Line amount sar.
+  - name: line_amount_ex_vat_sar
+    description: Line amount ex vat sar.
+  - name: vat_amount_sar
+    description: Vat amount sar.
+  - name: line_amount_incl_vat_sar
+    description: Line amount incl vat sar.
+  - name: quantity
+    description: Quantity.
+  - name: product_type
+    description: Product type.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_master_skus
+  description: Master device SKU catalog for top-model sales analytics.
+  columns:
+  - name: select
+    description: Select.
+  - name: master_sku_id
+    description: Master sku id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: master_sku_name
+    description: Master sku name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: brand
+    description: Brand.
+  - name: model
+    description: Model.
+  - name: memory
+    description: Memory.
+  - name: color
+    description: Color.
+  - name: category
+    description: Category.
+  - name: sku_master_uid
+    description: Sku master uid.
+  - name: device_sku_key
+    description: Surrogate key concatenating brand, model, memory, and color for device
+      analytics.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_order_items
+  description: Order line items linking orders to Zaam or channel-partner SKUs.
+  columns:
+  - name: select
+    description: Select.
+  - name: order_item_id
+    description: Order item id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: order_item_name
+    description: Order item name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: order_id
+    description: Order id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_orders')
+        field: order_id
+  - name: zaam_sku_id
+    description: Zaam sku id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_zaam_skus')
+        field: zaam_sku_id
+  - name: cp_sku_id
+    description: Cp sku id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_cp_skus')
+        field: cp_sku_id
+  - name: customer_id
+    description: Customer id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__accounts')
+        field: customer_id
+  - name: quantity
+    description: Quantity.
+  - name: unit_price_vat_inclusive
+    description: Unit price vat inclusive.
+  - name: total_price_vat_inclusive
+    description: Total price vat inclusive.
+  - name: device_purchase_price_vat_inclusive
+    description: Device purchase price vat inclusive.
+  - name: discount_amount
+    description: Discount amount.
+  - name: product_type
+    description: Product type.
+  - name: order_line_item_type
+    description: Order line item type.
+  - name: imei_1
+    description: Imei 1.
+  - name: serial_no
+    description: Serial no.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_orders
+  description: Commercial orders placed through Zaam channel partners; one row per
+    order.
+  columns:
+  - name: select
+    description: Select.
+  - name: order_id
+    description: Order id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: order_number
+    description: Order number.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: order_status
+    description: Order status.
+    data_tests:
+    - accepted_values:
+        values:
+        - cancelled
+        - delivered
+        - expired
+        - rejected
+        - waiting_for_delivery
+  - name: order_type
+    description: Order type.
+    data_tests:
+    - accepted_values:
+        values:
+        - order
+        - pre-order
+        - unknown
+  - name: gmv_amount_sar
+    description: Gmv amount sar.
+  - name: customer_id
+    description: Customer id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__accounts')
+        field: customer_id
+  - name: program_id
+    description: Program id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_programs')
+        field: program_id
+  - name: delivered_at
+    description: Delivered at.
+  - name: sales_channel
+    description: Sales channel.
+  - name: payment_method_id
+    description: Payment method id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_payment_methods')
+        field: payment_method_id
+  - name: total_discount_amount
+    description: Total discount amount.
+  - name: total_amount_incl_vat
+    description: Total amount incl vat.
+  - name: is_preorder
+    description: Is preorder.
+  - name: is_voided
+    description: Is voided.
+  - name: is_gmv_eligible
+    description: True when the order is not voided (cancelled, rejected, or expired)
+      per revenue KPI rules.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_payment_history
+  description: Payment attempt and card capture events for recurring failure and retry
+    analysis.
+  columns:
+  - name: select
+    description: Select.
+  - name: payment_history_id
+    description: Payment history id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: payment_history_name
+    description: Payment history name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: payment_attempt_status
+    description: Payment attempt status.
+    data_tests:
+    - accepted_values:
+        values:
+        - approved
+        - failed
+        - paid
+        - success
+  - name: payment_id
+    description: Payment id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_payments')
+        field: payment_id
+        config:
+          severity: warn
+  - name: payment_method_id
+    description: Payment method id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_payment_methods')
+        field: payment_method_id
+        config:
+          severity: warn
+  - name: error_code
+    description: Error code.
+  - name: error_reason
+    description: Error reason.
+  - name: card_last_four
+    description: Card last four.
+  - name: expiry_month
+    description: Expiry month.
+  - name: expiry_year
+    description: Expiry year.
+  - name: action
+    description: Action.
+  - name: funding_type
+    description: Funding type.
+  - name: attempted_at
+    description: Attempted at.
+  - name: refund_id
+    description: Refund id.
+  - name: is_successful_attempt
+    description: Is successful attempt.
+  - name: is_failed_attempt
+    description: Is failed attempt.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_payment_methods
+  description: CRM stored payment methods including card expiry for collections risk.
+  columns:
+  - name: select
+    description: Select.
+  - name: payment_method_id
+    description: Payment method id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: payment_method_name
+    description: Payment method name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: customer_id
+    description: Customer id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__accounts')
+        field: customer_id
+        config:
+          severity: warn
+  - name: payment_method_status
+    description: Payment method status.
+  - name: payment_method_type
+    description: Payment method type.
+  - name: card_last_four
+    description: Card last four.
+  - name: expiry_year
+    description: Expiry year.
+  - name: expiry_month
+    description: Expiry month.
+  - name: is_default
+    description: Is default.
+  - name: card_brand
+    description: Card brand.
+  - name: funding_type
+    description: Funding type.
+  - name: is_expired
+    description: Is expired.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_payments
+  description: CRM payment records bridging orders, invoices, and Payment Service
+    intents.
+  columns:
+  - name: select
+    description: Select.
+  - name: payment_id
+    description: Payment id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: payment_name
+    description: Payment name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: payment_status
+    description: Payment status.
+    data_tests:
+    - accepted_values:
+        values:
+        - cancelled
+        - failed
+        - not_invoiced
+        - paid
+        - refunded
+  - name: collected_amount_sar
+    description: Collected amount sar.
+  - name: refund_amount_sar
+    description: Refund amount sar.
+  - name: psp_payment_id
+    description: Psp payment id.
+    data_tests:
+    - relationships:
+        to: ref('stg_payments__payments')
+        field: psp_payment_id
+        config:
+          severity: warn
+  - name: order_id
+    description: Order id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_orders')
+        field: order_id
+  - name: invoice_id
+    description: Invoice id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__aos_invoices')
+        field: invoice_id
+  - name: customer_id
+    description: Customer id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__accounts')
+        field: customer_id
+  - name: subscription_id
+    description: Subscription id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_subscriptions')
+        field: subscription_id
+  - name: payment_timestamp
+    description: Payment timestamp.
+  - name: payment_due_date
+    description: Payment due date.
+  - name: payment_type
+    description: Payment type.
+  - name: refund_status
+    description: Refund status.
+  - name: is_collected
+    description: Is collected.
+  - name: is_failed
+    description: Is failed.
+  - name: is_refunded
+    description: Is refunded.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_programs
+  description: Commercial programs with subscription limits and partner commercial
+    terms.
+  columns:
+  - name: select
+    description: Select.
+  - name: program_id
+    description: Program id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: program_name
+    description: Program name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: program_status
+    description: Program status.
+    data_tests:
+    - accepted_values:
+        values:
+        - active
+  - name: channel_partner_id
+    description: Channel partner id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_channel_partners')
+        field: channel_partner_id
+  - name: program_uid
+    description: Program uid.
+  - name: subscription_limit
+    description: Subscription limit.
+  - name: payment_methods_limit
+    description: Payment methods limit.
+  - name: program_start_date
+    description: Program start date.
+  - name: program_end_date
+    description: Program end date.
+  - name: is_fnf_program
+    description: Flags Friends-and-Family programs pending stakeholder reporting rules.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_subscription_durations
+  description: Subscription term options in months linked to programs and partners.
+  columns:
+  - name: select
+    description: Select.
+  - name: subscription_duration_id
+    description: Subscription duration id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: subscription_duration_name
+    description: Subscription duration name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: duration_months
+    description: Duration months.
+  - name: duration_status
+    description: Duration status.
+  - name: program_id
+    description: Program id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_programs')
+        field: program_id
+  - name: channel_partner_id
+    description: Channel partner id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_channel_partners')
+        field: channel_partner_id
+  - name: duration_start_date
+    description: Duration start date.
+  - name: duration_end_date
+    description: Duration end date.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_subscription_pricing
+  description: Subscription price list; monthly_subscription_amount_sar is the MRR
+    source of truth.
+  columns:
+  - name: select
+    description: Select.
+  - name: subscription_pricing_id
+    description: Subscription pricing id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: subscription_pricing_name
+    description: Subscription pricing name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: monthly_subscription_amount_sar
+    description: Monthly subscription amount sar.
+  - name: zaam_sku_id
+    description: Zaam sku id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_zaam_skus')
+        field: zaam_sku_id
+  - name: subscription_duration_id
+    description: Subscription duration id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_subscription_durations')
+        field: subscription_duration_id
+  - name: subscription_pricing_status
+    description: Subscription pricing status.
+  - name: subscription_pricing_start_date
+    description: Subscription pricing start date.
+  - name: subscription_pricing_end_date
+    description: Subscription pricing end date.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_subscriptions
+  description: Device subscriptions with lifecycle status for MRR, churn, and upgrade
+    analytics.
+  columns:
+  - name: select
+    description: Select.
+  - name: subscription_id
+    description: Subscription id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: subscription_name
+    description: Subscription name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: case
+    description: Case.
+  - name: subscription_status
+    description: Subscription status.
+    data_tests:
+    - accepted_values:
+        values:
+        - active
+        - cancelled
+        - upgraded
+        - waiting_for_delivery
+  - name: service_started_at
+    description: Service started at.
+  - name: service_ended_at
+    description: Service ended at.
+  - name: subscription_close_date
+    description: Subscription close date.
+  - name: subscription_pricing_id
+    description: Subscription pricing id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_subscription_pricing')
+        field: subscription_pricing_id
+  - name: channel_partner_id
+    description: Channel partner id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_channel_partners')
+        field: channel_partner_id
+  - name: customer_id
+    description: Customer id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__accounts')
+        field: customer_id
+  - name: order_id
+    description: Order id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_orders')
+        field: order_id
+        config:
+          severity: warn
+  - name: order_item_id
+    description: Order item id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_order_items')
+        field: order_item_id
+  - name: subscription_uid
+    description: Subscription uid.
+  - name: product_type
+    description: Product type.
+  - name: upgraded_subscription_id
+    description: Upgraded subscription id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_subscriptions')
+        field: subscription_id
+  - name: is_active_subscription
+    description: Is active subscription.
+  - name: is_mrr_eligible
+    description: True for active subscriptions with a service start date; excludes
+      pre-delivery subs from MRR.
+  - name: is_churned
+    description: Is churned.
+  - name: is_upgraded
+    description: Is upgraded.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_crm__tos_zaam_skus
+  description: Zaam program SKUs mapped to master device attributes.
+  columns:
+  - name: select
+    description: Select.
+  - name: zaam_sku_id
+    description: Zaam sku id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: zaam_sku_name
+    description: Zaam sku name.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: master_sku_id
+    description: Master sku id.
+    data_tests:
+    - relationships:
+        to: ref('stg_crm__tos_master_skus')
+        field: master_sku_id
+  - name: barcode
+    description: Barcode.
+  - name: launch_rrp
+    description: Launch rrp.
+  - name: zaam_sku_type
+    description: Zaam sku type.
+  - name: category
+    description: Category.
+  - name: zaam_sku_uid
+    description: Zaam sku uid.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.

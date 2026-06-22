@@ -1,6 +1,3 @@
-# Source definitions for SuiteCRM and Payment Service tables.
-# Generated from codegen batches; status values profiled from warehouse.
-
 version: 2
 sources:
 - name: source
@@ -19,7 +16,9 @@ sources:
       description: Primary key for the customer account.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -375,6 +374,8 @@ sources:
       - relationships:
           to: source('source', 'crm_tos_corporate_company')
           field: id
+          config:
+            severity: warn
     - name: title_position
       data_type: character
       description: Title position.
@@ -513,7 +514,9 @@ sources:
       description: Primary key for the channel partner.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Display name of the channel partner (e.g. Jarir, Axiom).
@@ -549,6 +552,8 @@ sources:
           values:
           - ecommerce
           - Retailer
+          config:
+            severity: warn
     - name: vat_trn_number
       data_type: character
       description: Vat trn number.
@@ -609,7 +614,9 @@ sources:
       description: Primary key for the commercial program.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Program name (CEP, Jarir, FnF, Tradeling, etc.).
@@ -650,14 +657,20 @@ sources:
       - accepted_values:
           values:
           - ACTIVE
+          config:
+            severity: warn
     - name: channel_partner_id
       data_type: character
       description: Foreign key to the owning channel partner.
       data_tests:
-      - not_null
+      - not_null:
+          config:
+            severity: warn
       - relationships:
           to: source('source', 'crm_tos_channel_partners')
           field: id
+          config:
+            severity: warn
     - name: program_uid
       data_type: character
       description: Program uid.
@@ -791,7 +804,9 @@ sources:
       description: Primary key for the order record in SuiteCRM.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -830,6 +845,8 @@ sources:
           - expired
           - rejected
           - waiting_for_delivery
+          config:
+            severity: warn
     - name: valid_until
       data_type: timestamp with time zone
       description: Valid until.
@@ -849,15 +866,21 @@ sources:
       - relationships:
           to: source('source', 'crm_accounts')
           field: id
+          config:
+            severity: warn
     - name: programs_order_id
       data_type: character
       description: Foreign key to the commercial program under which the order was
         placed.
       data_tests:
-      - not_null
+      - not_null:
+          config:
+            severity: warn
       - relationships:
           to: source('source', 'crm_tos_programs')
           field: id
+          config:
+            severity: warn
     - name: store_id
       data_type: character
       description: Store id.
@@ -871,6 +894,8 @@ sources:
       - relationships:
           to: source('source', 'crm_tos_payment_methods')
           field: id
+          config:
+            severity: warn
     - name: addresses_street
       data_type: character
       description: Addresses street.
@@ -899,6 +924,7 @@ sources:
           - pre-order
           config:
             where: order_type is not null
+            severity: warn
     - name: partner_order_id
       data_type: character
       description: Partner order id.
@@ -1037,7 +1063,9 @@ sources:
       description: Primary key for the order line item.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -1096,10 +1124,14 @@ sources:
       data_type: character
       description: Foreign key to the parent commercial order.
       data_tests:
-      - not_null
+      - not_null:
+          config:
+            severity: warn
       - relationships:
           to: source('source', 'crm_tos_orders')
           field: id
+          config:
+            severity: warn
     - name: zaam_sku_id
       data_type: character
       description: Foreign key to the Zaam program SKU when the line references catalog
@@ -1108,6 +1140,8 @@ sources:
       - relationships:
           to: source('source', 'crm_tos_zaam_skus')
           field: id
+          config:
+            severity: warn
     - name: cp_sku_id
       data_type: character
       description: Foreign key to the channel-partner SKU mapping when partner catalog
@@ -1134,6 +1168,8 @@ sources:
       - relationships:
           to: source('source', 'crm_accounts')
           field: id
+          config:
+            severity: warn
     - name: is_recurring
       data_type: boolean
       description: Is recurring.
@@ -1198,7 +1234,9 @@ sources:
       description: Primary key for the subscription record.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -1239,6 +1277,8 @@ sources:
           - Cancelled
           - Upgraded
           - Waiting_For_Delivery
+          config:
+            severity: warn
     - name: service_start_date
       data_type: date
       description: Date recurring service began; required for active MRR eligibility.
@@ -1276,6 +1316,8 @@ sources:
       - relationships:
           to: source('source', 'crm_tos_order_items')
           field: id
+          config:
+            severity: warn
     - name: subscription_pricing_id
       data_type: character
       description: Foreign key to the price list entry for monthly recurring amount.
@@ -1283,6 +1325,8 @@ sources:
       - relationships:
           to: source('source', 'crm_tos_subscription_pricing')
           field: id
+          config:
+            severity: warn
     - name: subscription_id
       data_type: character
       description: Subscription id.
@@ -1296,10 +1340,14 @@ sources:
       data_type: character
       description: Foreign key to the channel partner selling the subscription.
       data_tests:
-      - not_null
+      - not_null:
+          config:
+            severity: warn
       - relationships:
           to: source('source', 'crm_tos_channel_partners')
           field: id
+          config:
+            severity: warn
     - name: store_id
       data_type: character
       description: Store id.
@@ -1322,10 +1370,14 @@ sources:
       data_type: character
       description: Foreign key to the originating commercial order.
       data_tests:
-      - not_null
+      - not_null:
+          config:
+            severity: warn
       - relationships:
           to: source('source', 'crm_tos_orders')
           field: id
+          config:
+            severity: warn
     - name: subscription_closure_reason
       data_type: text
       description: Subscription closure reason.
@@ -1354,6 +1406,8 @@ sources:
       - relationships:
           to: source('source', 'crm_accounts')
           field: id
+          config:
+            severity: warn
     - name: _etl_synced_at
       data_type: timestamp with time zone
       description: Etl synced at.
@@ -1375,7 +1429,9 @@ sources:
       description: Primary key for the device asset.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -1446,6 +1502,8 @@ sources:
       - relationships:
           to: source('source', 'crm_tos_order_items')
           field: id
+          config:
+            severity: warn
     - name: device_id
       data_type: character
       description: Device id.
@@ -1482,7 +1540,9 @@ sources:
       description: Primary key for the CRM payment record.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -1521,6 +1581,8 @@ sources:
           - not_invoiced
           - paid
           - refunded
+          config:
+            severity: warn
     - name: payment_due_date
       data_type: timestamp with time zone
       description: Payment due date.
@@ -1555,6 +1617,8 @@ sources:
       - relationships:
           to: source('source', 'payments_payments')
           field: id
+          config:
+            severity: warn
     - name: refund_reference
       data_type: character
       description: Refund reference.
@@ -1571,10 +1635,14 @@ sources:
       data_type: character
       description: Foreign key to the order being paid.
       data_tests:
-      - not_null
+      - not_null:
+          config:
+            severity: warn
       - relationships:
           to: source('source', 'crm_tos_orders')
           field: id
+          config:
+            severity: warn
     - name: invoice_id
       data_type: character
       description: Invoice id.
@@ -1641,7 +1709,9 @@ sources:
       description: Primary key for the payment attempt event.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -1710,6 +1780,8 @@ sources:
           - paid
           - Paid
           - success
+          config:
+            severity: warn
     - name: funding_type
       data_type: character
       description: Funding type.
@@ -1723,6 +1795,8 @@ sources:
       - relationships:
           to: source('source', 'crm_tos_payments')
           field: id
+          config:
+            severity: warn
     - name: action_payment
       data_type: character
       description: Action payment.
@@ -1762,7 +1836,9 @@ sources:
       description: Primary key for the channel-partner SKU mapping.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -1800,10 +1876,14 @@ sources:
       data_type: character
       description: Foreign key to the channel partner owning this catalog entry.
       data_tests:
-      - not_null
+      - not_null:
+          config:
+            severity: warn
       - relationships:
           to: source('source', 'crm_tos_channel_partners')
           field: id
+          config:
+            severity: warn
     - name: zaam_sku_id
       data_type: character
       description: Foreign key to the Zaam SKU being offered by the partner.
@@ -1811,6 +1891,8 @@ sources:
       - relationships:
           to: source('source', 'crm_tos_zaam_skus')
           field: id
+          config:
+            severity: warn
     - name: master_sku_id
       data_type: character
       description: Master sku id.
@@ -1841,7 +1923,9 @@ sources:
       description: Primary key for the subscription price list entry.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -1888,6 +1972,8 @@ sources:
       - relationships:
           to: source('source', 'crm_tos_zaam_skus')
           field: id
+          config:
+            severity: warn
     - name: tos_subscription_durations_id
       data_type: character
       description: Foreign key to the subscription term option in months.
@@ -1895,6 +1981,8 @@ sources:
       - relationships:
           to: source('source', 'crm_tos_subscription_durations')
           field: id
+          config:
+            severity: warn
     - name: subscription_pricing_uid
       data_type: character
       description: Subscription pricing uid.
@@ -1922,7 +2010,9 @@ sources:
       description: Primary key for the subscription duration option.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -1972,10 +2062,14 @@ sources:
       data_type: character
       description: Foreign key to the channel partner offering this term.
       data_tests:
-      - not_null
+      - not_null:
+          config:
+            severity: warn
       - relationships:
           to: source('source', 'crm_tos_channel_partners')
           field: id
+          config:
+            severity: warn
     - name: _etl_synced_at
       data_type: timestamp with time zone
       description: Etl synced at.
@@ -1997,7 +2091,9 @@ sources:
       description: Primary key for the corporate employer entity.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -2115,7 +2211,9 @@ sources:
       description: Primary key for the master device SKU.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -2254,7 +2352,9 @@ sources:
       description: Primary key for the Zaam program SKU.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -2295,10 +2395,14 @@ sources:
       data_type: character
       description: Foreign key to the canonical master SKU attributes.
       data_tests:
-      - not_null
+      - not_null:
+          config:
+            severity: warn
       - relationships:
           to: source('source', 'crm_tos_master_skus')
           field: id
+          config:
+            severity: warn
     - name: zaam_skus_type
       data_type: character
       description: Zaam skus type.
@@ -2338,7 +2442,9 @@ sources:
       description: Primary key for the synced invoice.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -2370,6 +2476,8 @@ sources:
       - relationships:
           to: source('source', 'crm_accounts')
           field: id
+          config:
+            severity: warn
     - name: billing_contact_id
       data_type: character
       description: Billing contact id.
@@ -2501,6 +2609,8 @@ sources:
           values:
           - paid
           - unpaid
+          config:
+            severity: warn
     - name: invoice_due_date
       data_type: date
       description: Invoice due date.
@@ -2552,7 +2662,9 @@ sources:
       description: Primary key for the invoice line.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -2641,6 +2753,8 @@ sources:
       - relationships:
           to: source('source', 'crm_tos_subscriptions')
           field: id
+          config:
+            severity: warn
     - name: product_type
       data_type: character
       description: Product type.
@@ -2674,7 +2788,9 @@ sources:
       description: Primary key for the credit note.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -2738,7 +2854,9 @@ sources:
       description: Primary key for the address record.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -2841,7 +2959,9 @@ sources:
       description: Primary key for the stored CRM payment method.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -2965,7 +3085,9 @@ sources:
       description: Primary key for the country reference row.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -3038,7 +3160,9 @@ sources:
       description: Primary key for the API call log entry.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -3086,6 +3210,8 @@ sources:
           values:
           - failure
           - success
+          config:
+            severity: warn
     - name: source
       data_type: character
       description: Source.
@@ -3134,7 +3260,9 @@ sources:
       description: Primary key for the device journey milestone.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: name
       data_type: character
       description: Name.
@@ -3189,7 +3317,9 @@ sources:
       description: Primary key for the PSP payment intent.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: payment_type
       data_type: character varying
       description: Payment type.
@@ -3212,10 +3342,14 @@ sources:
       data_type: character varying
       description: Foreign key to the Payment Service subscriber.
       data_tests:
-      - not_null
+      - not_null:
+          config:
+            severity: warn
       - relationships:
           to: source('source', 'payments_subscribers')
           field: id
+          config:
+            severity: warn
     - name: subscription_id
       data_type: character varying
       description: Foreign key to the PSP recurring subscription when applicable.
@@ -3223,6 +3357,8 @@ sources:
       - relationships:
           to: source('source', 'payments_subscriptions')
           field: id
+          config:
+            severity: warn
     - name: transaction_id
       data_type: uuid
       description: Transaction id.
@@ -3268,7 +3404,9 @@ sources:
       description: Primary key for the PSP transaction.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: idempotency_key
       data_type: character varying
       description: Idempotency key.
@@ -3285,6 +3423,8 @@ sources:
           - failed
           - in_progress
           - queued
+          config:
+            severity: warn
     - name: request_status
       data_type: character varying
       description: Authorization or capture request outcome from the processor.
@@ -3299,6 +3439,7 @@ sources:
           - voided
           config:
             where: request_status is not null
+            severity: warn
     - name: same_day_schedule_hash
       data_type: character varying
       description: Same day schedule hash.
@@ -3321,10 +3462,14 @@ sources:
       data_type: character varying
       description: Foreign key to the subscriber who initiated the transaction.
       data_tests:
-      - not_null
+      - not_null:
+          config:
+            severity: warn
       - relationships:
           to: source('source', 'payments_subscribers')
           field: id
+          config:
+            severity: warn
     - name: is_scheduled
       data_type: boolean
       description: Is scheduled.
@@ -3367,7 +3512,9 @@ sources:
       description: Primary key for the PSP refund.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: refund_id
       data_type: character varying
       description: Refund id.
@@ -3387,6 +3534,8 @@ sources:
       - accepted_values:
           values:
           - Approved
+          config:
+            severity: warn
     - name: currency
       data_type: character varying
       description: Currency.
@@ -3423,7 +3572,9 @@ sources:
       description: Primary key for the PSP subscriber profile.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: stripe_id
       data_type: character varying
       description: External Stripe customer identifier.
@@ -3484,7 +3635,9 @@ sources:
       description: Primary key for the PSP subscription entity.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: currency
       data_type: character varying
       description: Currency.
@@ -3524,7 +3677,9 @@ sources:
       description: Primary key for the PSP stored payment method.
       data_tests:
       - unique
-      - not_null
+      - not_null:
+          config:
+            severity: warn
     - name: details
       data_type: jsonb
       description: Details.

@@ -1,0 +1,246 @@
+version: 2
+models:
+- name: stg_payments__payment_methods
+  description: Card-on-file payment methods stored at the Payment Service.
+  columns:
+  - name: select
+    description: Select.
+  - name: psp_payment_method_id
+    description: Psp payment method id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: subscriber_id
+    description: Subscriber id.
+    data_tests:
+    - relationships:
+        to: ref('stg_payments__subscribers')
+        field: subscriber_id
+        config:
+          severity: warn
+  - name: is_enabled
+    description: Is enabled.
+  - name: expiry_month
+    description: Expiry month.
+  - name: expiry_year
+    description: Expiry year.
+  - name: card_last_four
+    description: Card last four.
+  - name: payment_gateway
+    description: Payment gateway.
+  - name: is_expired
+    description: Is expired.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_payments__payments
+  description: Payment Service payment intents for CRM-to-PSP reconciliation.
+  columns:
+  - name: select
+    description: Select.
+  - name: psp_payment_id
+    description: Psp payment id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: payment_type
+    description: Payment type.
+  - name: payment_amount
+    description: Payment amount.
+  - name: subscriber_id
+    description: Subscriber id.
+    data_tests:
+    - relationships:
+        to: ref('stg_payments__subscribers')
+        field: subscriber_id
+        config:
+          severity: warn
+  - name: psp_subscription_id
+    description: Psp subscription id.
+    data_tests:
+    - relationships:
+        to: ref('stg_payments__subscriptions')
+        field: psp_subscription_id
+        config:
+          severity: warn
+  - name: transaction_id
+    description: Transaction id.
+  - name: payment_intent_id
+    description: Payment intent id.
+  - name: due_date
+    description: Due date.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_payments__refunds
+  description: PSP refund events for refund volume reporting.
+  columns:
+  - name: select
+    description: Select.
+  - name: refund_record_id
+    description: Refund record id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: psp_refund_id
+    description: Psp refund id.
+  - name: payment_intent_id
+    description: Payment intent id.
+  - name: refund_amount
+    description: Refund amount.
+  - name: refund_status
+    description: Refund status.
+    data_tests:
+    - accepted_values:
+        values:
+        - approved
+  - name: currency
+    description: Currency.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: is_approved
+    description: Is approved.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_payments__subscribers
+  description: Payment Service subscribers (Stripe-backed) for PSP-side reconciliation.
+  columns:
+  - name: select
+    description: Select.
+  - name: subscriber_id
+    description: Subscriber id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: stripe_id
+    description: Stripe id.
+  - name: default_payment_method_id
+    description: Default payment method id.
+    data_tests:
+    - relationships:
+        to: ref('stg_payments__payment_methods')
+        field: psp_payment_method_id
+        config:
+          severity: warn
+  - name: disputed
+    description: Disputed.
+  - name: collectible
+    description: Collectible.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_payments__subscriptions
+  description: PSP recurring subscription records without a native CRM foreign key.
+  columns:
+  - name: select
+    description: Select.
+  - name: psp_subscription_id
+    description: Psp subscription id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: currency
+    description: Currency.
+  - name: is_locked
+    description: Is locked.
+  - name: subscriber_id
+    description: Subscriber id.
+    data_tests:
+    - relationships:
+        to: ref('stg_payments__subscribers')
+        field: subscriber_id
+        config:
+          severity: warn
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
+- name: stg_payments__transactions
+  description: PSP transaction outcomes for payment failure rate and retry queue metrics.
+  columns:
+  - name: select
+    description: Select.
+  - name: transaction_id
+    description: Transaction id.
+    data_tests:
+    - unique: {}
+    - not_null: {}
+  - name: process_status
+    description: Process status.
+    data_tests:
+    - accepted_values:
+        values:
+        - completed
+        - failed
+        - in_progress
+        - queued
+  - name: request_status
+    description: Request status.
+    data_tests:
+    - accepted_values:
+        values:
+        - authorized
+        - failed
+        - internal_error
+        - required_authentication
+        - success
+        - voided
+        config:
+          where: request_status is not null and request_status != ''
+  - name: subscriber_id
+    description: Subscriber id.
+    data_tests:
+    - relationships:
+        to: ref('stg_payments__subscribers')
+        field: subscriber_id
+        config:
+          severity: warn
+  - name: payment_intent_id
+    description: Payment intent id.
+  - name: transaction_type
+    description: Transaction type.
+  - name: is_scheduled
+    description: Is scheduled.
+  - name: due_date
+    description: Due date.
+  - name: created_at
+    description: Timestamp when the source record was created in SuiteCRM or the Payment
+      Service.
+  - name: updated_at
+    description: Timestamp when the source record was last modified.
+  - name: is_successful
+    description: Is successful.
+  - name: is_retry_queue
+    description: Is retry queue.
+  - name: _etl_synced_at
+    description: Warehouse ETL sync timestamp; excluded from marts.
+  - name: _etl_source_system
+    description: Originating source system label from ETL metadata.
