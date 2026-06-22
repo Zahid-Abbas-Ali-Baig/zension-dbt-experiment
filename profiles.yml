@@ -1,0 +1,50 @@
+zension:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: localhost
+      port: 5432
+      dbname: zension
+      user: postgres
+      password: admin99
+      schema: source
+      threads: 4
+
+# snowflake:
+#   target: dev
+#   outputs:
+#     dev:
+#       type: snowflake
+#       account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+#       user: "{{ env_var('SNOWFLAKE_USER') }}"
+#       password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+#       role: "{{ env_var('SNOWFLAKE_ROLE') }}"
+#       database: zension
+#       warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
+#       schema: source
+#       threads: 4
+
+# redshift:
+#   target: dev
+#   outputs:
+#     dev:
+#       type: redshift
+#       host: localhost
+#       port: 5439
+#       dbname: zension
+#       user: postgres
+#       password: admin99
+#       schema: source
+#       threads: 4
+
+# bigquery:
+#   target: dev
+#   outputs:
+#     dev:
+#       type: bigquery
+#       method: service-account
+#       project: "{{ env_var('BIGQUERY_PROJECT') }}"
+#       dataset: source
+#       threads: 4
+#       keyfile: "{{ env_var('BIGQUERY_KEYFILE') }}"
