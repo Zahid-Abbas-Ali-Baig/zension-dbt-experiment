@@ -1,0 +1,356 @@
+Zension Power BI Report — Page-by-Page Visual Build Guide
+==========================================================
+
+File:     powerbi/zension.pbix
+Measures: _KPIs table (28 DAX measures — use ONLY these, not raw column sums)
+Data:     source_marts fct_* and dim_* tables
+
+HOW TO READ THIS GUIDE — CARDS vs CHARTS (not a conflict)
+-------------------------------------------------------
+The same MEASURE can appear in more than one place if the VISUAL TYPE differs.
+
+  Visual type          | What it shows                         | Executive | Detail pages
+  ---------------------|---------------------------------------|-----------|-------------
+  Card                 | One total number (no breakdown)       | YES       | YES
+  Line chart over TIME | Trend by month/quarter                | YES       | YES (different metric)
+  Bar / donut / table  | Breakdown by partner, program, SKU…   | NO        | YES (one page each)
+
+Example — GMV (SAR):
+  OK  on Page 1: Card showing total GMV + line chart of GMV by MONTH
+  OK  on Page 2: Card showing total GMV + bar chart of GMV by PARTNER
+  NOT on Page 1: Bar chart of GMV by partner (that belongs on Page 2 only)
+
+Example — MRR (SAR):
+  OK  on Page 1: Card + monthly trend line
+  OK  on Page 3: Card + bar chart of MRR by PROGRAM
+  NOT on Page 1: MRR by program bar chart
+
+Rule: Executive = totals + time trends. Detail pages = breakdowns by dimension.
+
+Build exactly 5 report pages below.
+
+Global slicers (sync across pages where noted):
+  - dim_channel_partners.partner_name   (multi-select; required for partner isolation)
+  - dim_programs.program_name           (multi-select; pages 2–5)
+
+
+BUSINESS QUESTION → PAGE MAP (requirements.md / design_brief.md)
+-----------------------------------------------------------------
+ Q1  Orders & GMV by partner/program/month     → Page 2
+ Q2  Pre-order share; payment→delivery time     → Page 2
+ Q3  Top device models by partner               → Page 2
+ Q4  Subscriptions by status by partner         → Page 3
+ Q5  MRR & avg term by program                 → Page 3
+ Q6  Churn & upgrade rate per quarter          → Page 3
+ Q7  Collected vs invoiced revenue by month    → Page 4
+ Q8  Payment failure rate; customers on retry  → Page 4
+ Q9  Refund volume & credit notes by partner   → Page 4
+ Q10 Verified customers by CEP company          → Page 5
+ Q11 Devices per customer; program utilization → Page 5
+ Q12 Outstanding payments & expired cards      → Page 4
+ Q13 Order-to-delivery SLA by partner          → Page 2
+ Q14 Partner webhook / API failures            → Page 5
+ Q15 Programs over limit or disabled           → Page 5
+
+Executive (Page 1) = monthly rollup snapshot only — does not replace detail pages.
+
+
+================================================================================
+PAGE 1 — Executive Summary (monthly rollup)
+================================================================================
+Audience:   Leadership — monthly review (requirements: monthly executive summary)
+Questions:  High-level view of commercial, recurring, and cash health
+Allowed:    6 KPI cards (totals) + 1 time-trend chart (by month)
+Not allowed: Bar, donut, or table visuals that slice by partner, program,
+             product, status, or company — those go on Pages 2–5.
+
+SLICERS
+  - dim_channel_partners.partner_name
+  - Relative date on source_marts fct_orders.order_date (last 12 months)
+
+KPI CARDS (row of 6 — Card visual, one measure each)
+  1. GMV (SAR)
+  2. MRR (SAR)
+  3. Active Subscription Count
+  4. Collected Revenue (SAR)
+  5. Finance Variance (SAR)          ← reconciliation alert (Q7 headline)
+  6. Churn Rate
+
+TIME-TREND CHART (by month — NOT by partner)
+  Visual:  Line chart (or combo if scales differ)
+  Axis:    Month from source_marts fct_orders.order_date
+  Values:  GMV (SAR)     ← total over time, line 1
+           MRR (SAR)     ← total over time, line 2
+
+DO NOT ADD breakdown charts on this page (use detail pages instead):
+  - Bar chart: GMV or Order Count by partner or program     → Page 2
+  - Donut: subscription status                               → Page 3
+  - Bar/line: refunds, collected revenue by partner          → Page 4
+  - Bar: verified customers by company                         → Page 5
+
+
+================================================================================
+PAGE 2 — Sales, Catalog & Fulfillment
+================================================================================
+Audience:   Sales & ops — weekly partner performance
+Questions:  Q1, Q2, Q3, Q13
+Measures:   Order Count | GMV (SAR) | Pre-order Share | Order Item Count
+            | Avg Days Payment to Delivery | Median Order to Delivery Days
+
+SLICERS
+  - dim_channel_partners.partner_name
+  - dim_programs.program_name
+  - source_marts fct_orders.order_date
+
+ROW 1 — KPI CARDS (4 totals — same measures as Exec cards are OK here)
+  1. Order Count
+  2. GMV (SAR)                        ← total card (Exec also has this card)
+  3. Pre-order Share
+  4. Median Order to Delivery Days
+
+ROW 2 — BREAKDOWN CHARTS (by dimension — Page 2 only)
+  Left — Q1 partner slice
+    Visual: Clustered bar chart
+    Axis:   dim_channel_partners.partner_name
+    Values: GMV (SAR)
+
+  Right — Q1 program slice
+    Visual: Clustered bar chart
+    Axis:   dim_programs.program_name
+    Values: Order Count
+
+ROW 3 — CHARTS
+  Left — Q2 fulfillment timing
+    Visual: Clustered bar chart
+    Axis:   dim_channel_partners.partner_name
+    Values: Avg Days Payment to Delivery
+
+  Right — Q3 top device models
+    Visual: Clustered bar chart (or treemap)
+    Axis:   source_marts dim_device_skus.device_sku_key
+            (or brand + model columns if device_sku_key not in model)
+    Values: Order Item Count
+    Filter: Top N = 10
+
+ROW 4 — DETAIL TABLE (drill-through)
+  Visual: Table
+  Columns from source_marts fct_orders:
+    order_number, order_status, order_type, gmv_amount_sar,
+    order_date, delivered_at
+  Visual-level filter: is_gmv_eligible = true
+
+
+================================================================================
+PAGE 3 — Subscriptions & MRR
+================================================================================
+Audience:   Product & partner managers
+Questions:  Q4, Q5, Q6
+Measures:   Subscription Count | Active Subscription Count | MRR (SAR)
+            | Avg Subscription Term (Months) | Churn Rate | Upgrade Rate
+
+SLICERS
+  - dim_channel_partners.partner_name
+  - dim_programs.program_name
+  - Quarter or month on source_marts fct_subscription_monthly_snapshots.snapshot_month
+    (use for Q6 churn/upgrade context)
+
+ROW 1 — KPI CARDS (6)
+  1. Subscription Count
+  2. Active Subscription Count
+  3. MRR (SAR)
+  4. Avg Subscription Term (Months)
+  5. Churn Rate
+  6. Upgrade Rate
+
+ROW 2 — CHARTS
+  Left — Q4 status mix
+    Visual: Donut chart
+    Legend: source_marts fct_subscriptions.subscription_status
+    Values: Subscription Count
+
+  Right — Q5 MRR by program
+    Visual: Clustered bar chart
+    Axis:   dim_programs.program_name
+    Values: MRR (SAR)
+
+ROW 3 — TREND
+  Visual:  Line chart
+  Axis:    source_marts fct_subscription_monthly_snapshots.snapshot_month (month)
+  Values:  Active Subscription Count
+  Filter:  is_active = true on snapshot table
+
+DO NOT ADD on this page:
+  - GMV or Order Count bar charts (→ Page 2)
+  - MRR monthly trend line (→ Page 1 Executive)
+  - MRR-by-program bar chart lives HERE (Row 2 right) — not on Executive
+
+
+================================================================================
+PAGE 4 — Finance, Collections & Payment Health
+================================================================================
+Audience:   Finance & billing ops
+Questions:  Q7, Q8, Q9, Q12
+Measures:   Collected Revenue (SAR) | Invoiced Revenue (SAR) | Finance Variance (SAR)
+            | Refund Amount (SAR) | Credit Note Count
+            | Payment Failure Rate | Customers on Retry
+            | Customers with Outstanding Payments | Expired Payment Method Count
+
+SLICERS
+  - dim_channel_partners.partner_name
+  - Month on source_marts fct_finance_reconciliation_monthly.reconciliation_month
+    (or payment_date / invoice_date for transaction-level views)
+
+ROW 1 — KPI CARDS (6)
+  1. Collected Revenue (SAR)
+  2. Invoiced Revenue (SAR)
+  3. Finance Variance (SAR)
+  4. Refund Amount (SAR)
+  5. Payment Failure Rate
+  6. Customers with Outstanding Payments
+
+ROW 2 — CHARTS
+  Left — Q7 monthly reconciliation
+    Visual: Line chart
+    Axis:   source_marts fct_finance_reconciliation_monthly.reconciliation_month
+    Values: Collected Revenue (SAR), Invoiced Revenue (SAR)  (two lines)
+
+  Right — Q9 refunds by partner
+    Visual: Clustered bar chart
+    Axis:   dim_channel_partners.partner_name
+    Values: Refund Amount (SAR)
+
+ROW 3 — PAYMENT HEALTH (Q8, Q12)
+  Left
+    Visual: Card
+    Values: Customers on Retry
+
+  Center
+    Visual: Card
+    Values: Expired Payment Method Count
+
+  Right
+    Visual: Card
+    Values: Credit Note Count
+
+DO NOT ADD on this page:
+  - Collected/Invoiced revenue monthly line (lives HERE — Exec does not have this)
+  - Program utilization bar chart (→ Page 5)
+  Note: Executive shows Collected Revenue as a CARD only, not a line chart.
+
+
+================================================================================
+PAGE 5 — Customers, Programs & Partner Operations
+================================================================================
+Audience:   CEP program owners, partner ops, platform engineering
+Questions:  Q10, Q11, Q14, Q15
+Measures:   Verified Customer Count | Avg Devices per Customer
+            | Program Subscription Utilization %
+            | Partner API Failure Rate | Partner API Failure Count
+            | Programs Over Limit | Disabled Program Count
+
+SLICERS
+  - dim_corporate_companies.corporate_company_name   (CEP / Q10)
+  - dim_channel_partners.partner_name
+  - dim_programs.program_name
+
+ROW 1 — KPI CARDS (6)
+  1. Verified Customer Count
+  2. Avg Devices per Customer
+  3. Program Subscription Utilization %
+  4. Programs Over Limit
+  5. Partner API Failure Rate
+  6. Partner API Failure Count
+
+ROW 2 — CHARTS
+  Left — Q10 verified customers by employer (CEP)
+    Visual: Clustered bar chart
+    Axis:   dim_corporate_companies.corporate_company_name
+    Values: Verified Customer Count
+
+  Right — Q11 program capacity
+    Visual: Clustered bar chart
+    Axis:   dim_programs.program_name
+    Values: Program Subscription Utilization %
+
+ROW 3 — TABLES
+  Left — Q15 program limit monitoring
+    Visual: Table
+    Source: source_marts dim_programs
+    Columns: program_name, partner_name, subscription_limit,
+             active_subscription_count, waiting_for_delivery_subscription_count,
+             program_subscription_utilization_pct, is_over_subscription_limit,
+             is_disabled_program
+    Sort: program_subscription_utilization_pct descending
+
+  Right — Q10 customer verification detail
+    Visual: Table
+    Source: source_marts dim_customers
+    Columns: customer_name, corporate_company_name,
+             customer_verification_segment, device_count, is_fully_verified
+
+ROW 4 — Q14 API failures (optional bar if card is not enough)
+  Visual: Clustered bar chart
+  Axis:   dim_channel_partners.partner_name
+  Values: Partner API Failure Count
+
+
+================================================================================
+MEASURE PLACEMENT — CARD vs BREAKDOWN CHART
+================================================================================
+Measure                              | Card (total)          | Breakdown chart
+-------------------------------------|-----------------------|---------------------------
+GMV (SAR)                            | P1 Exec, P2           | P2 bar by partner
+Order Count                          | P2                    | P2 bar by program
+Pre-order Share                      | P2                    | —
+Order Item Count                     | —                     | P2 bar by device SKU
+Avg Days Payment to Delivery         | —                     | P2 bar by partner
+Median Order to Delivery Days        | P2                    | —
+Subscription Count                   | P3                    | P3 donut by status
+Active Subscription Count            | P1 Exec, P3           | P3 line by month
+MRR (SAR)                            | P1 Exec, P3           | P1 line by month; P3 bar by program
+Avg Subscription Term (Months)       | P3                    | —
+Churn Rate                           | P1 Exec, P3           | —
+Upgrade Rate                         | P3                    | —
+Collected Revenue (SAR)              | P1 Exec, P4           | P4 line by month
+Invoiced Revenue (SAR)               | P4                    | P4 line by month
+Finance Variance (SAR)               | P1 Exec, P4           | —
+Refund Amount (SAR)                  | P4                    | P4 bar by partner
+Credit Note Count                    | P4                    | —
+Payment Failure Rate                 | P4                    | —
+Customers on Retry                   | P4                    | —
+Expired Payment Method Count         | P4                    | —
+Customers with Outstanding Payments  | P4                    | —
+Verified Customer Count              | P5                    | P5 bar by CEP company
+Avg Devices per Customer             | P5                    | —
+Program Subscription Utilization %   | P5                    | P5 bar by program
+Partner API Failure Rate             | P5                    | —
+Partner API Failure Count            | P5                    | P5 bar by partner
+Programs Over Limit                  | P5                    | P5 table
+Disabled Program Count               | P5 table column       | —
+
+P1 = Executive Summary | P2 = Sales | P3 = Subscriptions | P4 = Finance | P5 = Customers & Ops
+
+Cards may repeat on Executive + one detail page. Each breakdown chart appears once.
+
+
+================================================================================
+MODEL & BUILD TIPS
+================================================================================
+1. Save zension.pbix after confirming all 28 measures exist in hidden _KPIs table.
+
+2. Activate inactive relationships in Model view if program/customer slicers
+   return blank charts:
+     fct_orders.program_id       → dim_programs.program_id
+     fct_orders.customer_id      → dim_customers.customer_id
+     fct_subscriptions.program_id → dim_programs.program_id
+
+3. Format: currency → #,0.00 SAR | rates → 0.0%
+
+4. FNF programs: add page filter or flag dim_programs.is_fnf_program = false
+   until business rules are signed off (design_brief.md).
+
+5. MRR and active subscription definitions are baked into _KPIs measures
+   (is_mrr_eligible, is_active_subscription) — do not override with raw sums.
+
+6. Pre-order / Jarir-Axiom: use Pre-order Share on Page 2; do not count
+   waiting-for-delivery subs in MRR (already excluded in measure logic).
