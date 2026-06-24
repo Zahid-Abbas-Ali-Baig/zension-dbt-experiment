@@ -15,6 +15,7 @@ select
     orders.order_type,
     orders.sales_channel,
     orders.delivered_at,
+    orders.first_paid_at,
     orders.is_preorder,
     orders.is_voided,
     orders.is_gmv_eligible,

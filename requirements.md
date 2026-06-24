@@ -48,18 +48,18 @@ Two commercial motions coexist:
 
 - How many subscriptions are Active, Waiting for Delivery, Cancelled, or Defaulted by partner?
 - What is monthly recurring revenue (MRR) and average subscription term by program?
-- What is churn rate and upgrade rate (KIFed / Upgraded statuses) per quarter?
+- What is churn rate per quarter (not a lifetime rate) and upgrade rate including KIFed and Upgraded statuses per quarter?
 
 **Payments & finance**
 
-- What is collected revenue vs invoiced revenue vs Zoho Books recognized revenue by month?
-- What is payment failure rate on recurring installments, and how many customers are on retry?
-- What is refund volume and credit-note value by partner and reason?
+- What is collected revenue vs invoiced revenue vs Zoho Books recognized revenue by month, and what is the monthly finance variance (collected − invoiced)?
+- What is payment failure rate on **recurring installment** attempts only (excluding one-off card captures), and how many customers are on retry?
+- What is refund volume from CRM paid/refunded payments (source of record ~64,697 SAR in discovery) and credit-note value by partner and reason?
 
 **Customers**
 
 - How many verified customers (Nafath + mobile OTP) by corporate company (CEP)?
-- What is average devices-per-customer and subscription limit utilization?
+- What is average devices-per-customer and program subscription limit utilization (active + waiting-for-delivery subs vs limit)?
 - Which customers have outstanding payments or expired cards?
 
 **Operations & partners**
@@ -92,6 +92,7 @@ Primary analytical source for operations: **SuiteCRM MySQL**. Finance alignment:
 - **Finance alignment:** monthly reconciliation report matching CRM payments ↔ Zoho invoices ↔ Payment Service settlements
 - **Semantic definitions needed:** active subscription, recognized revenue, refund-adjusted revenue, pre-order vs fulfilled revenue
 - **Delivery:** BI tool on star schema or semantic layer preferred over direct production CRM queries
+- **BI slicers:** program and customer filters on detail pages require active `fct_orders` / `fct_subscriptions` relationships to `dim_programs` and `dim_customers` (see `powerbi/report_build_guide.txt`)
 
 ## Constraints and Notes
 
@@ -99,6 +100,15 @@ Primary analytical source for operations: **SuiteCRM MySQL**. Finance alignment:
 - **Currency:** Assumed SAR for KSA programs (confirm with finance)
 - **Exclude from revenue KPIs:** voided orders, fully refunded payments, subscriptions in Cancelled / Returned status (unless reporting gross vs net separately)
 - **Pre-order revenue:** Jarir/Axiom may collect payment before delivery; subscription and device activation occur at delivery — do not count as active MRR until `service_start_date` is set
+- **Active subscription (reporting):** `subscription_status = Active` AND `service_start_date IS NOT NULL` (device delivered). Distinct from program limit utilization, which also counts `Waiting_For_Delivery`
+- **Finance variance:** monthly `SUM(collected) − SUM(invoiced)`; bucket collected payments by month of `coalesce(payment_timestamp, created_at)` when `payment_timestamp` is null in CRM
+- **Refund KPI:** CRM `tos_payments` with `payment_status = refunded` is the source of record for refund amount SAR (pending Finance confirmation on whether PSP refunds warrant a separate KPI)
+- **Churn rate:** quarter-scoped — subscriptions churned in the selected quarter ÷ active subscriptions at quarter start (`service_start_date` set; exclude `Waiting_For_Delivery` from denominator)
+- **Upgrade rate:** numerator includes subscriptions with status `Upgraded`, `kifed`, or `auto_kifed` (pending Product confirmation that KIFed is upgrade vs churn)
+- **Payment failure rate:** failed ÷ total attempts on **recurring installment** rows in `tos_payment_history` only (pending Product confirmation on exact filter)
+- **Payment-to-delivery SLA:** average days from **first paid CRM payment** (`coalesce(payment_timestamp, created_at)` on paid rows) to `delivered_on`
+- **Order-to-delivery median:** median of delivery days; many same-day deliveries make median 0 arithmetically correct (pending Product confirmation on switching to P90)
+- **Program utilization display:** ratio (active + waiting subs) ÷ program limit; when > 100% show as multiplier (e.g. `3.1×`), not as a percentage (pending Product confirmation)
 - **Identity:** customers require Nafath and/or mobile OTP verification per program rules; national ID is primary identifier
 - **Partner isolation:** each B2B partner sees only their channel-partner-scoped data via OAuth `client_credentials`
 - **FNF:** treated as generic partner in code today — business rules require stakeholder confirmation before reporting or SLAs are applied

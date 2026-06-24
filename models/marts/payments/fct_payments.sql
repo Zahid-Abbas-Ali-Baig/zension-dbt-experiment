@@ -15,6 +15,7 @@ select
     payments.psp_payment_id,
     payments.created_at::date as payment_date,
     payments.payment_timestamp,
+    payments.paid_at,
     payments.payment_status,
     payments.payment_type,
     payments.refund_status,

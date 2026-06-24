@@ -331,6 +331,10 @@ semantic_models:
         type: categorical
       - name: is_upgraded
         type: categorical
+      - name: is_kifed
+        type: categorical
+      - name: is_upgraded_or_kifed
+        type: categorical
     measures:
       - name: subscriptions_total_count
         description: Count of subscriptions.
@@ -341,9 +345,9 @@ semantic_models:
         agg: sum
         expr: "case when is_active_subscription then 1 else 0 end"
       - name: upgraded_subscriptions_count
-        description: Count of upgraded subscriptions.
+        description: Count of upgraded or KIFed subscriptions.
         agg: sum
-        expr: "case when is_upgraded then 1 else 0 end"
+        expr: "case when is_upgraded_or_kifed then 1 else 0 end"
       - name: mrr_amount_total
         description: Sum of monthly recurring revenue in SAR.
         agg: sum
@@ -354,7 +358,7 @@ semantic_models:
         expr: subscription_term_months
 
   - name: subscription_monthly_snapshots
-    description: Month-end subscription status for churn analysis.
+    description: Month-end subscription status for quarter-scoped churn analysis.
     model: ref('fct_subscription_monthly_snapshots')
     defaults:
       agg_time_dimension: snapshot_month
@@ -376,13 +380,21 @@ semantic_models:
         type: time
         type_params:
           time_granularity: month
+      - name: snapshot_quarter
+        type: time
+        type_params:
+          time_granularity: quarter
       - name: subscription_status
         type: categorical
       - name: is_active
         type: categorical
+      - name: is_active_at_quarter_start
+        type: categorical
       - name: is_churned
         type: categorical
       - name: is_upgraded
+        type: categorical
+      - name: is_kifed
         type: categorical
     measures:
       - name: snapshot_subscriptions_count
@@ -394,9 +406,13 @@ semantic_models:
         agg: sum
         expr: "case when is_churned then 1 else 0 end"
       - name: active_at_month_end_count
-        description: Active subscriptions at month end.
+        description: Active delivered subscriptions at month end (excludes waiting for delivery).
         agg: sum
         expr: "case when is_active then 1 else 0 end"
+      - name: active_at_quarter_start_count
+        description: Active delivered subscriptions at quarter start.
+        agg: sum
+        expr: "case when is_active_at_quarter_start then 1 else 0 end"
 
   - name: subscription_pricing
     description: Subscription price list dimension.
@@ -526,6 +542,8 @@ semantic_models:
         type: categorical
       - name: is_failed_attempt
         type: categorical
+      - name: is_recurring_installment
+        type: categorical
     measures:
       - name: payment_attempts_total_count
         description: Total payment attempts.
@@ -535,6 +553,14 @@ semantic_models:
         description: Failed payment attempts.
         agg: sum
         expr: "case when is_failed_attempt then 1 else 0 end"
+      - name: recurring_payment_attempts_total_count
+        description: Recurring installment payment attempts.
+        agg: sum
+        expr: "case when is_recurring_installment then 1 else 0 end"
+      - name: recurring_failed_payment_attempts_count
+        description: Failed recurring installment payment attempts.
+        agg: sum
+        expr: "case when is_recurring_installment and is_failed_attempt then 1 else 0 end"
       - name: customers_with_failed_attempts_count
         description: Distinct customers with failed payment attempts.
         agg: count_distinct
@@ -968,16 +994,30 @@ metrics:
         filter: "{{ Dimension('subscription__is_mrr_eligible') }} = true"
 
   - name: churn_rate
-    description: Churned subscriptions in period divided by active subscriptions at month end.
+    description: Quarter-scoped churn — subscriptions churned in the selected quarter divided by active subscriptions at quarter start (delivered active only).
     type: derived
     label: Churn Rate
     type_params:
-      expr: churned_in_month_count / active_at_month_end_count
+      expr: churned_in_quarter_count / active_at_quarter_start_count
       metrics:
-        - name: churned_subscriptions_in_month
-          alias: churned_in_month_count
-        - name: active_subscriptions_at_month_end
-          alias: active_at_month_end_count
+        - name: churned_subscriptions_in_quarter
+          alias: churned_in_quarter_count
+        - name: active_subscriptions_at_quarter_start
+          alias: active_at_quarter_start_count
+
+  - name: churned_subscriptions_in_quarter
+    description: Subscriptions churned in the snapshot quarter.
+    type: simple
+    label: Churned Subscriptions (Quarter)
+    type_params:
+      measure: churned_in_month_count
+
+  - name: active_subscriptions_at_quarter_start
+    description: Active delivered subscriptions at quarter start.
+    type: simple
+    label: Active Subscriptions (Quarter Start)
+    type_params:
+      measure: active_at_quarter_start_count
 
   - name: churned_subscriptions_in_month
     description: Subscriptions churned in the snapshot month.
@@ -994,7 +1034,7 @@ metrics:
       measure: active_at_month_end_count
 
   - name: upgrade_rate
-    description: Upgraded subscriptions as a share of all subscriptions.
+    description: Upgraded or KIFed subscriptions as a share of all subscriptions.
     type: ratio
     label: Upgrade Rate
     type_params:
@@ -1002,7 +1042,7 @@ metrics:
       denominator: subscription_count
 
   - name: upgraded_subscription_count
-    description: Count of subscriptions in upgraded status.
+    description: Count of subscriptions in upgraded or KIFed status.
     type: simple
     label: Upgraded Subscription Count
     type_params:
@@ -1027,19 +1067,33 @@ metrics:
         filter: "{{ Dimension('invoice__is_paid') }} = true"
 
   - name: finance_variance_sar
-    description: Collected minus invoiced revenue by reconciliation month.
+    description: Monthly collected minus invoiced revenue (collected bucketed by coalesce(payment_timestamp, created_at)).
     type: simple
     label: Finance Variance (SAR)
     type_params:
       measure: finance_variance_monthly_total
 
   - name: payment_failure_rate
-    description: Failed payment attempts divided by total payment attempts.
+    description: Failed recurring installment attempts divided by total recurring installment attempts.
     type: ratio
     label: Payment Failure Rate
     type_params:
-      numerator: failed_payment_attempts
-      denominator: payment_attempts_total
+      numerator: recurring_failed_payment_attempts
+      denominator: recurring_payment_attempts_total
+
+  - name: recurring_failed_payment_attempts
+    description: Count of failed recurring installment payment attempts.
+    type: simple
+    label: Recurring Failed Payment Attempts
+    type_params:
+      measure: recurring_failed_payment_attempts_count
+
+  - name: recurring_payment_attempts_total
+    description: Count of recurring installment payment attempts.
+    type: simple
+    label: Recurring Payment Attempts Total
+    type_params:
+      measure: recurring_payment_attempts_total_count
 
   - name: failed_payment_attempts
     description: Count of failed payment attempts.
@@ -1063,7 +1117,7 @@ metrics:
       measure: subscribers_on_retry_count
 
   - name: refund_amount_sar
-    description: Total refund amount in SAR across CRM and PSP sources.
+    description: Total refund amount in SAR from CRM refunded payments only.
     type: simple
     label: Refund Amount (SAR)
     type_params:

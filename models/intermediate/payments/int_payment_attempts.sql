@@ -4,6 +4,15 @@ with payment_history as (
 
 ),
 
+crm_payments as (
+
+    select
+        payment_id,
+        is_recurring_payment
+    from {{ ref('stg_crm__tos_payments') }}
+
+),
+
 unified_payments as (
 
     select * from {{ ref('int_payments_unified') }}
@@ -31,6 +40,7 @@ enriched as (
         payment_history.refund_id,
         payment_history.is_successful_attempt,
         payment_history.is_failed_attempt,
+        coalesce(crm_payments.is_recurring_payment, false) as is_recurring_installment,
         unified_payments.order_id,
         unified_payments.customer_id,
         unified_payments.program_id,
@@ -41,6 +51,8 @@ enriched as (
         (unified_payments.payment_id is not null) as has_valid_payment
 
     from payment_history
+    left join crm_payments
+        on payment_history.payment_id = crm_payments.payment_id
     left join unified_payments
         on payment_history.payment_id = unified_payments.payment_id
 

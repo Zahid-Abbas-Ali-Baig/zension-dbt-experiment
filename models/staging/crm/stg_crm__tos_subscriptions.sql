@@ -38,6 +38,7 @@ renamed as (
         ) as is_mrr_eligible,
         (lower(trim(subscription_status)) = 'cancelled') as is_churned,
         (lower(trim(subscription_status)) = 'upgraded') as is_upgraded,
+        (lower(trim(subscription_status)) in ('kifed', 'auto_kifed')) as is_kifed,
         _etl_synced_at,
         _etl_source_system
 

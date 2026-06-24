@@ -16,6 +16,19 @@ customers as (
 
 ),
 
+first_paid_payments as (
+
+    select
+        payments.order_id,
+        min(payments.paid_at) as first_paid_at
+
+    from {{ ref('stg_crm__tos_payments') }} as payments
+    where payments.is_collected
+        and payments.order_id is not null
+    group by 1
+
+),
+
 enriched as (
 
     select
@@ -29,6 +42,7 @@ enriched as (
         orders.customer_id,
         orders.program_id,
         orders.delivered_at,
+        first_paid_payments.first_paid_at,
         orders.sales_channel,
         orders.payment_method_id,
         orders.total_discount_amount,
@@ -54,6 +68,8 @@ enriched as (
         on orders.program_id = programs.program_id
     left join customers
         on orders.customer_id = customers.customer_id
+    left join first_paid_payments
+        on orders.order_id = first_paid_payments.order_id
 
 )
 

@@ -21,6 +21,8 @@ select
     subscriptions.is_mrr_eligible,
     subscriptions.is_churned,
     subscriptions.is_upgraded,
+    subscriptions.is_kifed,
+    subscriptions.is_upgraded_or_kifed,
     subscriptions.has_valid_subscription_pricing,
     subscriptions.has_valid_order,
     subscriptions.has_valid_customer,

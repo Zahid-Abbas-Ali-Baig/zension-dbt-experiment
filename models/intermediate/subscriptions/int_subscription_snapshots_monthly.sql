@@ -30,6 +30,7 @@ enriched as (
     select
         subscription_months.subscription_id,
         subscription_months.snapshot_month,
+        date_trunc('quarter', subscription_months.snapshot_month)::date as snapshot_quarter,
         subscriptions.subscription_status,
         subscriptions.service_started_at,
         subscriptions.service_ended_at,
@@ -41,8 +42,10 @@ enriched as (
         subscriptions.is_mrr_eligible,
         subscriptions.is_churned,
         subscriptions.is_upgraded,
+        subscriptions.is_kifed,
         (
-            subscriptions.service_started_at is not null
+            subscriptions.subscription_status = 'active'
+            and subscriptions.service_started_at is not null
             and date_trunc('month', subscriptions.service_started_at)::date
                 <= subscription_months.snapshot_month
             and (
@@ -55,8 +58,21 @@ enriched as (
                 or date_trunc('month', subscriptions.subscription_close_date)::date
                     > subscription_months.snapshot_month
             )
-            and subscriptions.subscription_status in ('active', 'waiting_for_delivery')
         ) as is_active_at_month_end,
+        (
+            extract(month from subscription_months.snapshot_month)::int in (1, 4, 7, 10)
+            and subscriptions.subscription_status = 'active'
+            and subscriptions.service_started_at is not null
+            and subscriptions.service_started_at::date <= subscription_months.snapshot_month
+            and (
+                subscriptions.service_ended_at is null
+                or subscriptions.service_ended_at::date > subscription_months.snapshot_month
+            )
+            and (
+                subscriptions.subscription_close_date is null
+                or subscriptions.subscription_close_date::date > subscription_months.snapshot_month
+            )
+        ) as is_active_at_quarter_start,
         (
             subscriptions.is_churned
             and subscriptions.service_ended_at is not null
@@ -68,7 +84,13 @@ enriched as (
             and subscriptions.updated_at is not null
             and date_trunc('month', subscriptions.updated_at)::date
                 = subscription_months.snapshot_month
-        ) as is_upgraded_in_month
+        ) as is_upgraded_in_month,
+        (
+            subscriptions.is_kifed
+            and subscriptions.updated_at is not null
+            and date_trunc('month', subscriptions.updated_at)::date
+                = subscription_months.snapshot_month
+        ) as is_kifed_in_month
 
     from subscription_months
     inner join subscriptions

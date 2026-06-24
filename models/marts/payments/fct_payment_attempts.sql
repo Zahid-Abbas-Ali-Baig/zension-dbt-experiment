@@ -23,6 +23,7 @@ select
     attempts.funding_type,
     attempts.is_successful_attempt,
     attempts.is_failed_attempt,
+    attempts.is_recurring_installment,
     attempts.has_valid_payment,
     attempts.psp_reconciliation_status,
     attempts.psp_is_retry_queue,

@@ -76,7 +76,7 @@ Two commercial motions coexist:
 - **Market:** KSA — VAT applies (`crm_tos_countries.zoho_tax_id` referenced in requirements)
 - **Currency:** SAR assumed for KSA programs (confirm with finance)
 - **Exclude from revenue KPIs:** voided orders, fully refunded payments, subscriptions in Cancelled / Returned (report gross vs net separately where needed)
-- **Active subscription definition:** `subscription_status = 'Active'` AND `service_start_date IS NOT NULL`
+- **Active subscription definition:** `subscription_status = 'Active'` AND `service_start_date IS NOT NULL` (device delivered). Global active count (235 in discovery) is correct. **Not** the same as program limit utilization, which counts `Active` + `Waiting_For_Delivery` against `subscription_limit`
 - **MRR definition:** `monthly_subscription_amount` from `crm_tos_subscription_pricing` for active subscriptions only; exclude pre-delivery subs
 - **Partner isolation:** All partner-facing marts filterable by `channel_partner_id`
 
@@ -89,22 +89,22 @@ Two commercial motions coexist:
 | ------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ------------------------- | ------------------- |
 | **Sales & orders**        |                                                                                          |                                                                       |                           |                     |
 | 1                         | Orders and GMV by channel partner, program, month?                                       | `order_count`, `gmv_sar`                                              | Order × month             | Sales               |
-| 2                         | Pre-order vs standard order share; avg time payment → delivery?                          | `preorder_order_share`, `avg_days_payment_to_delivery`                | Order                     | Sales / Fulfillment |
+| 2                         | Pre-order vs standard order share; avg time first paid payment → delivery?                 | `preorder_order_share`, `avg_days_payment_to_delivery`                | Order                     | Sales / Fulfillment |
 | 3                         | Top device models (brand, storage, color) by partner?                                    | `order_item_count` by SKU attributes                                  | Order item                | Sales               |
 | **Subscriptions**         |                                                                                          |                                                                       |                           |                     |
 | 4                         | Subscriptions by status (Active, Waiting for Delivery, Cancelled, Defaulted) by partner? | `subscription_count` by status                                        | Subscription              | Subscriptions       |
 | 5                         | MRR and average subscription term by program?                                            | `mrr_sar`, `avg_subscription_term_months`                             | Subscription × month      | Subscriptions       |
-| 6                         | Churn and upgrade rate (KIFed / Upgraded) per quarter?                                   | `churn_rate`, `upgrade_rate`                                          | Subscription × quarter    | Subscriptions       |
+| 6                         | Churn and upgrade rate (KIFed / Upgraded) per quarter?                                   | `churn_rate` (quarter-scoped), `upgrade_rate` (upgraded + kifed)      | Subscription × quarter    | Subscriptions       |
 | **Payments & finance**    |                                                                                          |                                                                       |                           |                     |
-| 7                         | Collected vs invoiced vs recognized revenue by month?                                    | `collected_revenue_sar`, `invoiced_revenue_sar`                       | Payment / invoice × month | Finance             |
-| 8                         | Recurring payment failure rate; customers on retry?                                      | `payment_failure_rate`, `customers_on_retry_count`                    | Payment attempt           | Payments            |
-| 9                         | Refund volume and credit-note value by partner and reason?                               | `refund_amount_sar`, `credit_note_count`                              | Refund / credit note      | Finance             |
+| 7                         | Collected vs invoiced vs recognized revenue by month?                                    | `collected_revenue_sar`, `invoiced_revenue_sar`, `finance_variance_sar` | Payment / invoice × month | Finance             |
+| 8                         | Recurring installment payment failure rate; customers on retry?                          | `payment_failure_rate` (recurring installments only), `customers_on_retry_count` | Payment attempt           | Payments            |
+| 9                         | Refund volume and credit-note value by partner and reason?                               | `refund_amount_sar` (CRM refunded payments only), `credit_note_count` | Refund / credit note      | Finance             |
 | **Customers**             |                                                                                          |                                                                       |                           |                     |
 | 10                        | Verified customers (Nafath + mobile OTP) by corporate company (CEP)?                     | `verified_customer_count`                                             | Customer                  | Customers           |
-| 11                        | Avg devices-per-customer; subscription limit utilization?                                | `avg_devices_per_customer`, `program_subscription_utilization_pct`    | Customer / program        | Customers           |
+| 11                        | Avg devices-per-customer; subscription limit utilization?                                | `avg_devices_per_customer`, `program_subscription_utilization` (× multiplier when > 1) | Customer / program        | Customers           |
 | 12                        | Customers with outstanding payments or expired cards?                                    | `customers_with_outstanding_payments`, `expired_payment_method_count` | Customer                  | Payments            |
 | **Operations & partners** |                                                                                          |                                                                       |                           |                     |
-| 13                        | Order-to-delivery SLA by partner and region?                                             | `median_order_to_delivery_days`, `sla_breach_count`                   | Order                     | Fulfillment         |
+| 13                        | Order-to-delivery SLA by partner and region?                                             | `median_order_to_delivery_days` (P90 under review), `sla_breach_count` | Order                     | Fulfillment         |
 | 14                        | Partner webhook (SNS) failures / delays?                                                 | `partner_api_failure_rate`, `partner_api_failure_count`               | API log event             | Operations          |
 | 15                        | Programs disabled or over subscription / payment-method limits?                          | `programs_over_limit_count`, `disabled_program_count`                 | Program                   | Operations          |
 
@@ -385,8 +385,9 @@ SuiteCRM exports use **char-padded strings**, inconsistent status casing, and bo
 | `channel_partner_id`      | `channel_partner_id`      | FK                                                                |
 | —                         | `is_active_subscription`  | `status = 'active' and service_started_at is not null`            |
 | —                         | `is_mrr_eligible`         | `is_active_subscription` (excludes pre-delivery per requirements) |
-| —                         | `is_churned`              | `status = 'cancelled'`                                            |
+| —                         | `is_churned`              | `status = 'cancelled'` (quarter-scoped via monthly snapshots, not lifetime) |
 | —                         | `is_upgraded`             | `status = 'upgraded'`                                             |
+| —                         | `is_kifed`                | `status in ('kifed', 'auto_kifed')` — **confirm with Product** if KIFed is upgrade vs churn |
 
 
 #### `stg_crm__tos_payments`
@@ -397,7 +398,9 @@ SuiteCRM exports use **char-padded strings**, inconsistent status casing, and bo
 | `payment_status`               | `payment_status`       | trim, lower                   |
 | `payment_amount_tax_inclusive` | `collected_amount_sar` |                               |
 | `refund_amount`                | `refund_amount_sar`    |                               |
+| `payment_timestamp`            | `payment_timestamp`    | nullable in CRM; many paid rows lack timestamp |
 | `payment_id`                   | `psp_payment_id`       | FK to PSP                     |
+| —                              | `paid_at`              | `coalesce(payment_timestamp, created_at)` for finance month bucketing and payment→delivery SLA |
 | —                              | `is_collected`         | `payment_status = 'paid'`     |
 | —                              | `is_failed`            | `payment_status = 'failed'`   |
 | —                              | `is_refunded`          | `payment_status = 'refunded'` |
@@ -446,6 +449,17 @@ SuiteCRM exports use **char-padded strings**, inconsistent status casing, and bo
 | `request_status` | `request_status` | trim, lower                                                   |
 | —                | `is_successful`  | `process_status = 'completed' and request_status = 'success'` |
 | —                | `is_retry_queue` | `process_status = 'queued'`                                   |
+
+
+#### `stg_crm__tos_payment_history`
+
+
+| Source           | Staging name                  | Transform                                                                 |
+| ---------------- | ----------------------------- | ------------------------------------------------------------------------- |
+| `status`         | `payment_attempt_status`      | trim, lower; normalize `Approved` → `approved`                            |
+| `is_recurring`   | `is_recurring_installment`    | boolean — **filter for `payment_failure_rate`** (recurring attempts only) |
+| —                | `is_successful_attempt`       | status in (`paid`, `approved`)                                            |
+| —                | `is_failed_attempt`           | status = `failed`                                                         |
 
 
 ---
@@ -510,10 +524,10 @@ Intermediate models resolve orphans, unify dual payment truth, and pre-compute b
 | `int_invoices`                       | Invoice + customer                                          | aos_invoices, customers                       | 1 row / invoice      |
 | `int_invoice_line_items`             | Invoice lines + subscription                                | invoice_line_items, subscriptions             | 1 row / line         |
 | `int_credit_notes`                   | Credit notes + invoice link                                 | credit_notes, invoices                        | 1 row / credit note  |
-| `int_refunds`                        | CRM refunds UNION PSP refunds with dedup key                | payments (refunded), payments_refunds         | 1 row / refund event |
-| `int_finance_reconciliation`         | Monthly CRM collected vs invoiced vs PSP                    | unified payments, invoices, credit notes      | 1 row / month        |
+| `int_refunds`                        | CRM refunded payments only (source of record for `refund_amount_sar`; PSP rows excluded pending Finance sign-off) | `int_payments_crm` where `is_refunded` | 1 row / CRM refund |
+| `int_finance_reconciliation`         | Monthly `SUM(collected) − SUM(invoiced)`; collected bucketed by `date_trunc('month', coalesce(payment_timestamp, created_at))` | unified payments, invoices, credit notes | 1 row / month        |
 | `int_partner_api_events`             | API logs with partner attribution                           | api_logs, programs/partners                   | 1 row / API call     |
-| `int_subscription_snapshots_monthly` | Month-end subscription status for churn                     | subscriptions + dates                         | 1 row / sub / month  |
+| `int_subscription_snapshots_monthly` | Month-end subscription status for **quarter-scoped** churn; denominator = active at quarter start (`service_start_date` set; exclude `waiting_for_delivery`) | subscriptions + dates                         | 1 row / sub / month  |
 | `int_customer_device_counts`         | Devices per customer                                        | devices, orders                               | 1 row / customer     |
 
 
@@ -546,7 +560,7 @@ Intermediate models resolve orphans, unify dual payment truth, and pre-compute b
 | ------------------------- | --------- | -------------------- | ------------------------------------------ |
 | `dim_customers`           | Dimension | 1 row / customer     | From `int_customers`; SCD Type 1           |
 | `dim_channel_partners`    | Dimension | 1 row / partner      | Jarir, ZAAM, Axiom, etc.                   |
-| `dim_programs`            | Dimension | 1 row / program      | Includes `subscription_limit`, utilization |
+| `dim_programs`            | Dimension | 1 row / program      | Includes `subscription_limit`, utilization ratio (active + waiting) ÷ limit |
 | `dim_corporate_companies` | Dimension | 1 row / CEP employer | `allowed_email_domains`                    |
 | `dim_device_skus`         | Dimension | 1 row / master SKU   | brand, model, memory, color                |
 | `dim_dates`               | Dimension | calendar             | via `dbt_utils.date_spine`                 |
@@ -557,7 +571,7 @@ Intermediate models resolve orphans, unify dual payment truth, and pre-compute b
 
 | Mart                                 | Type | Grain                | Key measures                                |
 | ------------------------------------ | ---- | -------------------- | ------------------------------------------- |
-| `fct_subscriptions`                  | Fact | 1 row / subscription | `monthly_recurring_amount_sar`, term months |
+| `fct_subscriptions`                  | Fact | 1 row / subscription | `monthly_recurring_amount_sar`, term months; `program_id` FK for partner/program slicers |
 | `fct_subscription_monthly_snapshots` | Fact | 1 row / sub / month  | status, is_active, is_churned               |
 
 
@@ -631,30 +645,59 @@ Intermediate models resolve orphans, unify dual payment truth, and pre-compute b
 | -------------------------------------- | ------- | ---------------------------------------------------------- | -------------------------------------------------- | ------------------ |
 | `order_count`                          | simple  | Count of orders where `is_gmv_eligible`                    | `fct_orders`                                       | Q1                 |
 | `gmv_sar`                              | simple  | Sum of `gmv_amount_sar` where `is_gmv_eligible`            | `fct_orders`                                       | Q1                 |
-| `preorder_order_share`                 | ratio   | `preorder orders / total orders`                           | `fct_orders`                                       | Q2                 |
-| `avg_days_payment_to_delivery`         | derived | `avg(delivered_at - first_paid_at)` days                   | `fct_orders` + `fct_payments`                      | Q2, Q13            |
+| `preorder_order_share`                 | ratio   | `preorder orders / eligible orders`; BI: `IF(EligibleOrders=0, BLANK(), DIVIDE(Preorders, EligibleOrders, 0))` — show **0%** when eligible > 0 and preorders = 0 | `fct_orders`                                       | Q2                 |
+| `avg_days_payment_to_delivery`         | derived | `avg(delivered_at − first_paid_at)` days; `first_paid_at` = min `paid_at` on paid CRM payments per order (`coalesce(payment_timestamp, created_at)`) | `fct_orders` + `fct_payments`                      | Q2, Q13            |
 | `order_item_count`                     | simple  | Count of order line items                                  | `fct_order_items`                                  | Q3                 |
 | `subscription_count`                   | simple  | Count subscriptions by status dim                          | `fct_subscriptions`                                | Q4                 |
-| `active_subscription_count`            | simple  | Count where `is_active_subscription`                       | `fct_subscriptions`                                | Q4                 |
+| `active_subscription_count`            | simple  | Count where `is_active_subscription` (`status = active` AND `service_started_at IS NOT NULL`). Partner/program slices require active `fct_subscriptions[program_id]` → `dim_programs` relationship in BI | `fct_subscriptions`                                | Q4                 |
 | `mrr_sar`                              | simple  | Sum `monthly_recurring_amount_sar` where `is_mrr_eligible` | `fct_subscriptions`                                | Q5                 |
-| `avg_subscription_term_months`         | derived | Avg duration months by program                             | `fct_subscriptions` + `dim_subscription_durations` | Q5                 |
-| `churn_rate`                           | derived | Churned subs in quarter / active at quarter start          | `fct_subscription_monthly_snapshots`               | Q6                 |
-| `upgrade_rate`                         | derived | Upgraded subs / eligible subs per quarter                  | `fct_subscriptions`                                | Q6                 |
+| `avg_subscription_term_months`         | derived | Avg `subscription_term_months` where `is_mrr_eligible = TRUE` (align with MRR scope); BI: `AVERAGEX` over eligible rows | `fct_subscriptions` + `dim_subscription_durations` | Q5                 |
+| `churn_rate`                           | derived | **Quarter-scoped:** churned in selected quarter ÷ active at quarter start (monthly snapshot flags; not lifetime `DISTINCTCOUNT`). Denominator = active with `service_start_date` only (exclude `waiting_for_delivery`) | `fct_subscription_monthly_snapshots`               | Q6                 |
+| `upgrade_rate`                         | derived | (Upgraded + KIFed subs in quarter) ÷ eligible subs per quarter; numerator uses `is_upgraded OR is_kifed` | `fct_subscriptions`                                | Q6                 |
 | `collected_revenue_sar`                | simple  | Sum `collected_amount_sar` where `is_collected`            | `fct_payments`                                     | Q7                 |
 | `invoiced_revenue_sar`                 | simple  | Sum `invoice_amount_sar` on paid invoices                  | `fct_invoices`                                     | Q7                 |
-| `finance_variance_sar`                 | derived | collected − invoiced by month                              | `fct_finance_reconciliation_monthly`               | Q7                 |
-| `payment_failure_rate`                 | ratio   | Failed attempts / total attempts                           | `fct_payment_attempts`                             | Q8                 |
+| `finance_variance_sar`                 | derived | `SUM(collected) − SUM(invoiced)` by month; collected bucketed by `date_trunc('month', coalesce(payment_timestamp, created_at))`. Expected all-time gap ~27,821 SAR (901,936 − 874,115) | `fct_finance_reconciliation_monthly`               | Q7                 |
+| `payment_failure_rate`                 | ratio   | Failed ÷ total **recurring installment** attempts only (`is_recurring_installment = TRUE` in `fct_payment_attempts`; not all payment history) | `fct_payment_attempts`                             | Q8                 |
 | `customers_on_retry_count`             | derived | Distinct customers with queued PSP transactions            | `fct_psp_transactions`                             | Q8                 |
-| `refund_amount_sar`                    | simple  | Sum refund amounts                                         | `fct_refunds`                                      | Q9                 |
+| `refund_amount_sar`                    | simple  | Sum `refund_amount_sar` from CRM `tos_payments` where `is_refunded` only (~64,697 SAR in discovery; exclude PSP union) | `fct_refunds`                                      | Q9                 |
 | `credit_note_count`                    | simple  | Count credit notes                                         | `fct_credit_notes`                                 | Q9                 |
 | `verified_customer_count`              | simple  | Customers with `is_fully_verified`                         | `dim_customers`                                    | Q10                |
 | `avg_devices_per_customer`             | derived | Avg device count per customer                              | `fct_devices`                                      | Q11                |
-| `program_subscription_utilization_pct` | ratio   | Active subs / `subscription_limit`                         | `dim_programs`                                     | Q11, Q15           |
+| `program_subscription_utilization_pct` | ratio   | (Active + waiting subs) ÷ `subscription_limit`; BI displays as **multiplier (×)** when ratio > 1 (e.g. `3.1×`), not `307%` | `dim_programs`                                     | Q11, Q15           |
 | `expired_payment_method_count`         | simple  | Payment methods past expiry                                | `dim_payment_methods`                              | Q12                |
-| `customers_with_outstanding_payments`  | derived | Customers with unpaid invoice or failed recurring          | `fct_invoices`, `fct_payment_attempts`             | Q12                |
-| `median_order_to_delivery_days`        | derived | Median delivery SLA                                        | `fct_orders`                                       | Q13                |
+| `customers_with_outstanding_payments`  | derived | Distinct customers in union of unpaid-invoice set and failed-recurring set; BI: `COUNTROWS(SUMMARIZE(UNION(...), customer_id))` (~1,210 expected) | `fct_invoices`, `fct_payment_attempts`             | Q12                |
+| `median_order_to_delivery_days`        | derived | Median `delivered_at − order_date` days; median 0 is valid when many same-day deliveries — **confirm with Product** on P90 alternative | `fct_orders`                                       | Q13                |
 | `partner_api_failure_rate`             | ratio   | API failures / total calls                                 | `fct_partner_api_events`                           | Q14                |
-| `programs_over_limit_count`            | simple  | Programs where active subs > limit                         | `dim_programs`                                     | Q15                |
+| `programs_over_limit_count`            | simple  | Programs where (active + waiting) subs > limit               | `dim_programs`                                     | Q15                |
+| `disabled_program_count`               | simple  | Count programs where `is_disabled_program = TRUE`; BI: `COALESCE(CALCULATE(COUNTROWS(dim_programs), is_disabled_program=TRUE), 0)` — show **0** when none | `dim_programs`                                     | Q15                |
+
+
+### Power BI (`_KPIs` DAX) — cycle 2 fixes
+
+Target file: `powerbi/zension.pbix`. Update measures per `powerbi/report_build_guide.txt`. Validation spot-checks after Pass 2: Finance Variance ≈ **27,821 SAR**; Refund Amount ≈ **64,697 SAR**.
+
+
+| Measure | Agreed DAX / behavior |
+| ------- | --------------------- |
+| Finance Variance (SAR) | Sum `finance_variance_sar` from mart (monthly collected − invoiced after `paid_at` bucketing fix) |
+| Refund Amount (SAR) | Sum CRM refunded payments only (not PSP union) |
+| Churn Rate | Quarter-scoped ratio from monthly snapshots; respect quarter slicer — not lifetime rate |
+| Payment Failure Rate | `DIVIDE` failed recurring installments, total recurring installments |
+| Upgrade Rate | Numerator includes `is_upgraded` + `is_kifed` |
+| Active Subscription Count | `is_active_subscription`; partner/program slices need active relationships (below) |
+| Pre-order Share | `IF(EligibleOrders=0, BLANK(), DIVIDE(Preorders, EligibleOrders, 0))` |
+| Avg Subscription Term (Months) | `AVERAGEX` filtered to `is_mrr_eligible = TRUE` |
+| Customers with Outstanding Payments | `COUNTROWS(SUMMARIZE(UNION(unpaid_customers, failed_customers), customer_id))` |
+| Program Subscription Utilization | Display as `FORMAT(ratio, "0.0") & "×"` when ratio > 1 |
+| Disabled Program Count | `COALESCE(CALCULATE(COUNTROWS(dim_programs), is_disabled_program=TRUE), 0)` |
+| Avg Days Payment to Delivery | First paid CRM payment (`paid_at`) → `delivered_on` |
+| Median Order to Delivery Days | Keep median; document same-day delivery effect in tooltip |
+
+**Model relationships (activate if inactive):**
+
+- `fct_orders[program_id]` → `dim_programs[program_id]`
+- `fct_orders[customer_id]` → `dim_customers[customer_id]`
+- `fct_subscriptions[program_id]` → `dim_programs[program_id]`
 
 
 ---
@@ -692,16 +735,16 @@ Codegen `generate_source` calls grouped **max 3 tables** per batch for Phase 2.
 | Q3: Top device models by partner              | `crm_tos_order_items`, `crm_tos_zaam_skus`, `crm_tos_master_skus`, `crm_tos_devices`      | `stg_crm__tos_order_items`, `stg_crm__tos_zaam_skus`, `stg_crm__tos_master_skus`                         | `int_order_items`, `int_device_skus`                                 | `fct_order_items`, `dim_device_skus`                                 | `order_item_count`                                                      |
 | Q4: Subscriptions by status & partner         | `crm_tos_subscriptions`, `crm_tos_channel_partners`                                       | `stg_crm__tos_subscriptions`, `stg_crm__tos_channel_partners`                                            | `int_subscriptions`                                                  | `fct_subscriptions`                                                  | `subscription_count`, `active_subscription_count`                       |
 | Q5: MRR & avg term by program                 | `crm_tos_subscriptions`, `crm_tos_subscription_pricing`, `crm_tos_subscription_durations` | `stg_crm__tos_subscriptions`, `stg_crm__tos_subscription_pricing`, `stg_crm__tos_subscription_durations` | `int_subscriptions`                                                  | `fct_subscriptions`, `dim_subscription_durations`                    | `mrr_sar`, `avg_subscription_term_months`                               |
-| Q6: Churn & upgrade rate                      | `crm_tos_subscriptions`                                                                   | `stg_crm__tos_subscriptions`                                                                             | `int_subscriptions`, `int_subscription_snapshots_monthly`            | `fct_subscription_monthly_snapshots`                                 | `churn_rate`, `upgrade_rate`                                            |
-| Q7: Collected vs invoiced revenue             | `crm_tos_payments`, `crm_aos_invoices`                                                    | `stg_crm__tos_payments`, `stg_crm__aos_invoices`                                                         | `int_payments_unified`, `int_invoices`, `int_finance_reconciliation` | `fct_payments`, `fct_invoices`, `fct_finance_reconciliation_monthly` | `collected_revenue_sar`, `invoiced_revenue_sar`, `finance_variance_sar` |
-| Q8: Payment failure & retry                   | `crm_tos_payment_history`, `payments_transactions`                                        | `stg_crm__tos_payment_history`, `stg_payments__transactions`                                             | `int_payment_attempts`, `int_payments_psp`                           | `fct_payment_attempts`, `fct_psp_transactions`                       | `payment_failure_rate`, `customers_on_retry_count`                      |
-| Q9: Refunds & credit notes                    | `crm_tos_payments`, `crm_tos_credit_notes`, `payments_refunds`                            | `stg_crm__tos_payments`, `stg_crm__tos_credit_notes`, `stg_payments__refunds`                            | `int_refunds`, `int_credit_notes`                                    | `fct_refunds`, `fct_credit_notes`                                    | `refund_amount_sar`, `credit_note_count`                                |
+| Q6: Churn & upgrade rate                      | `crm_tos_subscriptions`                                                                   | `stg_crm__tos_subscriptions` (+ `is_kifed`)                                                                  | `int_subscriptions`, `int_subscription_snapshots_monthly` (quarter-scoped) | `fct_subscription_monthly_snapshots`, `fct_subscriptions`              | `churn_rate`, `upgrade_rate`                                            |
+| Q7: Collected vs invoiced revenue             | `crm_tos_payments`, `crm_aos_invoices`                                                    | `stg_crm__tos_payments` (+ `paid_at`), `stg_crm__aos_invoices`                                             | `int_payments_unified`, `int_invoices`, `int_finance_reconciliation` (`paid_at` month bucket) | `fct_payments`, `fct_invoices`, `fct_finance_reconciliation_monthly` | `collected_revenue_sar`, `invoiced_revenue_sar`, `finance_variance_sar` |
+| Q8: Payment failure & retry                   | `crm_tos_payment_history`, `payments_transactions`                                        | `stg_crm__tos_payment_history` (+ `is_recurring_installment`), `stg_payments__transactions`              | `int_payment_attempts` (recurring filter), `int_payments_psp`        | `fct_payment_attempts`, `fct_psp_transactions`                       | `payment_failure_rate`, `customers_on_retry_count`                      |
+| Q9: Refunds & credit notes                    | `crm_tos_payments`, `crm_tos_credit_notes`                                                | `stg_crm__tos_payments`, `stg_crm__tos_credit_notes`                                                       | `int_refunds` (CRM only), `int_credit_notes`                         | `fct_refunds`, `fct_credit_notes`                                    | `refund_amount_sar`, `credit_note_count`                                |
 | Q10: Verified customers by CEP company        | `crm_accounts`, `crm_tos_corporate_company`                                               | `stg_crm__accounts`, `stg_crm__tos_corporate_company`                                                    | `int_customers`                                                      | `dim_customers`, `dim_corporate_companies`                           | `verified_customer_count`                                               |
-| Q11: Devices per customer & limit utilization | `crm_tos_devices`, `crm_tos_orders`, `crm_tos_programs`, `crm_tos_subscriptions`          | `stg_crm__tos_devices`, `stg_crm__tos_orders`, `stg_crm__tos_programs`                                   | `int_customer_device_counts`, `int_programs`                         | `fct_devices`, `dim_programs`                                        | `avg_devices_per_customer`, `program_subscription_utilization_pct`      |
-| Q12: Outstanding payments & expired cards     | `crm_tos_payment_methods`, `crm_aos_invoices`, `crm_tos_payment_history`                  | `stg_crm__tos_payment_methods`, `stg_crm__aos_invoices`, `stg_crm__tos_payment_history`                  | `int_payment_attempts`, `int_invoices`                               | `dim_payment_methods`, `fct_invoices`                                | `expired_payment_method_count`, `customers_with_outstanding_payments`   |
-| Q13: Order-to-delivery SLA                    | `crm_tos_orders`, `crm_tos_addresses`                                                     | `stg_crm__tos_orders`, `stg_crm__tos_addresses`                                                          | `int_orders`                                                         | `fct_orders`                                                         | `median_order_to_delivery_days`                                         |
+| Q11: Devices per customer & limit utilization | `crm_tos_devices`, `crm_tos_orders`, `crm_tos_programs`, `crm_tos_subscriptions`          | `stg_crm__tos_devices`, `stg_crm__tos_orders`, `stg_crm__tos_programs`                                   | `int_customer_device_counts`, `int_programs` (active + waiting ÷ limit) | `fct_devices`, `dim_programs`                                        | `avg_devices_per_customer`, `program_subscription_utilization_pct`      |
+| Q12: Outstanding payments & expired cards     | `crm_tos_payment_methods`, `crm_aos_invoices`, `crm_tos_payment_history`                  | `stg_crm__tos_payment_methods`, `stg_crm__aos_invoices`, `stg_crm__tos_payment_history`                  | `int_payment_attempts`, `int_invoices`                               | `dim_payment_methods`, `fct_invoices`                                | `expired_payment_method_count`, `customers_with_outstanding_payments` (deduped) |
+| Q13: Order-to-delivery SLA                    | `crm_tos_orders`, `crm_tos_payments`, `crm_tos_addresses`                                 | `stg_crm__tos_orders`, `stg_crm__tos_payments` (+ `paid_at`), `stg_crm__tos_addresses`                   | `int_orders`, `int_payments_crm` (first paid per order)              | `fct_orders`, `fct_payments`                                         | `median_order_to_delivery_days`, `avg_days_payment_to_delivery`         |
 | Q14: Partner webhook failures                 | `crm_tos_api_logs`                                                                        | `stg_crm__tos_api_logs`                                                                                  | `int_partner_api_events`                                             | `fct_partner_api_events`                                             | `partner_api_failure_rate`                                              |
-| Q15: Programs over limits                     | `crm_tos_programs`, `crm_tos_subscriptions`                                               | `stg_crm__tos_programs`, `stg_crm__tos_subscriptions`                                                    | `int_programs`                                                       | `dim_programs`                                                       | `programs_over_limit_count`                                             |
+| Q15: Programs over limits / disabled          | `crm_tos_programs`, `crm_tos_subscriptions`                                               | `stg_crm__tos_programs`, `stg_crm__tos_subscriptions`                                                    | `int_programs`                                                       | `dim_programs`                                                       | `programs_over_limit_count`, `disabled_program_count`                   |
 
 
 ---

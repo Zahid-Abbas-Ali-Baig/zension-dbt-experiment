@@ -1,22 +1,23 @@
 {{
     config(
         description='Monthly reconciliation of CRM collected revenue vs Zoho-synced '
-        'invoiced revenue. Collected sums paid CRM payments by payment_timestamp month; '
-        'invoiced sums paid aos_invoices by invoice_date month. finance_variance_sar '
-        'is collected minus invoiced per KPI map Q7.'
+        'invoiced revenue. Collected sums paid CRM payments by coalesce(payment_timestamp, '
+        'created_at) month; invoiced sums paid aos_invoices by invoice_date month. '
+        'finance_variance_sar is collected minus invoiced per KPI map Q7.'
     )
 }}
 
 with monthly_collected as (
 
     select
-        date_trunc('month', payments.payment_timestamp)::date as reconciliation_month,
+        date_trunc('month', coalesce(payments.payment_timestamp, payments.created_at))::date
+            as reconciliation_month,
         sum(payments.collected_amount_sar) filter (where payments.is_collected) as collected_revenue_sar,
         count(*) filter (where payments.is_collected) as collected_payment_count,
         sum(payments.refund_amount_sar) filter (where payments.is_refunded) as crm_refund_amount_sar
 
     from {{ ref('int_payments_unified') }} as payments
-    where payments.payment_timestamp is not null
+    where coalesce(payments.payment_timestamp, payments.created_at) is not null
     group by 1
 
 ),
@@ -24,13 +25,16 @@ with monthly_collected as (
 monthly_invoiced as (
 
     select
-        date_trunc('month', invoices.invoice_date)::date as reconciliation_month,
+        date_trunc(
+            'month',
+            coalesce(invoices.invoice_date, invoices.settlement_date, invoices.created_at)
+        )::date as reconciliation_month,
         sum(invoices.invoice_amount_sar) filter (where invoices.is_paid) as invoiced_revenue_sar,
         count(*) filter (where invoices.is_paid) as paid_invoice_count,
         sum(invoices.invoice_amount_sar) filter (where not invoices.is_paid) as unpaid_invoice_amount_sar
 
     from {{ ref('int_invoices') }} as invoices
-    where invoices.invoice_date is not null
+    where coalesce(invoices.invoice_date, invoices.settlement_date, invoices.created_at) is not null
     group by 1
 
 ),

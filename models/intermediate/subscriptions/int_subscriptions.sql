@@ -43,6 +43,8 @@ enriched as (
         subscriptions.upgraded_subscription_id,
         subscriptions.is_churned,
         subscriptions.is_upgraded,
+        subscriptions.is_kifed,
+        (subscriptions.is_upgraded or subscriptions.is_kifed) as is_upgraded_or_kifed,
         pricing.monthly_subscription_amount_sar,
         pricing.subscription_duration_id,
         durations.duration_months as subscription_term_months,

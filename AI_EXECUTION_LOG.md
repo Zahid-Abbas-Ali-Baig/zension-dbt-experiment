@@ -57,3 +57,63 @@ Row counts are below source totals (900 subs, 2956 accounts) because staging exc
 ### Blockers
 
 None. All compile and test failures resolved within validation scope (no new models, `design_brief.md` unchanged).
+
+---
+
+## Feedback Cycle 2 — Pass 2 (2026-06-24)
+
+**Trigger:** `client_feedback.md` cycle 2; `design_brief.md` approved; phases 3–8.
+
+### dbt models touched
+
+| Layer | Models |
+| ----- | ------ |
+| Staging | `stg_crm__tos_subscriptions` (`is_kifed`), `stg_crm__tos_payments` (`paid_at`, `is_recurring_payment`) |
+| Intermediate | `int_finance_reconciliation` (collected `coalesce(payment_timestamp, created_at)`; invoiced `coalesce(invoice_date, settlement_date, created_at)`), `int_refunds` (CRM only), `int_subscription_snapshots_monthly` (quarter flags, churn denominator excludes waiting-for-delivery), `int_payment_attempts` (`is_recurring_installment` via parent payment), `int_subscriptions` (`is_kifed`, `is_upgraded_or_kifed`), `int_orders` (`first_paid_at`) |
+| Marts | `fct_subscription_monthly_snapshots`, `fct_subscriptions`, `fct_payment_attempts`, `fct_payments` (`paid_at`), `fct_orders` (`first_paid_at`) |
+| Semantic | `semantic_models.yml` — churn quarter-scoped, recurring payment failure, CRM-only refunds, upgrade includes KIFed |
+
+### Build command
+
+```powershell
+.venv\Scripts\dbt.exe build --select stg_crm__tos_subscriptions+ stg_crm__tos_payments+ int_refunds+ int_finance_reconciliation+ int_subscription_snapshots_monthly+ int_payment_attempts+ int_orders+ --profiles-dir . --quiet
+```
+
+**Result:** PASS (exit 0).
+
+### Warehouse validation (`dbt show`)
+
+| KPI | Expected | Observed |
+| --- | -------- | -------- |
+| Finance variance (all-time) | ~27,821 SAR | collected 901,936 − invoiced 874,115 = **27,821** |
+| Refund amount (CRM) | ~64,697 SAR | **64,697** (81 rows) |
+| Payment failure rate (recurring only) | << 80% | **40.4%** (1,052 recurring attempts) |
+
+### Power BI (`powerbi/zension.pbix`, Desktop port 62938)
+
+- Refreshed partitions: `fct_finance_reconciliation_monthly`, `fct_refunds`, `fct_subscription_monthly_snapshots`, `fct_orders`, `fct_payment_attempts`, `fct_subscriptions`
+- Removed stale model columns (`is_active_at_month_start`, `is_quarter_start_month`, `year_quarter`, `days_payment_to_delivery`); updated M partitions to explicit `NativeQuery` for snapshot/orders/attempts tables
+- Recreated **Churn Rate** measure (quarter-scoped via `is_active_at_quarter_start`)
+- Relationships per `report_build_guide.txt` already active: `fct_orders[program_id]`, `fct_orders[customer_id]`, `fct_subscriptions[program_id]`; `fct_subscription_monthly_snapshots[program_id]` left inactive (ambiguous path via `dim_channel_partners`)
+
+### DAX spot-check (`dax_query_operations`)
+
+| Measure | Value |
+| ------- | ----- |
+| Finance Variance (SAR) | 27,820.57 |
+| Refund Amount (SAR) | 64,697 |
+| Payment Failure Rate | 40.4% |
+| Customers with Outstanding Payments | 1,210 |
+| Active Subscription Count | 235 |
+
+**Manual step:** Save `zension.pbix` in Power BI Desktop to persist MCP changes.
+
+### Build-time doc fix (not Pass 1)
+
+`int_finance_reconciliation` invoiced month bucketing uses `coalesce(invoice_date, settlement_date, created_at)` because paid invoices have null `invoice_date` in CRM (1,664 rows; settlement_date populated).
+
+
+
+
+
+
