@@ -41,14 +41,14 @@ Two commercial motions coexist:
 **Sales & orders**
 
 - How many orders and what gross merchandise value (GMV) by channel partner, program, and month?
-- What share of orders are pre-order vs standard order, and what is average time from payment to delivery?
+- What share of orders are pre-order vs standard order (show 0% when none), and what is average time from payment to delivery?
 - Which device models (brand, storage, color) sell most by partner?
 
 **Subscriptions**
 
 - How many subscriptions are Active, Waiting for Delivery, Cancelled, or Defaulted by partner?
 - What is monthly recurring revenue (MRR) and average subscription term by program?
-- What is churn rate per quarter (not a lifetime rate) and upgrade rate including KIFed and Upgraded statuses per quarter?
+- What is churn rate per quarter (not a lifetime rate) and upgrade rate including KIFed and Upgraded statuses per quarter (from monthly snapshots, not all-time subscription counts)?
 
 **Payments & finance**
 
@@ -60,7 +60,7 @@ Two commercial motions coexist:
 
 - How many verified customers (Nafath + mobile OTP) by corporate company (CEP)?
 - What is average devices-per-customer and program subscription limit utilization (active + waiting-for-delivery subs vs limit)?
-- Which customers have outstanding payments or expired cards?
+- Which customers have outstanding payments (unpaid invoices or retry-queue failures only) or expired cards?
 
 **Operations & partners**
 
@@ -103,8 +103,13 @@ Primary analytical source for operations: **SuiteCRM MySQL**. Finance alignment:
 - **Active subscription (reporting):** `subscription_status = Active` AND `service_start_date IS NOT NULL` (device delivered). Distinct from program limit utilization, which also counts `Waiting_For_Delivery`
 - **Finance variance:** monthly `SUM(collected) − SUM(invoiced)`; bucket collected payments by month of `coalesce(payment_timestamp, created_at)` when `payment_timestamp` is null in CRM
 - **Refund KPI:** CRM `tos_payments` with `payment_status = refunded` is the source of record for refund amount SAR (pending Finance confirmation on whether PSP refunds warrant a separate KPI)
-- **Churn rate:** quarter-scoped — subscriptions churned in the selected quarter ÷ active subscriptions at quarter start (`service_start_date` set; exclude `Waiting_For_Delivery` from denominator)
-- **Upgrade rate:** numerator includes subscriptions with status `Upgraded`, `kifed`, or `auto_kifed` (pending Product confirmation that KIFed is upgrade vs churn)
+- **Churn rate (Executive):** quarter-scoped by default — churned in selected (or current) quarter ÷ active at quarter start (`service_start_date` set; exclude `Waiting_For_Delivery` from denominator). Unfiltered lifetime aggregation overstates the rate (audit: 5.43% all-time vs ~3.43% for Q4 2026 with quarter slicer)
+- **Upgrade rate:** quarter-scoped numerator/denominator from monthly subscription snapshots (`is_upgraded_in_month`, `is_kifed_in_month`) — not lifetime all-time counts. Numerator includes `Upgraded`, `kifed`, and `auto_kifed` (pending Product confirmation that KIFed is upgrade vs churn)
+- **MRR eligibility:** active subscriptions with linked `subscription_pricing_id` and `monthly_subscription_amount` only (~166 of 235 active subs in cycle-3 audit). **69 active subs lack pricing FK** — pending Product/Finance decision: (a) exclude from MRR (current), (b) impute from order pricing, or (c) show dashboard warning. Average subscription term must use the same scope
+- **Outstanding payments:** distinct customers with unpaid invoices OR retry-queue payment failures only (`is_retry_queue` on PSP transactions / recent `fct_payment_attempts`) — **not** all historical failed payment attempts (audit inflated count to ~1,210). Pending Product confirmation of "outstanding" definition
+- **Collected revenue:** CRM `tos_payments` remains KPI source of record (~901,936 SAR in audit). Reconciliation workflow flags on unified payments: `no_psp_reference` (paid CRM rows without PSP ID), `missing_in_psp` (PSP lookup failed). Pending Finance decision on authority when CRM and PSP disagree
+- **Invoiced revenue:** validate `SUM(invoice_amount_sar) WHERE is_paid` in mart against Zoho/CRM. Finance to define paid-invoice rule for `aos_invoices` / `tos_invoices` (raw `aos_invoices.status` NULL in MySQL complicates live verification; mart total ~874,115 SAR in audit)
+- **Pre-order share:** display **0%** when there are no pre-orders (never BLANK on executive cards)
 - **Payment failure rate:** failed ÷ total attempts on **recurring installment** rows in `tos_payment_history` only (pending Product confirmation on exact filter)
 - **Payment-to-delivery SLA:** average days from **first paid CRM payment** (`coalesce(payment_timestamp, created_at)` on paid rows) to `delivered_on`
 - **Order-to-delivery median:** median of delivery days; many same-day deliveries make median 0 arithmetically correct (pending Product confirmation on switching to P90)

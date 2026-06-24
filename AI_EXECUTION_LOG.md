@@ -112,6 +112,66 @@ None. All compile and test failures resolved within validation scope (no new mod
 
 `int_finance_reconciliation` invoiced month bucketing uses `coalesce(invoice_date, settlement_date, created_at)` because paid invoices have null `invoice_date` in CRM (1,664 rows; settlement_date populated).
 
+---
+
+## Feedback Cycle 3 — Pass 2 (2026-06-24)
+
+**Trigger:** `client_feedback.md` cycle 3 (measure audit); `design_brief.md` approved; phases 4, 5, 7, 8.
+
+### dbt models touched
+
+| Layer | Models |
+| ----- | ------ |
+| Staging | `stg_crm__tos_subscriptions` (removed staging-only `is_mrr_eligible`; eligibility enforced in `int_subscriptions`) |
+| Intermediate | `int_subscriptions`, `int_payments_unified`, `int_subscription_snapshots_monthly`, `int_invoices` (verified cycle-3 flags) |
+| Marts | `fct_subscriptions`, `fct_subscription_monthly_snapshots`, `fct_payments` (+ `reconciliation_gap_reason`), `fct_invoices`, `fct_payment_attempts` (`is_outstanding_retry_failure`) |
+
+### Build command
+
+```powershell
+.venv\Scripts\dbt.exe build --select stg_crm__tos_subscriptions+ stg_crm__aos_invoices+ int_payments_unified+ int_subscription_snapshots_monthly+ int_subscriptions+ fct_subscription_monthly_snapshots+ fct_subscriptions+ fct_payments+ fct_invoices+ fct_payment_attempts+ --profiles-dir . --quiet
+```
+
+**Result:** PASS (exit 0, ~40s).
+
+### Warehouse validation (`dbt show`)
+
+| KPI | Expected | Observed |
+| --- | -------- | -------- |
+| Active subs / MRR-eligible / MRR | 235 / 166 / 43,219 SAR | **235 / 166 / 43,219.27** |
+| Invoiced revenue (paid) | ~874,115 SAR | **874,115.43** |
+| PSP reconciliation (collected) | no_psp_reference + missing_in_psp | **1,361** + **51** |
+| Q4 2026 churn (mart) | ~3.43% (8 / 233) | churned **8**, active at quarter start **233** → **3.43%** |
+| Pre-order share | 0% (0 preorders / 781 eligible) | **0 / 781** |
+
+### Power BI (`powerbi/zension.pbix`, Desktop port 62938)
+
+- Refreshed partitions: `fct_subscription_monthly_snapshots`, `fct_orders`, `fct_payment_attempts` (partition SQL updated for `is_outstanding_retry_failure`; removed stale `is_retry_indicator` column)
+- Updated `_KPIs` measures: **Churn Rate** (quarter-scoped, defaults to current quarter), **Upgrade Rate** (quarter-scoped from snapshots), **Pre-order Share** (0% not BLANK), **Customers with Outstanding Payments** (unpaid ∪ retry-queue only)
+- Unchanged (already correct): MRR, Avg Subscription Term, Invoiced/Collected Revenue, Program Subscription Utilization % (`0.0\x` multiplier format)
+
+### DAX spot-check (`dax_query_operations`)
+
+| Measure | Value |
+| ------- | ----- |
+| Churn Rate (Q4 2026 slicer) | **3.43%** |
+| Pre-order Share | **0%** |
+| Customers with Outstanding Payments | **69** (was 1,210) |
+| MRR (SAR) | 43,219 |
+| Active Subscription Count | 235 |
+| Invoiced Revenue (SAR) | 874,115 |
+| Collected Revenue (SAR) | 901,936 |
+| Finance Variance (SAR) | 27,821 |
+
+**Manual step:** Save `zension.pbix` in Power BI Desktop to persist MCP changes.
+
+### Open decisions (documented; defaults applied)
+
+- MRR: exclude 69 subs without pricing FK (current behavior)
+- Upgrade numerator: includes KIFed (`is_kifed_in_month`)
+- Outstanding: unpaid invoices ∪ retry-queue failures only
+- Program utilization: keep `AVERAGEX` multiplier display
+
 
 
 

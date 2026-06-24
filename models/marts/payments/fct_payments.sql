@@ -26,6 +26,7 @@ select
     payments.has_valid_customer,
     payments.is_psp_reconciled,
     payments.psp_reconciliation_status,
+    payments.reconciliation_gap_reason,
     payments.collected_amount_sar,
     payments.refund_amount_sar,
     payments.psp_payment_amount

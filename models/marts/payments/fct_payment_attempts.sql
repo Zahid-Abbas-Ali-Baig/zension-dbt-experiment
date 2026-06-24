@@ -29,8 +29,8 @@ select
     attempts.psp_is_retry_queue,
     case
         when attempts.is_failed_attempt and attempts.psp_is_retry_queue
-            then 1
-        else 0
-    end as is_retry_indicator
+            then true
+        else false
+    end as is_outstanding_retry_failure
 
 from attempts
