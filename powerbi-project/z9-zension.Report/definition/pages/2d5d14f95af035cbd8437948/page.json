@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.3.1/schema.json",
+  "name": "2d5d14f95af035cbd8437948",
+  "displayName": "Sales & Orders",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280
+}

@@ -1,0 +1,166 @@
+table 'source_marts fct_invoices'
+	lineageTag: 916e5a5d-90fc-4ac8-bb6b-4fd9d9b4e506
+
+	column invoice_id
+		dataType: string
+		lineageTag: 917f29e8-878d-41e0-ab43-9ff6ba5fde59
+		summarizeBy: none
+		sourceColumn: invoice_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: 3d142afe-0d9c-4be4-8adf-45996c1216b7
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_partner_id
+		dataType: string
+		lineageTag: b845c75e-65a2-4649-a8a9-515a80fcd8ad
+		summarizeBy: none
+		sourceColumn: channel_partner_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_id
+		dataType: string
+		lineageTag: 3f9ba588-926f-4dff-a302-d1ebae489c37
+		summarizeBy: none
+		sourceColumn: program_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column billing_account_id
+		dataType: string
+		lineageTag: d1760eec-8f1a-4461-a038-d0b191a0dfa8
+		summarizeBy: none
+		sourceColumn: billing_account_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: aadfa0da-5739-430d-97b2-6fe1468ea9c5
+		summarizeBy: none
+		sourceColumn: invoice_date
+
+		variation Variation
+			isDefault
+			relationship: c77a97cc-d44d-45dd-8635-d08d6e8c7e30
+			defaultHierarchy: LocalDateTable_9ff8272a-1989-4be0-b368-09efc956a718.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column invoice_due_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 53c8819b-b704-4b43-9bef-32a88c0abf2f
+		summarizeBy: none
+		sourceColumn: invoice_due_date
+
+		variation Variation
+			isDefault
+			relationship: 0ee0060a-e86a-45d9-a58a-083abbff1e1a
+			defaultHierarchy: LocalDateTable_8944b02b-7adf-458b-be5f-cc77d4b33a6a.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column settlement_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9a879e5d-4971-4f74-bc95-2eb3ce51f144
+		summarizeBy: none
+		sourceColumn: settlement_date
+
+		variation Variation
+			isDefault
+			relationship: 9d243171-595e-4eba-86ae-bf543b6be879
+			defaultHierarchy: LocalDateTable_cb5650cc-a83a-4d8a-b9f9-1b04395e5215.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column invoice_status
+		dataType: string
+		lineageTag: 92fdea1b-b9ec-4c6c-9ba9-7d86f57a1f94
+		summarizeBy: none
+		sourceColumn: invoice_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column zoho_invoice_number
+		dataType: string
+		lineageTag: 000a72e4-1b20-4685-88d7-4449d2bd7855
+		summarizeBy: none
+		sourceColumn: zoho_invoice_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_paid
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: b6a4b552-708a-4fb9-8b6a-9bdff026da15
+		summarizeBy: none
+		sourceColumn: is_paid
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_valid_customer
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: b3c8d7db-894c-4672-9bb4-86436c671a16
+		summarizeBy: none
+		sourceColumn: has_valid_customer
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_amount_sar
+		dataType: double
+		lineageTag: d5be2ae9-ef50-4752-819e-851347368c3c
+		summarizeBy: sum
+		sourceColumn: invoice_amount_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column vat_amount_sar
+		dataType: double
+		lineageTag: 2d8c0a81-db89-4f8d-bc7a-7eaab5adbc3d
+		summarizeBy: sum
+		sourceColumn: vat_amount_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column amount_ex_vat_sar
+		dataType: double
+		lineageTag: d1ead1be-2380-4190-a727-c98165ad376c
+		summarizeBy: sum
+		sourceColumn: amount_ex_vat_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'source_marts fct_invoices' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_fct_invoices = Source{[Schema="source_marts",Item="fct_invoices"]}[Data]
+				in
+				    source_marts_fct_invoices
+
+	annotation PBI_ResultType = Table
+

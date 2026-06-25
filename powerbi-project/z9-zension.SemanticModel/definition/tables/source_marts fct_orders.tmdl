@@ -1,0 +1,199 @@
+table 'source_marts fct_orders'
+	lineageTag: a9abd4dc-bca8-46f7-b31e-52a4244e3378
+
+	column order_id
+		dataType: string
+		lineageTag: 9126662f-5896-4892-abe7-05b692f3e354
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e2d7ff1d-f582-438c-9837-644d2615631b
+		summarizeBy: none
+		sourceColumn: order_date
+
+		variation Variation
+			isDefault
+			relationship: f7970b2b-8d55-489c-a1ce-ebe2374a86c4
+			defaultHierarchy: LocalDateTable_e033dad4-d01e-4e60-80d5-14f117866b75.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column customer_id
+		dataType: string
+		lineageTag: 25bee307-8ce8-453c-90d8-847e70861f5f
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_id
+		dataType: string
+		lineageTag: 00d14f88-6f80-4c92-846d-53ab17e7ada2
+		summarizeBy: none
+		sourceColumn: program_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_partner_id
+		dataType: string
+		lineageTag: 88381b74-8d85-4e29-8148-9c0d8001bcab
+		summarizeBy: none
+		sourceColumn: channel_partner_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_number
+		dataType: string
+		lineageTag: e09f8303-d77d-419b-a873-f284e2112339
+		summarizeBy: none
+		sourceColumn: order_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_status
+		dataType: string
+		lineageTag: f6e3e725-5f88-4717-a259-627655180b60
+		summarizeBy: none
+		sourceColumn: order_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_type
+		dataType: string
+		lineageTag: d9d8d7a9-2e15-48b3-9df4-491c58e99874
+		summarizeBy: none
+		sourceColumn: order_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column sales_channel
+		dataType: string
+		lineageTag: 476e136e-8bf4-4c03-918e-5f5eefc30c33
+		summarizeBy: none
+		sourceColumn: sales_channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column delivered_at
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e5f71089-ba2c-4d8d-b7ba-173dce941e27
+		summarizeBy: none
+		sourceColumn: delivered_at
+
+		variation Variation
+			isDefault
+			relationship: 94572364-c7db-4a66-8271-a46d779e4066
+			defaultHierarchy: LocalDateTable_ba581b7d-2de2-4aad-ac45-9394c61459c3.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column first_paid_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4a2c0520-511b-46c4-bb70-40fea4276c1c
+		summarizeBy: none
+		sourceColumn: first_paid_at
+
+		variation Variation
+			isDefault
+			relationship: cd2c7fbb-362a-4d1b-842a-0f5bc72cea0f
+			defaultHierarchy: LocalDateTable_e4647c70-0671-49d1-b9bb-f8ce3b03ba77.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_preorder
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: fe340edc-0547-4a48-b7cc-bd0fd5e674e9
+		summarizeBy: none
+		sourceColumn: is_preorder
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_voided
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 48bb16ab-e53d-4c0f-b4b8-a1427c71293c
+		summarizeBy: none
+		sourceColumn: is_voided
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_gmv_eligible
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 3bfcd1ee-610b-4499-abbe-2da4746a05d8
+		summarizeBy: none
+		sourceColumn: is_gmv_eligible
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_valid_customer
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0d21c9a7-6556-4644-8272-9eb3297949ec
+		summarizeBy: none
+		sourceColumn: has_valid_customer
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_valid_program
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 45bdffb6-e484-4e6e-af0a-8023fa135484
+		summarizeBy: none
+		sourceColumn: has_valid_program
+
+		annotation SummarizationSetBy = Automatic
+
+	column gmv_amount_sar
+		dataType: double
+		lineageTag: 68f6f088-9fba-4e7a-8d0e-b0351df2d14d
+		summarizeBy: sum
+		sourceColumn: gmv_amount_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_discount_amount
+		dataType: double
+		lineageTag: 952cb55d-93fd-4d71-8d8b-e8e7fd571ede
+		summarizeBy: sum
+		sourceColumn: total_discount_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_amount_incl_vat
+		dataType: double
+		lineageTag: b5dfd86f-d713-4abb-a0cf-f5624af29ef0
+		summarizeBy: sum
+		sourceColumn: total_amount_incl_vat
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'source_marts fct_orders' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_fct_orders = Source{[Schema="source_marts",Item="fct_orders"]}[Data]
+				in
+				    source_marts_fct_orders
+
+	annotation PBI_ResultType = Table
+

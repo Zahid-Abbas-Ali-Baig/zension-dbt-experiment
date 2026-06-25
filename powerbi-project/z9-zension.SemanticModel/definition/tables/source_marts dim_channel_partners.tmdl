@@ -1,0 +1,142 @@
+table 'source_marts dim_channel_partners'
+	lineageTag: 3e9a38ce-faff-4b32-8222-2b6c8a12d9d8
+
+	column channel_partner_id
+		dataType: string
+		lineageTag: 96071421-747b-4bf5-be6d-d62cc151b3fd
+		summarizeBy: none
+		sourceColumn: channel_partner_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column partner_name
+		dataType: string
+		lineageTag: 2022f122-55f5-4cf8-9c3e-469892e97d61
+		summarizeBy: none
+		sourceColumn: partner_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2f3193b7-726d-405d-9125-fb6f5871d3d8
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 101ba9dc-fb17-4011-8954-f022d595aed2
+			defaultHierarchy: LocalDateTable_cb6abc4d-fdc0-4476-98d4-01128bd9364f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4d44af92-0890-4b89-89b4-4c55a0a10b04
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: 97434682-842c-4594-93e4-6939eb903e29
+			defaultHierarchy: LocalDateTable_4b55f90c-3afe-48b0-a226-3657eb3a8af3.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column legal_name
+		dataType: string
+		lineageTag: 564f00f5-07d3-48c6-9d6f-b1ab093a408e
+		summarizeBy: none
+		sourceColumn: legal_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column partner_type
+		dataType: string
+		lineageTag: 506a2082-f0d2-41e5-a423-ffc97ce9134d
+		summarizeBy: none
+		sourceColumn: partner_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column vat_trn_number
+		dataType: string
+		lineageTag: 0a1c98ea-0c72-4e89-8f19-c2e31666bb46
+		summarizeBy: none
+		sourceColumn: vat_trn_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_partner_uid
+		dataType: string
+		lineageTag: b1a47822-7eec-443a-be98-88bc4f45df9f
+		summarizeBy: none
+		sourceColumn: channel_partner_uid
+
+		annotation SummarizationSetBy = Automatic
+
+	column partner_status
+		dataType: string
+		lineageTag: b49a9503-5d9c-457a-ad33-a800221472d7
+		summarizeBy: none
+		sourceColumn: partner_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column country_id
+		dataType: string
+		lineageTag: 93820a39-ad90-4308-9268-d62f2b020703
+		summarizeBy: none
+		sourceColumn: country_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column api_call_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 5aa8b47a-a36d-44cc-9836-97dddb63f08b
+		summarizeBy: sum
+		sourceColumn: api_call_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column api_failure_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 929491d0-70af-4d0a-91aa-f86024a261f3
+		summarizeBy: sum
+		sourceColumn: api_failure_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column partner_api_failure_rate
+		dataType: double
+		lineageTag: fb45cd64-0787-4077-ae2e-f8aa86f57e24
+		summarizeBy: sum
+		sourceColumn: partner_api_failure_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column partner_operations_segment
+		dataType: string
+		lineageTag: 0648605e-d423-4b94-b4b3-2deeaf10ac9f
+		summarizeBy: none
+		sourceColumn: partner_operations_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts dim_channel_partners' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_dim_channel_partners = Source{[Schema="source_marts",Item="dim_channel_partners"]}[Data]
+				in
+				    source_marts_dim_channel_partners
+
+	annotation PBI_ResultType = Table
+

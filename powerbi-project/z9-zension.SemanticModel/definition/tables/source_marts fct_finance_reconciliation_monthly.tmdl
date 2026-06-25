@@ -1,0 +1,107 @@
+table 'source_marts fct_finance_reconciliation_monthly'
+	lineageTag: 7ecb3131-f27a-45a7-bfcf-360867c6447b
+
+	column reconciliation_month
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1fc0b295-e01a-4a73-bc1c-952024cad832
+		summarizeBy: none
+		sourceColumn: reconciliation_month
+
+		variation Variation
+			isDefault
+			relationship: a8c53a9c-ed6e-4a82-977f-a7fb7286e7d5
+			defaultHierarchy: LocalDateTable_1dc69bba-91a3-49fd-97ef-7e48f7face19.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column collected_revenue_sar
+		dataType: double
+		lineageTag: 90907e45-c096-4307-b197-48b466229466
+		summarizeBy: sum
+		sourceColumn: collected_revenue_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column invoiced_revenue_sar
+		dataType: double
+		lineageTag: eee0253f-790b-4bfa-a099-dc6a23cf00d9
+		summarizeBy: sum
+		sourceColumn: invoiced_revenue_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column finance_variance_sar
+		dataType: double
+		lineageTag: 3042ab66-035d-45af-a92b-31aafef2d1db
+		summarizeBy: sum
+		sourceColumn: finance_variance_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column collected_payment_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 5df20887-5695-4c53-a912-6f1286eff229
+		summarizeBy: sum
+		sourceColumn: collected_payment_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column paid_invoice_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 836bfc3c-cc26-43f0-9b78-46a981339dcc
+		summarizeBy: sum
+		sourceColumn: paid_invoice_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column unpaid_invoice_amount_sar
+		dataType: double
+		lineageTag: c278ee02-daa6-4d97-aa12-a0571a8c5138
+		summarizeBy: sum
+		sourceColumn: unpaid_invoice_amount_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column crm_refund_amount_sar
+		dataType: double
+		lineageTag: 33162bb7-b932-4dd5-ad05-a0726af79790
+		summarizeBy: sum
+		sourceColumn: crm_refund_amount_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column credit_note_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 657b77a1-b41d-4d0d-88ea-ed693e30cdfa
+		summarizeBy: sum
+		sourceColumn: credit_note_count
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts fct_finance_reconciliation_monthly' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_fct_finance_reconciliation_monthly = Source{[Schema="source_marts",Item="fct_finance_reconciliation_monthly"]}[Data]
+				in
+				    source_marts_fct_finance_reconciliation_monthly
+
+	annotation PBI_ResultType = Table
+

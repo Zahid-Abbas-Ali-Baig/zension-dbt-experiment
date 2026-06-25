@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.3.1/schema.json",
+  "name": "3250d1e21c4281d3cd9479f5",
+  "displayName": "Subscriptions",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280
+}

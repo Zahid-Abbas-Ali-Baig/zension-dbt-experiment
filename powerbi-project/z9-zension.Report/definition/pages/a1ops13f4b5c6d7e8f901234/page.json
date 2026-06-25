@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.3.1/schema.json",
+  "name": "a1ops13f4b5c6d7e8f901234",
+  "displayName": "Operations & Partners",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280
+}

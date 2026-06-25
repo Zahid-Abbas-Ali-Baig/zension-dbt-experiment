@@ -1,0 +1,283 @@
+table 'source_marts dim_customers'
+	lineageTag: c6550c73-9437-4abd-8c6b-a90ca2df854b
+
+	column customer_id
+		dataType: string
+		lineageTag: f6f70268-8a76-47d6-829f-1e860059a1b4
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_name
+		dataType: string
+		lineageTag: 098fa6e9-a1d4-4126-9d3b-ab010dccc4b2
+		summarizeBy: none
+		sourceColumn: customer_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7215d3ed-b890-4568-919b-9ab7a3f55d17
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: b4446331-d6fc-4539-b5ba-3f25d77079dd
+			defaultHierarchy: LocalDateTable_a590ccfc-60eb-4b30-b036-40806fd08e29.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 006c2816-ad2e-48f1-afe1-630b0faa32d3
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: 232111d0-a878-474a-9a7c-6dac2b941301
+			defaultHierarchy: LocalDateTable_20e962c6-31e2-444f-905d-2077ce57619a.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column national_id
+		dataType: string
+		lineageTag: 22259ac0-64f9-4c36-8f31-016dca542ca1
+		summarizeBy: none
+		sourceColumn: national_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_nafath_verified
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: a37a8250-92c7-4243-b4f7-d365c9e7405b
+		summarizeBy: none
+		sourceColumn: is_nafath_verified
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_mobile_verified
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 408bc581-8527-43de-a476-bb8bb7613fa1
+		summarizeBy: none
+		sourceColumn: is_mobile_verified
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_fully_verified
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 7fc30a7d-77df-405a-951b-3ce1f342f1d7
+		summarizeBy: none
+		sourceColumn: is_fully_verified
+
+		annotation SummarizationSetBy = Automatic
+
+	column corporate_company_id
+		dataType: string
+		lineageTag: 10cbd32f-3b05-469a-a098-7bac2c087aee
+		summarizeBy: none
+		sourceColumn: corporate_company_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column corporate_company_name
+		dataType: string
+		lineageTag: e6693000-9fad-4e3c-9252-dbd672b44ff8
+		summarizeBy: none
+		sourceColumn: corporate_company_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column zoho_customer_id
+		dataType: string
+		lineageTag: 9f316784-8f73-4dee-98e8-e4f463c11810
+		summarizeBy: none
+		sourceColumn: zoho_customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_partner_id
+		dataType: string
+		lineageTag: 4733feea-5dfb-4692-b5b0-0ab211cd6713
+		summarizeBy: none
+		sourceColumn: channel_partner_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_id
+		dataType: string
+		lineageTag: 335a1159-dc09-49b1-9660-3728f9c2f40e
+		summarizeBy: none
+		sourceColumn: program_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_uid
+		dataType: string
+		lineageTag: afe96f9f-e6b9-4594-bc4e-5d4f4d2a2603
+		summarizeBy: none
+		sourceColumn: customer_uid
+
+		annotation SummarizationSetBy = Automatic
+
+	column phone_number
+		dataType: string
+		lineageTag: d53c329a-0a3e-4fbf-9978-8acccd787d0b
+		summarizeBy: none
+		sourceColumn: phone_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column mobile_number
+		dataType: string
+		lineageTag: 5f7d08be-2ea9-4c52-aa3a-2be5d4bb8886
+		summarizeBy: none
+		sourceColumn: mobile_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column personal_email_address
+		dataType: string
+		lineageTag: 87027605-532e-49f5-9bb4-ca5f383e0c09
+		summarizeBy: none
+		sourceColumn: personal_email_address
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_status
+		dataType: string
+		lineageTag: dcd9c80d-fe40-4872-8658-4e046e463744
+		summarizeBy: none
+		sourceColumn: customer_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_verification_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 629f7336-53ff-4037-861c-8650bb7b651f
+		summarizeBy: none
+		sourceColumn: customer_verification_at
+
+		variation Variation
+			isDefault
+			relationship: f4a02e05-0b21-4241-ad79-eca8c3a75815
+			defaultHierarchy: LocalDateTable_7c07ce7b-1ff9-4709-9b42-a36b4d00ed03.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column nafath_verified_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 90b8b0ff-8b83-4f95-a86b-cc9e2696a177
+		summarizeBy: none
+		sourceColumn: nafath_verified_at
+
+		variation Variation
+			isDefault
+			relationship: 86cb8895-29f6-4778-b520-aadc3f8d482c
+			defaultHierarchy: LocalDateTable_69dfd178-5f3d-493a-81be-76b4ae8a0f96.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column allowed_email_domains
+		dataType: string
+		lineageTag: 3b7f6992-679d-4895-99c4-4c0795fe4bd1
+		summarizeBy: none
+		sourceColumn: allowed_email_domains
+
+		annotation SummarizationSetBy = Automatic
+
+	column company_status
+		dataType: string
+		lineageTag: b3cfd3b9-3ede-49f5-92e3-91bdd61b71c2
+		summarizeBy: none
+		sourceColumn: company_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column company_type
+		dataType: string
+		lineageTag: ee46658c-5cb3-44fa-bfea-617b0f7846ec
+		summarizeBy: none
+		sourceColumn: company_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_valid_corporate_company
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 42415433-e8f3-4114-8fc0-69ce55b8547e
+		summarizeBy: none
+		sourceColumn: has_valid_corporate_company
+
+		annotation SummarizationSetBy = Automatic
+
+	column device_count
+		dataType: int64
+		formatString: 0
+		lineageTag: b241ab5c-ff3b-4d18-8892-bbe709b7b0c1
+		summarizeBy: sum
+		sourceColumn: device_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_device_purchase_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 2b6ecff3-117a-4a28-9066-0fb3da1acc11
+		summarizeBy: none
+		sourceColumn: first_device_purchase_date
+
+		variation Variation
+			isDefault
+			relationship: d683d677-f0a5-4008-aa3a-604545b5eb57
+			defaultHierarchy: LocalDateTable_c935bfc4-a934-4860-b6da-73bc15a5772c.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column latest_device_delivery_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 3ccf76d3-a9b4-4d03-adfc-4af5490e9d53
+		summarizeBy: none
+		sourceColumn: latest_device_delivery_date
+
+		variation Variation
+			isDefault
+			relationship: d5f62ea8-c719-4fbf-91f5-ab2f135748be
+			defaultHierarchy: LocalDateTable_06f24430-b78c-474f-b68b-0c722e76edd7.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column customer_verification_segment
+		dataType: string
+		lineageTag: 032fb2ae-f1c5-45f7-b612-c06cbb9a8df3
+		summarizeBy: none
+		sourceColumn: customer_verification_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts dim_customers' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_dim_customers = Source{[Schema="source_marts",Item="dim_customers"]}[Data]
+				in
+				    source_marts_dim_customers
+
+	annotation PBI_ResultType = Table
+

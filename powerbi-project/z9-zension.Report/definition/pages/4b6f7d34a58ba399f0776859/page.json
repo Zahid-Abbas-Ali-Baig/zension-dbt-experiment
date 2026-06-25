@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.3.1/schema.json",
+  "name": "4b6f7d34a58ba399f0776859",
+  "displayName": "Finance & Payments",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280
+}

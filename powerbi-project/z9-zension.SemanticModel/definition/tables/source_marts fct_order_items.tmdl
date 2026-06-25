@@ -1,0 +1,210 @@
+table 'source_marts fct_order_items'
+	lineageTag: aee14e8d-9f18-4af6-b8d7-153a056cb3f6
+
+	column order_item_id
+		dataType: string
+		lineageTag: 1d258be7-d8b6-464f-8547-f81a85a068d8
+		summarizeBy: none
+		sourceColumn: order_item_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_id
+		dataType: string
+		lineageTag: 6f3d854d-ac22-413c-a5e0-1b26ca8e761b
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: a673fad8-9000-4e66-aae7-e5021f3870c0
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_id
+		dataType: string
+		lineageTag: aa745968-dd4f-4ae6-a41c-92ae9ef59521
+		summarizeBy: none
+		sourceColumn: program_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_partner_id
+		dataType: string
+		lineageTag: 1ba2acd7-83f3-4c54-9949-a9b978c1730e
+		summarizeBy: none
+		sourceColumn: channel_partner_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column master_sku_id
+		dataType: string
+		lineageTag: 0c74cdff-f625-4aae-9e32-b0f929a5a85f
+		summarizeBy: none
+		sourceColumn: master_sku_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column zaam_sku_id
+		dataType: string
+		lineageTag: 6944f422-8820-48d0-8a62-83f2ee1aa54f
+		summarizeBy: none
+		sourceColumn: zaam_sku_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column device_sku_key
+		dataType: string
+		lineageTag: a2597ea8-57dd-46fb-8c13-e24074b7f945
+		summarizeBy: none
+		sourceColumn: device_sku_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_item_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9368987a-0447-4bc1-b1f1-dc89557cca95
+		summarizeBy: none
+		sourceColumn: order_item_date
+
+		variation Variation
+			isDefault
+			relationship: f55f70bb-558a-4798-b4a3-096ba97a85f1
+			defaultHierarchy: LocalDateTable_992f97e7-63d5-43a7-9290-414b5e948399.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column quantity
+		dataType: double
+		lineageTag: 1e04e5d9-3960-4003-b6e1-495a06fb3974
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column unit_price_vat_inclusive
+		dataType: double
+		lineageTag: 64f52b99-8d6a-47ce-8dc3-c4329e5fe047
+		summarizeBy: sum
+		sourceColumn: unit_price_vat_inclusive
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_price_vat_inclusive
+		dataType: double
+		lineageTag: 91cef9b3-2224-4ac4-a5f4-5027ca527fe6
+		summarizeBy: sum
+		sourceColumn: total_price_vat_inclusive
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column device_purchase_price_vat_inclusive
+		dataType: double
+		lineageTag: f982dbb3-623b-4aba-b720-5f91b5520adc
+		summarizeBy: sum
+		sourceColumn: device_purchase_price_vat_inclusive
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column discount_amount
+		dataType: double
+		lineageTag: 241935cc-8595-4950-9eaf-68fa6dd7b04b
+		summarizeBy: sum
+		sourceColumn: discount_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column product_type
+		dataType: string
+		lineageTag: e67f39d3-b375-47b6-ae63-06cff00321ff
+		summarizeBy: none
+		sourceColumn: product_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_line_item_type
+		dataType: string
+		lineageTag: d8482ca2-2834-41d2-82bc-e3fd232c2826
+		summarizeBy: none
+		sourceColumn: order_line_item_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column brand
+		dataType: string
+		lineageTag: eeaa932c-be0c-415b-bafb-b447b43907fc
+		summarizeBy: none
+		sourceColumn: brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column model
+		dataType: string
+		lineageTag: bfae86d5-cadb-4f4c-9e8b-d9aa3e43d688
+		summarizeBy: none
+		sourceColumn: model
+
+		annotation SummarizationSetBy = Automatic
+
+	column memory
+		dataType: string
+		lineageTag: 44014be6-4dd7-4a4d-92d0-3337fcdbf794
+		summarizeBy: none
+		sourceColumn: memory
+
+		annotation SummarizationSetBy = Automatic
+
+	column color
+		dataType: string
+		lineageTag: 744edf63-c5d2-40b7-a358-958247d881ef
+		summarizeBy: none
+		sourceColumn: color
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_valid_order
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 93737278-5d8d-4bbc-8a9a-e8593b1b2bdb
+		summarizeBy: none
+		sourceColumn: has_valid_order
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_valid_resolved_sku
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 96e8923c-fa1a-45a4-9fad-362fd3320d84
+		summarizeBy: none
+		sourceColumn: has_valid_resolved_sku
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts fct_order_items' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_fct_order_items = Source{[Schema="source_marts",Item="fct_order_items"]}[Data]
+				in
+				    source_marts_fct_order_items
+
+	annotation PBI_ResultType = Table
+

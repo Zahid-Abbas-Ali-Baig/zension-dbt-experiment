@@ -1,0 +1,139 @@
+table 'source_marts fct_psp_transactions'
+	lineageTag: 079acd23-f5e4-435e-be55-11b9bf9f0f3f
+
+	column transaction_id
+		dataType: string
+		lineageTag: eddc574b-4256-46ad-a477-56d1219520c6
+		summarizeBy: none
+		sourceColumn: transaction_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column subscriber_id
+		dataType: string
+		lineageTag: 5baba160-c60c-43cb-96b8-7ef67142424a
+		summarizeBy: none
+		sourceColumn: subscriber_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_intent_id
+		dataType: string
+		lineageTag: b2026167-1821-480c-ac10-7f4f2c1c8ef4
+		summarizeBy: none
+		sourceColumn: payment_intent_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column transaction_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 364dbac0-80ab-4c2b-8465-6e6bde8bea83
+		summarizeBy: none
+		sourceColumn: transaction_date
+
+		variation Variation
+			isDefault
+			relationship: 8919698c-a54d-463b-9acc-f3e5ddfdba62
+			defaultHierarchy: LocalDateTable_6ccb9c5c-e393-468e-bc93-108f70bdad1b.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column process_status
+		dataType: string
+		lineageTag: 88f1eb7d-c490-48c0-aae3-9388e7a85fb4
+		summarizeBy: none
+		sourceColumn: process_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column request_status
+		dataType: string
+		lineageTag: 0d0ea915-7916-4711-b8a7-8a7d8f322930
+		summarizeBy: none
+		sourceColumn: request_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column transaction_type
+		dataType: string
+		lineageTag: b9664b29-9a02-47c6-a5ca-bcdec94936cf
+		summarizeBy: none
+		sourceColumn: transaction_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_scheduled
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8db9948d-e7fa-45ac-8d11-f9ae736ece63
+		summarizeBy: none
+		sourceColumn: is_scheduled
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_successful
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: ad6c1364-9d9b-48b6-8480-a2e5bc8ce2c9
+		summarizeBy: none
+		sourceColumn: is_successful
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_retry_queue
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: b41c670a-4eb3-4691-ad8a-267152a0f85c
+		summarizeBy: none
+		sourceColumn: is_retry_queue
+
+		annotation SummarizationSetBy = Automatic
+
+	column psp_payment_id
+		dataType: string
+		lineageTag: 227dcba6-28b9-4240-b87e-fda363b19664
+		summarizeBy: none
+		sourceColumn: psp_payment_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_amount
+		dataType: double
+		lineageTag: 0ed2ab4b-4450-4359-8dda-07997056b1a5
+		summarizeBy: sum
+		sourceColumn: payment_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column psp_subscription_id
+		dataType: string
+		lineageTag: fae979e5-94de-4259-a504-6b751d6da5ec
+		summarizeBy: none
+		sourceColumn: psp_subscription_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column transaction_outcome_segment
+		dataType: string
+		lineageTag: 4229675f-f55e-47ae-b2da-248892e54174
+		summarizeBy: none
+		sourceColumn: transaction_outcome_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts fct_psp_transactions' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_fct_psp_transactions = Source{[Schema="source_marts",Item="fct_psp_transactions"]}[Data]
+				in
+				    source_marts_fct_psp_transactions
+
+	annotation PBI_ResultType = Table
+

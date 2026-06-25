@@ -1,0 +1,113 @@
+table 'source_marts fct_partner_api_events'
+	lineageTag: f2cf6452-5c97-4842-a407-7f5e4c1c36f0
+
+	column api_log_id
+		dataType: string
+		lineageTag: 73d54b4e-4d8f-47d5-8e66-5abdb52e4110
+		summarizeBy: none
+		sourceColumn: api_log_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_partner_id
+		dataType: string
+		lineageTag: 18a16a26-c856-460f-8e94-04927cab794b
+		summarizeBy: none
+		sourceColumn: channel_partner_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 81da597c-147d-42bd-9422-13c57e26c574
+		summarizeBy: none
+		sourceColumn: event_date
+
+		variation Variation
+			isDefault
+			relationship: 4fed00ac-9ca8-4430-98c6-da8d12bc48bc
+			defaultHierarchy: LocalDateTable_e6ea9d48-f6e0-4da3-bfe6-ea6172d743d9.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column api_status
+		dataType: string
+		lineageTag: 4b8f3c26-df04-4908-a309-ebc99e608285
+		summarizeBy: none
+		sourceColumn: api_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column api_source
+		dataType: string
+		lineageTag: 9583f7e3-0f74-4996-93e7-b7d88e3820ee
+		summarizeBy: none
+		sourceColumn: api_source
+
+		annotation SummarizationSetBy = Automatic
+
+	column parent_type
+		dataType: string
+		lineageTag: 7e4144e6-953e-43ac-9032-3ff383d02239
+		summarizeBy: none
+		sourceColumn: parent_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column parent_id
+		dataType: string
+		lineageTag: d06896bb-1f84-4ed9-b22d-2634863b4048
+		summarizeBy: none
+		sourceColumn: parent_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column error_details
+		dataType: string
+		lineageTag: e63d1c68-22ca-4dc7-8a77-8019d0645a91
+		summarizeBy: none
+		sourceColumn: error_details
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_failure
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 87cb524e-58ab-48d7-aa2f-5a60cebe988b
+		summarizeBy: none
+		sourceColumn: is_failure
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_partner_attribution
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 3dc497b0-d9e1-424a-a9b6-1c29da5a0f36
+		summarizeBy: none
+		sourceColumn: has_partner_attribution
+
+		annotation SummarizationSetBy = Automatic
+
+	column failure_count
+		dataType: int64
+		formatString: 0
+		lineageTag: f0336a77-a85e-4a70-b1f0-927986129499
+		summarizeBy: sum
+		sourceColumn: failure_count
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts fct_partner_api_events' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_fct_partner_api_events = Source{[Schema="source_marts",Item="fct_partner_api_events"]}[Data]
+				in
+				    source_marts_fct_partner_api_events
+
+	annotation PBI_ResultType = Table
+

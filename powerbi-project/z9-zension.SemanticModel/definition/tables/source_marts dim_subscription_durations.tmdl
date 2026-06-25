@@ -1,0 +1,159 @@
+table 'source_marts dim_subscription_durations'
+	lineageTag: b3f94e0b-742b-4046-9336-d3b79e76eac9
+
+	column subscription_duration_id
+		dataType: string
+		lineageTag: de3ada20-f24e-44ab-afcf-9f6b0b20e141
+		summarizeBy: none
+		sourceColumn: subscription_duration_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column subscription_duration_name
+		dataType: string
+		lineageTag: 47676e25-d052-448c-af33-007262264520
+		summarizeBy: none
+		sourceColumn: subscription_duration_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5a861cb4-4051-4ff5-bced-ec83de10a56c
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: e7a19dc6-1360-4474-b065-1ea3495b6be2
+			defaultHierarchy: LocalDateTable_0da712d1-07d7-4234-b0d5-df818daad033.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 53f5055e-3b01-4df4-9af5-d57f4c16112c
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: 264d3184-4d7e-487c-af7f-a7c723dacfcd
+			defaultHierarchy: LocalDateTable_62983ab9-c79e-4056-bbe0-e1e96f0ad53b.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column duration_months
+		dataType: int64
+		formatString: 0
+		lineageTag: e523e9ea-4547-4814-be78-c84fbb8d76d7
+		summarizeBy: sum
+		sourceColumn: duration_months
+
+		annotation SummarizationSetBy = Automatic
+
+	column duration_status
+		dataType: string
+		lineageTag: 931236e9-764e-4b44-8e26-793759007db3
+		summarizeBy: none
+		sourceColumn: duration_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_id
+		dataType: string
+		lineageTag: 483d42ff-c630-4151-a78c-07530305adf0
+		summarizeBy: none
+		sourceColumn: program_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_partner_id
+		dataType: string
+		lineageTag: cd74e9c4-8b4b-427e-af87-77b630df4c4c
+		summarizeBy: none
+		sourceColumn: channel_partner_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column duration_start_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 31499b30-ba4c-415f-8f5e-399067051d46
+		summarizeBy: none
+		sourceColumn: duration_start_date
+
+		variation Variation
+			isDefault
+			relationship: f04d9ac9-8ae6-417b-8368-fdd87be7f591
+			defaultHierarchy: LocalDateTable_fb7baf94-d74c-40da-835e-4593dd191ea2.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column duration_end_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 17b1037c-199b-41f2-8321-851ea12e89a9
+		summarizeBy: none
+		sourceColumn: duration_end_date
+
+		variation Variation
+			isDefault
+			relationship: d5284b23-a1c1-4685-8a2b-761245b1dbd7
+			defaultHierarchy: LocalDateTable_667cedf0-4e09-4c73-aab8-1d5c068ae647.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column subscription_count
+		dataType: int64
+		formatString: 0
+		lineageTag: e3c8e41a-02f2-45d0-ae6e-8f3cfc797f12
+		summarizeBy: sum
+		sourceColumn: subscription_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column mrr_eligible_subscription_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 6731ea67-498d-4346-a9ad-c5f689ac5fbd
+		summarizeBy: sum
+		sourceColumn: mrr_eligible_subscription_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column avg_subscription_term_months
+		dataType: double
+		lineageTag: 477cb6b4-cef1-4363-8609-9f7a5f46770e
+		summarizeBy: sum
+		sourceColumn: avg_subscription_term_months
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column duration_utilization_segment
+		dataType: string
+		lineageTag: 7e677586-e349-47c6-8f86-aae409ac3f26
+		summarizeBy: none
+		sourceColumn: duration_utilization_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts dim_subscription_durations' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_dim_subscription_durations = Source{[Schema="source_marts",Item="dim_subscription_durations"]}[Data]
+				in
+				    source_marts_dim_subscription_durations
+
+	annotation PBI_ResultType = Table
+

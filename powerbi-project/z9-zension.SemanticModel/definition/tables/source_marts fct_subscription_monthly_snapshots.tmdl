@@ -1,0 +1,190 @@
+table 'source_marts fct_subscription_monthly_snapshots'
+	lineageTag: 666e1e98-02c5-4d5a-b43c-8f6b6002327c
+
+	column subscription_id
+		dataType: string
+		lineageTag: c9837898-e157-44ee-86a9-57e007dd01f6
+		summarizeBy: none
+		sourceColumn: subscription_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column snapshot_month
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 74648aa4-fce6-44c3-ad26-34d28562ae43
+		summarizeBy: none
+		sourceColumn: snapshot_month
+
+		variation Variation
+			isDefault
+			relationship: 932c40cf-a447-4149-99ef-b86b93b3930b
+			defaultHierarchy: LocalDateTable_0665a465-f0f3-4497-bbeb-d502aa20e038.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column snapshot_quarter
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ab2adf8c-b36d-43a1-9e3c-a3747f9b59c1
+		summarizeBy: none
+		sourceColumn: snapshot_quarter
+
+		variation Variation
+			isDefault
+			relationship: ad7ac5a4-ade9-4559-8632-fc301125af52
+			defaultHierarchy: LocalDateTable_d9365f16-9424-4b96-bcd4-4f7c9ee6936d.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column channel_partner_id
+		dataType: string
+		lineageTag: 1f478446-1da9-4c5c-b036-8d315968aaa3
+		summarizeBy: none
+		sourceColumn: channel_partner_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_id
+		dataType: string
+		lineageTag: c33273d6-797d-4127-8e38-9dd6619d141a
+		summarizeBy: none
+		sourceColumn: program_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column subscription_status
+		dataType: string
+		lineageTag: 41a714a3-fa4e-47a7-90d8-048f7932a9ea
+		summarizeBy: none
+		sourceColumn: subscription_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_started_at
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 056944e6-47dd-4985-aa69-94cb4b1bf7d4
+		summarizeBy: none
+		sourceColumn: service_started_at
+
+		variation Variation
+			isDefault
+			relationship: ba65f24c-8bb5-4c0e-9292-8924a0792cd3
+			defaultHierarchy: LocalDateTable_c429e138-eb04-452c-8d4e-9b3a73bd60e1.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column service_ended_at
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 7679d063-f7fe-4b9d-9a7f-fa530b98ccfe
+		summarizeBy: none
+		sourceColumn: service_ended_at
+
+		variation Variation
+			isDefault
+			relationship: 1f49bf31-d141-429e-8fb1-3093bbddc691
+			defaultHierarchy: LocalDateTable_2ac0afd0-78aa-4b37-9076-0560f20db975.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column subscription_close_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e60decf4-d94b-4643-805e-f268ed4221a5
+		summarizeBy: none
+		sourceColumn: subscription_close_date
+
+		variation Variation
+			isDefault
+			relationship: 82d7a9b7-f331-4ed4-b8ac-f8c10ed3f18d
+			defaultHierarchy: LocalDateTable_898888e2-6c0d-4288-b0e8-8657857bc29c.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column monthly_subscription_amount_sar
+		dataType: double
+		lineageTag: 818ca465-5949-4cca-8349-9d2b42a8ca51
+		summarizeBy: sum
+		sourceColumn: monthly_subscription_amount_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column is_mrr_eligible
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 133656de-0336-497e-b2ab-d5dadfa9051d
+		summarizeBy: none
+		sourceColumn: is_mrr_eligible
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_active
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 9f5f9ef6-1b74-4d09-bb63-b1ecd019851d
+		summarizeBy: none
+		sourceColumn: is_active
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_active_at_quarter_start
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 60b1a301-38b9-48d7-88a3-b9c74d8c24f9
+		summarizeBy: none
+		sourceColumn: is_active_at_quarter_start
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_churned
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: e48dc622-90d5-472b-b933-50a1517368c4
+		summarizeBy: none
+		sourceColumn: is_churned
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_upgraded
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 606ec0e0-368a-4a3b-a06a-709beb103e78
+		summarizeBy: none
+		sourceColumn: is_upgraded
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_kifed
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 11c9a6bf-f419-45ad-b26e-df940a238fd9
+		summarizeBy: none
+		sourceColumn: is_kifed
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts fct_subscription_monthly_snapshots' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_fct_subscription_monthly_snapshots = Source{[Schema="source_marts",Item="fct_subscription_monthly_snapshots"]}[Data]
+				in
+				    source_marts_fct_subscription_monthly_snapshots
+
+	annotation PBI_ResultType = Table
+

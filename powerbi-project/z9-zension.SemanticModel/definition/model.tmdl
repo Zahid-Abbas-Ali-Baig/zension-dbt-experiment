@@ -1,0 +1,103 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["source_marts bridge_cp_skus","source_marts dim_channel_partners","source_marts dim_corporate_companies","source_marts dim_customers","source_marts dim_dates","source_marts dim_device_skus","source_marts dim_payment_methods","source_marts dim_programs","source_marts dim_subscription_durations","source_marts dim_subscription_pricing","source_marts fct_credit_notes","source_marts fct_device_journey_events","source_marts fct_devices","source_marts fct_finance_reconciliation_monthly","source_marts fct_invoice_line_items","source_marts fct_invoices","source_marts fct_order_items","source_marts fct_orders","source_marts fct_partner_api_events","source_marts fct_payment_attempts","source_marts fct_payments","source_marts fct_psp_transactions","source_marts fct_refunds","source_marts fct_subscription_monthly_snapshots","source_marts fct_subscriptions","_KPIs"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'source_marts bridge_cp_skus'
+ref table DateTableTemplate_c4ab86f1-7cd8-4220-a133-019783e888dc
+ref table LocalDateTable_09f2ced1-11f3-4a12-b78c-ca34ac9b4642
+ref table LocalDateTable_e42a9776-85f4-4170-b489-37585f3b2d9c
+ref table 'source_marts dim_channel_partners'
+ref table LocalDateTable_cb6abc4d-fdc0-4476-98d4-01128bd9364f
+ref table LocalDateTable_4b55f90c-3afe-48b0-a226-3657eb3a8af3
+ref table 'source_marts dim_corporate_companies'
+ref table LocalDateTable_3a7dc2e4-4584-4abc-80fa-fbc51761288b
+ref table LocalDateTable_f4b62484-6563-40cd-89b8-5ac1a36df887
+ref table 'source_marts dim_customers'
+ref table LocalDateTable_a590ccfc-60eb-4b30-b036-40806fd08e29
+ref table LocalDateTable_20e962c6-31e2-444f-905d-2077ce57619a
+ref table LocalDateTable_7c07ce7b-1ff9-4709-9b42-a36b4d00ed03
+ref table LocalDateTable_69dfd178-5f3d-493a-81be-76b4ae8a0f96
+ref table LocalDateTable_c935bfc4-a934-4860-b6da-73bc15a5772c
+ref table LocalDateTable_06f24430-b78c-474f-b68b-0c722e76edd7
+ref table 'source_marts dim_dates'
+ref table LocalDateTable_0f0072fa-8b29-4233-ab14-2dc97c24f8ed
+ref table LocalDateTable_ebbe2dff-4728-4c5a-aa93-ce37dc16565b
+ref table 'source_marts dim_device_skus'
+ref table LocalDateTable_77d8f130-2422-410f-9826-2dba4f3bc796
+ref table LocalDateTable_fe018eb9-7e28-43f9-b904-fdef7891b9ea
+ref table 'source_marts dim_payment_methods'
+ref table LocalDateTable_7a59a80b-1d8f-4eaa-b0b5-e1ee3aefed48
+ref table LocalDateTable_2369acfa-14c9-4380-854f-cc0198a0506f
+ref table 'source_marts dim_programs'
+ref table LocalDateTable_4e0e3fa7-303e-46e8-b688-2932b4ae793d
+ref table LocalDateTable_2d282d68-30b6-4879-85cf-399ff6656a29
+ref table 'source_marts dim_subscription_durations'
+ref table LocalDateTable_0da712d1-07d7-4234-b0d5-df818daad033
+ref table LocalDateTable_62983ab9-c79e-4056-bbe0-e1e96f0ad53b
+ref table LocalDateTable_fb7baf94-d74c-40da-835e-4593dd191ea2
+ref table LocalDateTable_667cedf0-4e09-4c73-aab8-1d5c068ae647
+ref table 'source_marts dim_subscription_pricing'
+ref table LocalDateTable_d29a32d5-2323-4ccb-95a4-68e58c7a66d0
+ref table LocalDateTable_bc3e10b5-5b41-41bd-b6b8-763792287c27
+ref table LocalDateTable_7473fd20-ce93-463a-bd08-b5519fb804c9
+ref table LocalDateTable_7a0882c6-5bab-42bd-b25f-665d707b9d77
+ref table 'source_marts fct_credit_notes'
+ref table LocalDateTable_1485d13c-782e-413a-858f-f57f66105493
+ref table 'source_marts fct_device_journey_events'
+ref table LocalDateTable_8fc28de4-bdef-48ac-a719-28cd8c901f51
+ref table LocalDateTable_37e05628-d207-412d-bc6f-523c0c2badc8
+ref table 'source_marts fct_devices'
+ref table LocalDateTable_5e19f418-7ace-4a4e-8347-1e9b5133a925
+ref table LocalDateTable_634ce4bb-bbd0-4f11-8128-e90d2d634655
+ref table 'source_marts fct_finance_reconciliation_monthly'
+ref table LocalDateTable_1dc69bba-91a3-49fd-97ef-7e48f7face19
+ref table 'source_marts fct_invoice_line_items'
+ref table LocalDateTable_f62e49df-850e-45c3-9084-ef109cb6e11c
+ref table 'source_marts fct_invoices'
+ref table LocalDateTable_9ff8272a-1989-4be0-b368-09efc956a718
+ref table LocalDateTable_8944b02b-7adf-458b-be5f-cc77d4b33a6a
+ref table LocalDateTable_cb5650cc-a83a-4d8a-b9f9-1b04395e5215
+ref table 'source_marts fct_order_items'
+ref table LocalDateTable_992f97e7-63d5-43a7-9290-414b5e948399
+ref table 'source_marts fct_orders'
+ref table LocalDateTable_e033dad4-d01e-4e60-80d5-14f117866b75
+ref table LocalDateTable_ba581b7d-2de2-4aad-ac45-9394c61459c3
+ref table LocalDateTable_e4647c70-0671-49d1-b9bb-f8ce3b03ba77
+ref table 'source_marts fct_partner_api_events'
+ref table LocalDateTable_e6ea9d48-f6e0-4da3-bfe6-ea6172d743d9
+ref table 'source_marts fct_payment_attempts'
+ref table LocalDateTable_f7ad0729-ff53-4cb1-9e50-54ad0df4db90
+ref table 'source_marts fct_payments'
+ref table LocalDateTable_988ffdc6-491e-4225-87e5-a54783605932
+ref table LocalDateTable_78af24cf-b13c-4c7a-967e-a58145d3b33d
+ref table LocalDateTable_a6f8db7a-3f6a-40db-b052-43b4bd6ee40f
+ref table 'source_marts fct_psp_transactions'
+ref table LocalDateTable_6ccb9c5c-e393-468e-bc93-108f70bdad1b
+ref table 'source_marts fct_refunds'
+ref table LocalDateTable_4cb11400-0af3-478d-8c79-9d0f5f9a4003
+ref table LocalDateTable_7748382a-9d8e-4b71-8826-46a8c8bf29bb
+ref table 'source_marts fct_subscription_monthly_snapshots'
+ref table LocalDateTable_0665a465-f0f3-4497-bbeb-d502aa20e038
+ref table LocalDateTable_d9365f16-9424-4b96-bcd4-4f7c9ee6936d
+ref table LocalDateTable_c429e138-eb04-452c-8d4e-9b3a73bd60e1
+ref table LocalDateTable_2ac0afd0-78aa-4b37-9076-0560f20db975
+ref table LocalDateTable_898888e2-6c0d-4288-b0e8-8657857bc29c
+ref table 'source_marts fct_subscriptions'
+ref table LocalDateTable_484a96e4-34f5-4be9-84df-f657bd118fb7
+ref table LocalDateTable_b4bdb6c2-4997-46da-9852-ee94fe342b24
+ref table LocalDateTable_c0209001-2daa-47c2-975c-806ab5d37ee8
+ref table LocalDateTable_471800bd-026d-438b-848a-c1a6cfe1d4fa
+ref table _KPIs
+
+ref cultureInfo en-US
+

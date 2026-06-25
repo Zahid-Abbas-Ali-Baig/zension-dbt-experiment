@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "z9-zension"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "3a52ff80-891c-465b-b20e-a5e088298024"
+  }
+}

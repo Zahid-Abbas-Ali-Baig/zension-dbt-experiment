@@ -1,0 +1,583 @@
+relationship c980b66e-2661-4ede-a783-432c9ff9f1c5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts bridge_cp_skus'.created_at
+	toColumn: LocalDateTable_09f2ced1-11f3-4a12-b78c-ca34ac9b4642.Date
+
+relationship 07fa2c4d-745a-4d40-9df8-fae716e54d7c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts bridge_cp_skus'.updated_at
+	toColumn: LocalDateTable_e42a9776-85f4-4170-b489-37585f3b2d9c.Date
+
+relationship 101ba9dc-fb17-4011-8954-f022d595aed2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_channel_partners'.created_at
+	toColumn: LocalDateTable_cb6abc4d-fdc0-4476-98d4-01128bd9364f.Date
+
+relationship 97434682-842c-4594-93e4-6939eb903e29
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_channel_partners'.updated_at
+	toColumn: LocalDateTable_4b55f90c-3afe-48b0-a226-3657eb3a8af3.Date
+
+relationship 0c0f1972-1780-4cb9-bf7b-5341e32a9c37
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_corporate_companies'.created_at
+	toColumn: LocalDateTable_3a7dc2e4-4584-4abc-80fa-fbc51761288b.Date
+
+relationship 713044fe-3fd9-4684-85b9-9c425cefcc24
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_corporate_companies'.updated_at
+	toColumn: LocalDateTable_f4b62484-6563-40cd-89b8-5ac1a36df887.Date
+
+relationship b4446331-d6fc-4539-b5ba-3f25d77079dd
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_customers'.created_at
+	toColumn: LocalDateTable_a590ccfc-60eb-4b30-b036-40806fd08e29.Date
+
+relationship 232111d0-a878-474a-9a7c-6dac2b941301
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_customers'.updated_at
+	toColumn: LocalDateTable_20e962c6-31e2-444f-905d-2077ce57619a.Date
+
+relationship f4a02e05-0b21-4241-ad79-eca8c3a75815
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_customers'.customer_verification_at
+	toColumn: LocalDateTable_7c07ce7b-1ff9-4709-9b42-a36b4d00ed03.Date
+
+relationship 86cb8895-29f6-4778-b520-aadc3f8d482c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_customers'.nafath_verified_at
+	toColumn: LocalDateTable_69dfd178-5f3d-493a-81be-76b4ae8a0f96.Date
+
+relationship d683d677-f0a5-4008-aa3a-604545b5eb57
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_customers'.first_device_purchase_date
+	toColumn: LocalDateTable_c935bfc4-a934-4860-b6da-73bc15a5772c.Date
+
+relationship d5f62ea8-c719-4fbf-91f5-ab2f135748be
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_customers'.latest_device_delivery_date
+	toColumn: LocalDateTable_06f24430-b78c-474f-b68b-0c722e76edd7.Date
+
+relationship f3668a5a-a3dd-4ce3-b9d1-baba6088d6c7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_dates'.date_key
+	toColumn: LocalDateTable_0f0072fa-8b29-4233-ab14-2dc97c24f8ed.Date
+
+relationship 211b2089-e5f7-4e4f-8ee1-c2c87f5fc757
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_dates'.full_date
+	toColumn: LocalDateTable_ebbe2dff-4728-4c5a-aa93-ce37dc16565b.Date
+
+relationship 164b5268-62c2-4bb2-adf5-8b5d9e1cbbc5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_device_skus'.created_at
+	toColumn: LocalDateTable_77d8f130-2422-410f-9826-2dba4f3bc796.Date
+
+relationship fe3b22d1-ccda-4c42-a375-8ac135d6e8d9
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_device_skus'.updated_at
+	toColumn: LocalDateTable_fe018eb9-7e28-43f9-b904-fdef7891b9ea.Date
+
+relationship c3a13cf0-fc33-4099-bf13-48ba2d9cd308
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_payment_methods'.created_at
+	toColumn: LocalDateTable_7a59a80b-1d8f-4eaa-b0b5-e1ee3aefed48.Date
+
+relationship 17aabba4-6452-40d0-87b5-cf0e06702a5f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_payment_methods'.updated_at
+	toColumn: LocalDateTable_2369acfa-14c9-4380-854f-cc0198a0506f.Date
+
+relationship 15bf5cdc-658f-45ea-bdb7-e2e748535105
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_programs'.created_at
+	toColumn: LocalDateTable_4e0e3fa7-303e-46e8-b688-2932b4ae793d.Date
+
+relationship f5cd60d4-841a-4fd4-9bf4-ef056bcd074b
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_programs'.updated_at
+	toColumn: LocalDateTable_2d282d68-30b6-4879-85cf-399ff6656a29.Date
+
+relationship e7a19dc6-1360-4474-b065-1ea3495b6be2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_subscription_durations'.created_at
+	toColumn: LocalDateTable_0da712d1-07d7-4234-b0d5-df818daad033.Date
+
+relationship 264d3184-4d7e-487c-af7f-a7c723dacfcd
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_subscription_durations'.updated_at
+	toColumn: LocalDateTable_62983ab9-c79e-4056-bbe0-e1e96f0ad53b.Date
+
+relationship f04d9ac9-8ae6-417b-8368-fdd87be7f591
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_subscription_durations'.duration_start_date
+	toColumn: LocalDateTable_fb7baf94-d74c-40da-835e-4593dd191ea2.Date
+
+relationship d5284b23-a1c1-4685-8a2b-761245b1dbd7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_subscription_durations'.duration_end_date
+	toColumn: LocalDateTable_667cedf0-4e09-4c73-aab8-1d5c068ae647.Date
+
+relationship 2d33c6eb-1dbc-4829-a57a-470180e53479
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_subscription_pricing'.created_at
+	toColumn: LocalDateTable_d29a32d5-2323-4ccb-95a4-68e58c7a66d0.Date
+
+relationship 3bd4d4cf-2e69-4b51-9e34-cde3dfa27197
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_subscription_pricing'.updated_at
+	toColumn: LocalDateTable_bc3e10b5-5b41-41bd-b6b8-763792287c27.Date
+
+relationship 1406ec4a-608f-4fd3-ab3e-e97cd6514b43
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_subscription_pricing'.subscription_pricing_start_date
+	toColumn: LocalDateTable_7473fd20-ce93-463a-bd08-b5519fb804c9.Date
+
+relationship 7fceee91-e26a-47e9-9727-df14a1cff3ba
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts dim_subscription_pricing'.subscription_pricing_end_date
+	toColumn: LocalDateTable_7a0882c6-5bab-42bd-b25f-665d707b9d77.Date
+
+relationship 99fad036-af9c-48fe-af28-3a56fbef67dc
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_credit_notes'.credit_note_date
+	toColumn: LocalDateTable_1485d13c-782e-413a-858f-f57f66105493.Date
+
+relationship f80b7ca3-44db-4457-b22b-30d7bd7b58ab
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_device_journey_events'.movement_date
+	toColumn: LocalDateTable_8fc28de4-bdef-48ac-a719-28cd8c901f51.Date
+
+relationship 54fd8134-0ffc-404d-b292-90c5c05667e0
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_device_journey_events'.event_recorded_at
+	toColumn: LocalDateTable_37e05628-d207-412d-bc6f-523c0c2badc8.Date
+
+relationship c052407c-b17b-4c7c-9d2a-738f510897ce
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_devices'.purchase_date
+	toColumn: LocalDateTable_5e19f418-7ace-4a4e-8347-1e9b5133a925.Date
+
+relationship ec22e95a-bd4a-4b11-84b5-e67c4d20b9b3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_devices'.delivery_date
+	toColumn: LocalDateTable_634ce4bb-bbd0-4f11-8128-e90d2d634655.Date
+
+relationship a8c53a9c-ed6e-4a82-977f-a7fb7286e7d5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_finance_reconciliation_monthly'.reconciliation_month
+	toColumn: LocalDateTable_1dc69bba-91a3-49fd-97ef-7e48f7face19.Date
+
+relationship 9ed71158-4ce5-450a-b7be-5245026e5e0a
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_invoice_line_items'.invoice_date
+	toColumn: LocalDateTable_f62e49df-850e-45c3-9084-ef109cb6e11c.Date
+
+relationship c77a97cc-d44d-45dd-8635-d08d6e8c7e30
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_invoices'.invoice_date
+	toColumn: LocalDateTable_9ff8272a-1989-4be0-b368-09efc956a718.Date
+
+relationship 0ee0060a-e86a-45d9-a58a-083abbff1e1a
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_invoices'.invoice_due_date
+	toColumn: LocalDateTable_8944b02b-7adf-458b-be5f-cc77d4b33a6a.Date
+
+relationship 9d243171-595e-4eba-86ae-bf543b6be879
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_invoices'.settlement_date
+	toColumn: LocalDateTable_cb5650cc-a83a-4d8a-b9f9-1b04395e5215.Date
+
+relationship f55f70bb-558a-4798-b4a3-096ba97a85f1
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_order_items'.order_item_date
+	toColumn: LocalDateTable_992f97e7-63d5-43a7-9290-414b5e948399.Date
+
+relationship f7970b2b-8d55-489c-a1ce-ebe2374a86c4
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_orders'.order_date
+	toColumn: LocalDateTable_e033dad4-d01e-4e60-80d5-14f117866b75.Date
+
+relationship 94572364-c7db-4a66-8271-a46d779e4066
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_orders'.delivered_at
+	toColumn: LocalDateTable_ba581b7d-2de2-4aad-ac45-9394c61459c3.Date
+
+relationship cd2c7fbb-362a-4d1b-842a-0f5bc72cea0f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_orders'.first_paid_at
+	toColumn: LocalDateTable_e4647c70-0671-49d1-b9bb-f8ce3b03ba77.Date
+
+relationship 4fed00ac-9ca8-4430-98c6-da8d12bc48bc
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_partner_api_events'.event_date
+	toColumn: LocalDateTable_e6ea9d48-f6e0-4da3-bfe6-ea6172d743d9.Date
+
+relationship b0f5558b-6a06-43df-8b7d-376294c912d8
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_payment_attempts'.attempt_date
+	toColumn: LocalDateTable_f7ad0729-ff53-4cb1-9e50-54ad0df4db90.Date
+
+relationship b54cbb86-ea66-4e14-ac7e-3d71024fd168
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_payments'.payment_date
+	toColumn: LocalDateTable_988ffdc6-491e-4225-87e5-a54783605932.Date
+
+relationship 3dde2e13-d375-4052-866f-a3dac1538701
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_payments'.payment_timestamp
+	toColumn: LocalDateTable_78af24cf-b13c-4c7a-967e-a58145d3b33d.Date
+
+relationship 7512f106-951f-4447-b144-25367ddad8f3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_payments'.paid_at
+	toColumn: LocalDateTable_a6f8db7a-3f6a-40db-b052-43b4bd6ee40f.Date
+
+relationship 8919698c-a54d-463b-9acc-f3e5ddfdba62
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_psp_transactions'.transaction_date
+	toColumn: LocalDateTable_6ccb9c5c-e393-468e-bc93-108f70bdad1b.Date
+
+relationship f13e9957-9c4a-40d4-896f-d185e9e1fd73
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_refunds'.refund_date
+	toColumn: LocalDateTable_4cb11400-0af3-478d-8c79-9d0f5f9a4003.Date
+
+relationship 2c0c22d2-9cb8-42ef-9337-2521a9078891
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_refunds'.refunded_at
+	toColumn: LocalDateTable_7748382a-9d8e-4b71-8826-46a8c8bf29bb.Date
+
+relationship 932c40cf-a447-4149-99ef-b86b93b3930b
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_subscription_monthly_snapshots'.snapshot_month
+	toColumn: LocalDateTable_0665a465-f0f3-4497-bbeb-d502aa20e038.Date
+
+relationship ad7ac5a4-ade9-4559-8632-fc301125af52
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_subscription_monthly_snapshots'.snapshot_quarter
+	toColumn: LocalDateTable_d9365f16-9424-4b96-bcd4-4f7c9ee6936d.Date
+
+relationship ba65f24c-8bb5-4c0e-9292-8924a0792cd3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_subscription_monthly_snapshots'.service_started_at
+	toColumn: LocalDateTable_c429e138-eb04-452c-8d4e-9b3a73bd60e1.Date
+
+relationship 1f49bf31-d141-429e-8fb1-3093bbddc691
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_subscription_monthly_snapshots'.service_ended_at
+	toColumn: LocalDateTable_2ac0afd0-78aa-4b37-9076-0560f20db975.Date
+
+relationship 82d7a9b7-f331-4ed4-b8ac-f8c10ed3f18d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_subscription_monthly_snapshots'.subscription_close_date
+	toColumn: LocalDateTable_898888e2-6c0d-4288-b0e8-8657857bc29c.Date
+
+relationship e82009c5-2d8a-4336-91cf-a04e4e423d72
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_subscriptions'.subscription_date
+	toColumn: LocalDateTable_484a96e4-34f5-4be9-84df-f657bd118fb7.Date
+
+relationship 5444ba07-0717-417c-98c0-ba0bac102b76
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_subscriptions'.service_started_at
+	toColumn: LocalDateTable_b4bdb6c2-4997-46da-9852-ee94fe342b24.Date
+
+relationship cc079aad-5fe6-4e10-93b7-ec04bc4725fd
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_subscriptions'.service_ended_at
+	toColumn: LocalDateTable_c0209001-2daa-47c2-975c-806ab5d37ee8.Date
+
+relationship cc808aa7-a2bd-4bed-b413-721d685ec684
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'source_marts fct_subscriptions'.subscription_close_date
+	toColumn: LocalDateTable_471800bd-026d-438b-848a-c1a6cfe1d4fa.Date
+
+relationship AutoDetected_8c32197a-fb6d-42ea-b609-bd40264d2193
+	fromColumn: 'source_marts bridge_cp_skus'.channel_partner_id
+	toColumn: 'source_marts dim_channel_partners'.channel_partner_id
+
+relationship AutoDetected_25d6c534-e11d-40ca-93b6-d305ecd61dc9
+	fromColumn: 'source_marts dim_corporate_companies'.channel_partner_id
+	toColumn: 'source_marts dim_channel_partners'.channel_partner_id
+
+relationship AutoDetected_fd73b0e2-0f30-492c-8688-5569234f5efd
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'source_marts dim_programs'.channel_partner_id
+	toColumn: 'source_marts dim_channel_partners'.channel_partner_id
+
+relationship AutoDetected_77f30b80-aa23-45f8-a02f-691fac249ae5
+	fromColumn: 'source_marts dim_subscription_durations'.channel_partner_id
+	toColumn: 'source_marts dim_channel_partners'.channel_partner_id
+
+relationship AutoDetected_6a085230-60e1-4ed1-a580-4904ec881c6d
+	fromColumn: 'source_marts fct_credit_notes'.channel_partner_id
+	toColumn: 'source_marts dim_channel_partners'.channel_partner_id
+
+relationship AutoDetected_9fc9b4e5-f113-49d5-ac98-3850bde07901
+	fromColumn: 'source_marts fct_devices'.channel_partner_id
+	toColumn: 'source_marts dim_channel_partners'.channel_partner_id
+
+relationship AutoDetected_23fbe2c6-0b25-481f-a28f-4eabfa302328
+	fromColumn: 'source_marts fct_invoices'.channel_partner_id
+	toColumn: 'source_marts dim_channel_partners'.channel_partner_id
+
+relationship AutoDetected_87eda2bc-bb8e-4a04-b80a-59a178c02f01
+	fromColumn: 'source_marts fct_order_items'.channel_partner_id
+	toColumn: 'source_marts dim_channel_partners'.channel_partner_id
+
+relationship AutoDetected_f41d3834-7613-4e6e-a248-d38d35b94c6c
+	fromColumn: 'source_marts fct_orders'.channel_partner_id
+	toColumn: 'source_marts dim_channel_partners'.channel_partner_id
+
+relationship AutoDetected_cf0cec23-d123-40b0-85a4-3267537e7171
+	fromColumn: 'source_marts fct_partner_api_events'.channel_partner_id
+	toColumn: 'source_marts dim_channel_partners'.channel_partner_id
+
+relationship AutoDetected_880184a1-d790-46e8-9be8-73ad6ac9ded9
+	fromColumn: 'source_marts fct_payment_attempts'.channel_partner_id
+	toColumn: 'source_marts dim_channel_partners'.channel_partner_id
+
+relationship AutoDetected_745b9318-1155-483a-8041-7e565a9daf91
+	fromColumn: 'source_marts fct_payments'.channel_partner_id
+	toColumn: 'source_marts dim_channel_partners'.channel_partner_id
+
+relationship AutoDetected_628a199c-e2b1-4c79-a27a-f5c11db224d0
+	fromColumn: 'source_marts fct_refunds'.channel_partner_id
+	toColumn: 'source_marts dim_channel_partners'.channel_partner_id
+
+relationship AutoDetected_d0e6275c-527f-48f9-9df7-290ccae94492
+	fromColumn: 'source_marts fct_subscription_monthly_snapshots'.channel_partner_id
+	toColumn: 'source_marts dim_channel_partners'.channel_partner_id
+
+relationship AutoDetected_e2de6a8e-895d-4886-919c-e7d348acf721
+	fromColumn: 'source_marts fct_subscriptions'.channel_partner_id
+	toColumn: 'source_marts dim_channel_partners'.channel_partner_id
+
+relationship AutoDetected_b04ca108-921f-4f21-9020-e3000c1966a0
+	fromColumn: 'source_marts bridge_cp_skus'.master_sku_id
+	toColumn: 'source_marts dim_device_skus'.master_sku_id
+
+relationship AutoDetected_b5b60c6b-b40d-4b40-8aa2-eac084691e49
+	fromColumn: 'source_marts fct_order_items'.master_sku_id
+	toColumn: 'source_marts dim_device_skus'.master_sku_id
+
+relationship AutoDetected_d481f2f2-1e60-406c-bee7-6022fd39a8a9
+	isActive: false
+	fromColumn: 'source_marts bridge_cp_skus'.partner_name
+	toColumn: 'source_marts dim_programs'.partner_name
+
+relationship AutoDetected_00259ab3-d4bc-4b4b-8429-38d08ef3f7c0
+	isActive: false
+	fromColumn: 'source_marts fct_refunds'.partner_name
+	toColumn: 'source_marts dim_programs'.partner_name
+
+relationship AutoDetected_5ff66c2a-6bb6-4bfd-be27-44bbe2f836b8
+	fromColumn: 'source_marts dim_customers'.corporate_company_id
+	toColumn: 'source_marts dim_corporate_companies'.corporate_company_id
+
+relationship AutoDetected_fc15aae3-5de7-427d-b174-284957937eba
+	fromColumn: 'source_marts dim_payment_methods'.customer_id
+	toColumn: 'source_marts dim_customers'.customer_id
+
+relationship AutoDetected_0f30a214-fb73-4cf0-957f-8b09b2144d1a
+	isActive: false
+	fromColumn: 'source_marts fct_credit_notes'.customer_id
+	toColumn: 'source_marts dim_customers'.customer_id
+
+relationship AutoDetected_d7faf45a-33af-4f0f-9da4-51dea1275384
+	isActive: false
+	fromColumn: 'source_marts fct_devices'.customer_id
+	toColumn: 'source_marts dim_customers'.customer_id
+
+relationship AutoDetected_b6fb4ec2-1552-4428-8bec-96b469e40e5c
+	fromColumn: 'source_marts fct_invoice_line_items'.customer_id
+	toColumn: 'source_marts dim_customers'.customer_id
+
+relationship AutoDetected_3e6188ab-c73b-46df-814b-5cba4ab126cf
+	isActive: false
+	fromColumn: 'source_marts fct_invoices'.customer_id
+	toColumn: 'source_marts dim_customers'.customer_id
+
+relationship AutoDetected_275d326f-93fd-41c2-becd-ea120c912d03
+	isActive: false
+	fromColumn: 'source_marts fct_order_items'.customer_id
+	toColumn: 'source_marts dim_customers'.customer_id
+
+relationship AutoDetected_7acb3234-1bf3-4c07-b4f9-f52af75d6fea
+	isActive: false
+	fromColumn: 'source_marts fct_orders'.customer_id
+	toColumn: 'source_marts dim_customers'.customer_id
+
+relationship AutoDetected_275f6d4f-e60b-49da-b649-622eb3b42796
+	isActive: false
+	fromColumn: 'source_marts fct_payment_attempts'.customer_id
+	toColumn: 'source_marts dim_customers'.customer_id
+
+relationship AutoDetected_a5563f00-cb76-4629-978b-22f913b50157
+	isActive: false
+	fromColumn: 'source_marts fct_payments'.customer_id
+	toColumn: 'source_marts dim_customers'.customer_id
+
+relationship AutoDetected_cce5b36b-4f41-4b0d-862d-1c476d18b1b8
+	isActive: false
+	fromColumn: 'source_marts fct_refunds'.customer_id
+	toColumn: 'source_marts dim_customers'.customer_id
+
+relationship AutoDetected_d2cf253e-006e-4f2f-bc9e-c9bf9117f885
+	isActive: false
+	fromColumn: 'source_marts fct_subscriptions'.customer_id
+	toColumn: 'source_marts dim_customers'.customer_id
+
+relationship AutoDetected_0d267a72-df3c-4978-b0d7-8bf9319f9b27
+	isActive: false
+	fromColumn: 'source_marts dim_customers'.program_id
+	toColumn: 'source_marts dim_programs'.program_id
+
+relationship AutoDetected_f3bbcf1a-c47c-4bd6-939b-f66eb33f6e98
+	isActive: false
+	fromColumn: 'source_marts dim_subscription_durations'.program_id
+	toColumn: 'source_marts dim_programs'.program_id
+
+relationship AutoDetected_3a75eed0-c60b-42ac-b338-4a63af9fde02
+	isActive: false
+	fromColumn: 'source_marts fct_credit_notes'.program_id
+	toColumn: 'source_marts dim_programs'.program_id
+
+relationship AutoDetected_f1c21dab-752e-4d7c-a35f-a0d1aa9f70fc
+	isActive: false
+	fromColumn: 'source_marts fct_devices'.program_id
+	toColumn: 'source_marts dim_programs'.program_id
+
+relationship AutoDetected_4142f35c-2927-4c6b-872f-7a393583ee1c
+	isActive: false
+	fromColumn: 'source_marts fct_invoices'.program_id
+	toColumn: 'source_marts dim_programs'.program_id
+
+relationship AutoDetected_b0f78cdc-588a-4f42-b670-d64fbfda013f
+	isActive: false
+	fromColumn: 'source_marts fct_order_items'.program_id
+	toColumn: 'source_marts dim_programs'.program_id
+
+relationship AutoDetected_1990c560-aa2c-48c5-94b3-4539ab6651cb
+	isActive: false
+	fromColumn: 'source_marts fct_orders'.program_id
+	toColumn: 'source_marts dim_programs'.program_id
+
+relationship AutoDetected_e9284139-2366-4488-87de-a5a27333a7a9
+	isActive: false
+	fromColumn: 'source_marts fct_payment_attempts'.program_id
+	toColumn: 'source_marts dim_programs'.program_id
+
+relationship AutoDetected_230db244-0145-4086-9101-7bdf348dd9d0
+	isActive: false
+	fromColumn: 'source_marts fct_payments'.program_id
+	toColumn: 'source_marts dim_programs'.program_id
+
+relationship AutoDetected_92eb9ca6-9cb8-434e-a170-3dda52d7cb06
+	isActive: false
+	fromColumn: 'source_marts fct_subscription_monthly_snapshots'.program_id
+	toColumn: 'source_marts dim_programs'.program_id
+
+relationship AutoDetected_6c6f066d-6bb7-47b2-8776-859bdfe654e9
+	isActive: false
+	fromColumn: 'source_marts fct_subscriptions'.program_id
+	toColumn: 'source_marts dim_programs'.program_id
+
+relationship AutoDetected_c85f4c81-93c7-4927-856a-7fe130474eb6
+	fromColumn: 'source_marts dim_subscription_pricing'.subscription_duration_id
+	toColumn: 'source_marts dim_subscription_durations'.subscription_duration_id
+
+relationship AutoDetected_5d4ef9cd-d40a-489b-ad93-a3617d2f6caf
+	isActive: false
+	fromColumn: 'source_marts fct_subscriptions'.subscription_pricing_id
+	toColumn: 'source_marts dim_subscription_pricing'.subscription_pricing_id
+
+relationship AutoDetected_e00c8bb7-d6f7-4973-84cd-c17d813a151f
+	isActive: false
+	fromColumn: 'source_marts fct_credit_notes'.invoice_id
+	toColumn: 'source_marts fct_invoices'.invoice_id
+
+relationship AutoDetected_cb918249-4b77-4a98-964e-3de3e051019f
+	isActive: false
+	fromColumn: 'source_marts fct_invoice_line_items'.invoice_id
+	toColumn: 'source_marts fct_invoices'.invoice_id
+
+relationship AutoDetected_123a36b7-150f-4561-9742-b14ab38661eb
+	isActive: false
+	fromColumn: 'source_marts fct_payments'.invoice_id
+	toColumn: 'source_marts fct_invoices'.invoice_id
+
+relationship AutoDetected_e21580d7-f7f2-4eff-b1c1-bf7f9a0bb8e8
+	isActive: false
+	fromColumn: 'source_marts fct_devices'.order_item_id
+	toColumn: 'source_marts fct_order_items'.order_item_id
+
+relationship AutoDetected_4e74e831-ec73-4170-982d-fb481ba27ae0
+	isActive: false
+	fromColumn: 'source_marts fct_invoice_line_items'.order_item_id
+	toColumn: 'source_marts fct_order_items'.order_item_id
+
+relationship AutoDetected_56a27f25-3781-46b5-8c59-8f9cd7dd6b75
+	isActive: false
+	fromColumn: 'source_marts fct_subscriptions'.order_item_id
+	toColumn: 'source_marts fct_order_items'.order_item_id
+
+relationship AutoDetected_07dec279-899e-4eb0-a28f-cab33b0efc60
+	isActive: false
+	fromColumn: 'source_marts fct_devices'.order_id
+	toColumn: 'source_marts fct_orders'.order_id
+
+relationship AutoDetected_eeebc83a-9263-468c-946a-890bfccbf797
+	isActive: false
+	fromColumn: 'source_marts fct_order_items'.order_id
+	toColumn: 'source_marts fct_orders'.order_id
+
+relationship AutoDetected_c02781c0-e1f5-4629-b084-1b1200d87900
+	isActive: false
+	fromColumn: 'source_marts fct_payment_attempts'.order_id
+	toColumn: 'source_marts fct_orders'.order_id
+
+relationship AutoDetected_f800484a-6124-4363-94cf-6d91367273fe
+	isActive: false
+	fromColumn: 'source_marts fct_payments'.order_id
+	toColumn: 'source_marts fct_orders'.order_id
+
+relationship AutoDetected_87ed7fd6-74c0-444b-a0f4-e9e60a3c5fc6
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'source_marts fct_refunds'.order_id
+	toColumn: 'source_marts fct_orders'.order_id
+
+relationship AutoDetected_7a1f3e20-770e-4e01-86ee-1918227a2801
+	isActive: false
+	fromColumn: 'source_marts fct_subscriptions'.order_id
+	toColumn: 'source_marts fct_orders'.order_id
+
+relationship AutoDetected_9eb2072d-ab9a-40da-bf22-f4ac1bc03e2a
+	isActive: false
+	fromColumn: 'source_marts fct_devices'.subscription_id
+	toColumn: 'source_marts fct_subscriptions'.subscription_id
+
+relationship AutoDetected_308e3636-60e0-42f2-8266-dfa76480e0fe
+	isActive: false
+	fromColumn: 'source_marts fct_invoice_line_items'.subscription_id
+	toColumn: 'source_marts fct_subscriptions'.subscription_id
+
+relationship AutoDetected_3ebc41c0-885b-4937-bccc-8b2e4a591612
+	isActive: false
+	fromColumn: 'source_marts fct_subscription_monthly_snapshots'.subscription_id
+	toColumn: 'source_marts fct_subscriptions'.subscription_id
+
+relationship AutoDetected_44d57184-6fd5-4fdf-8244-80a24fe365e8
+	isActive: false
+	fromColumn: 'source_marts fct_payment_attempts'.payment_id
+	toColumn: 'source_marts fct_payments'.payment_id
+
+relationship AutoDetected_9398bfc0-d5c9-4f8a-8aa3-1708df6b96b7
+	isActive: false
+	fromColumn: 'source_marts fct_payment_attempts'.payment_method_id
+	toColumn: 'source_marts dim_payment_methods'.payment_method_key
+

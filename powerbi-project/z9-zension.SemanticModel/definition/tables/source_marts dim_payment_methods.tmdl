@@ -1,0 +1,182 @@
+table 'source_marts dim_payment_methods'
+	lineageTag: 0da85272-0f27-4553-b14d-bcf10c229839
+
+	column payment_method_key
+		dataType: string
+		lineageTag: d9be9652-c2e1-45a8-971e-b2f86fdcbc96
+		summarizeBy: none
+		sourceColumn: payment_method_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_method_source
+		dataType: string
+		lineageTag: 69fdc5b7-e29e-4753-a37b-b7f081ab2767
+		summarizeBy: none
+		sourceColumn: payment_method_source
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_method_id
+		dataType: string
+		lineageTag: 562caf55-cc58-49b0-9b43-592c44698777
+		summarizeBy: none
+		sourceColumn: payment_method_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column psp_payment_method_id
+		dataType: string
+		lineageTag: 11690d84-6a0b-4e7c-a399-66ab46569cbf
+		summarizeBy: none
+		sourceColumn: psp_payment_method_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: e4c82097-16d1-4ab0-a4a7-fc2014176c52
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column subscriber_id
+		dataType: string
+		lineageTag: 44f8acc0-3ede-4ece-83db-95613549225b
+		summarizeBy: none
+		sourceColumn: subscriber_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_method_name
+		dataType: string
+		lineageTag: b7ce3d1b-3105-4902-ae8a-bcd2103b8d89
+		summarizeBy: none
+		sourceColumn: payment_method_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_method_status
+		dataType: string
+		lineageTag: 9d13633e-644b-4a28-905f-8346c7ee59e3
+		summarizeBy: none
+		sourceColumn: payment_method_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_method_type
+		dataType: string
+		lineageTag: 87497f69-b3c9-412c-a4cf-5a18f848d468
+		summarizeBy: none
+		sourceColumn: payment_method_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column card_last_four
+		dataType: string
+		lineageTag: 0a7c3c2a-df63-425a-a90a-92e2be6b262b
+		summarizeBy: none
+		sourceColumn: card_last_four
+
+		annotation SummarizationSetBy = Automatic
+
+	column expiry_year
+		dataType: int64
+		formatString: 0
+		lineageTag: e13adac3-f9ff-43f8-aed9-ebfa7637a7d7
+		summarizeBy: sum
+		sourceColumn: expiry_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column expiry_month
+		dataType: int64
+		formatString: 0
+		lineageTag: 86cd1dc1-3448-4723-953b-1ffc2de5834c
+		summarizeBy: sum
+		sourceColumn: expiry_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_default
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d6631e27-4fe1-4bad-9578-025a03feb44e
+		summarizeBy: none
+		sourceColumn: is_default
+
+		annotation SummarizationSetBy = Automatic
+
+	column card_brand
+		dataType: string
+		lineageTag: 07e5c9d2-7d69-4599-a2eb-71b9b8d34bba
+		summarizeBy: none
+		sourceColumn: card_brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column funding_type
+		dataType: string
+		lineageTag: 9919eebf-e587-4458-995d-531f4aa48f87
+		summarizeBy: none
+		sourceColumn: funding_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_expired
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 22b724ef-3cc6-4dee-a537-fc9558aa57c2
+		summarizeBy: none
+		sourceColumn: is_expired
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: cf1172b5-ade9-4cd8-b2ba-df033650a159
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: c3a13cf0-fc33-4099-bf13-48ba2d9cd308
+			defaultHierarchy: LocalDateTable_7a59a80b-1d8f-4eaa-b0b5-e1ee3aefed48.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 177f5dce-7587-4987-889f-cc5881b1e06b
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: 17aabba4-6452-40d0-87b5-cf0e06702a5f
+			defaultHierarchy: LocalDateTable_2369acfa-14c9-4380-854f-cc0198a0506f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_method_health_segment
+		dataType: string
+		lineageTag: ced5d545-81c0-4875-8555-84bbd7ec37e4
+		summarizeBy: none
+		sourceColumn: payment_method_health_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts dim_payment_methods' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_dim_payment_methods = Source{[Schema="source_marts",Item="dim_payment_methods"]}[Data]
+				in
+				    source_marts_dim_payment_methods
+
+	annotation PBI_ResultType = Table
+

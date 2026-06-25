@@ -1,0 +1,151 @@
+table 'source_marts dim_subscription_pricing'
+	lineageTag: 08a2150c-b257-4811-a1ff-da9057c99b82
+
+	column subscription_pricing_id
+		dataType: string
+		lineageTag: 409b2b73-88d9-4202-8da5-ef11226e389e
+		summarizeBy: none
+		sourceColumn: subscription_pricing_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column subscription_pricing_name
+		dataType: string
+		lineageTag: 67e3b098-843e-409a-bd27-4e958f58c141
+		summarizeBy: none
+		sourceColumn: subscription_pricing_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 907a33c2-5626-4f38-9341-9239c5cccde5
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 2d33c6eb-1dbc-4829-a57a-470180e53479
+			defaultHierarchy: LocalDateTable_d29a32d5-2323-4ccb-95a4-68e58c7a66d0.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 62dbbfcb-91e8-4e29-ad1f-e96a02222bef
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: 3bd4d4cf-2e69-4b51-9e34-cde3dfa27197
+			defaultHierarchy: LocalDateTable_bc3e10b5-5b41-41bd-b6b8-763792287c27.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column monthly_subscription_amount_sar
+		dataType: double
+		lineageTag: adfa9937-e7f9-495c-b5be-0ee338012707
+		summarizeBy: sum
+		sourceColumn: monthly_subscription_amount_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column zaam_sku_id
+		dataType: string
+		lineageTag: a2d18b3d-87a3-4fb7-acb1-8472ecae1122
+		summarizeBy: none
+		sourceColumn: zaam_sku_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column subscription_duration_id
+		dataType: string
+		lineageTag: f32d1189-1ad7-41aa-aa0a-fa7a9be60d43
+		summarizeBy: none
+		sourceColumn: subscription_duration_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column subscription_pricing_status
+		dataType: string
+		lineageTag: cd19816e-5257-461b-8269-ed7a69820d0b
+		summarizeBy: none
+		sourceColumn: subscription_pricing_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column subscription_pricing_start_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1e45b7fe-6e5a-4cfa-8276-8436e7bc0e20
+		summarizeBy: none
+		sourceColumn: subscription_pricing_start_date
+
+		variation Variation
+			isDefault
+			relationship: 1406ec4a-608f-4fd3-ab3e-e97cd6514b43
+			defaultHierarchy: LocalDateTable_7473fd20-ce93-463a-bd08-b5519fb804c9.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column subscription_pricing_end_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 283ddeaf-965e-412e-8bd1-6353a1395c34
+		summarizeBy: none
+		sourceColumn: subscription_pricing_end_date
+
+		variation Variation
+			isDefault
+			relationship: 7fceee91-e26a-47e9-9727-df14a1cff3ba
+			defaultHierarchy: LocalDateTable_7a0882c6-5bab-42bd-b25f-665d707b9d77.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column mrr_eligible_subscription_count
+		dataType: int64
+		formatString: 0
+		lineageTag: c402025d-0820-4d36-90ad-ee60178d9501
+		summarizeBy: sum
+		sourceColumn: mrr_eligible_subscription_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_mrr_sar
+		dataType: double
+		lineageTag: ae61052d-0cea-40f4-b5a8-1615b8cca763
+		summarizeBy: sum
+		sourceColumn: total_mrr_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column pricing_utilization_segment
+		dataType: string
+		lineageTag: f5c8e6cf-cdb1-44c8-a931-e6ed448d44d1
+		summarizeBy: none
+		sourceColumn: pricing_utilization_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts dim_subscription_pricing' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_dim_subscription_pricing = Source{[Schema="source_marts",Item="dim_subscription_pricing"]}[Data]
+				in
+				    source_marts_dim_subscription_pricing
+
+	annotation PBI_ResultType = Table
+

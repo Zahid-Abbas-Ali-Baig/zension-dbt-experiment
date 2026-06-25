@@ -1,0 +1,269 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "e199089d00a04399b5004ff9",
+  "position": {
+    "x": 460.06079027355628,
+    "y": 225.6534954407295,
+    "z": 0,
+    "height": 474.65045592705167,
+    "width": 600.12158054711244,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "source_marts fct_finance_reconciliation_monthly"
+                    }
+                  },
+                  "Property": "reconciliation_month"
+                }
+              },
+              "queryRef": "source_marts fct_finance_reconciliation_monthly.reconciliation_month",
+              "nativeQueryRef": "reconciliation_month",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_KPIs"
+                    }
+                  },
+                  "Property": "Collected Revenue (SAR)"
+                }
+              },
+              "queryRef": "_KPIs.Collected Revenue (SAR)",
+              "nativeQueryRef": "Collected Revenue (SAR)",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_KPIs"
+                    }
+                  },
+                  "Property": "Invoiced Revenue (SAR)"
+                }
+              },
+              "queryRef": "_KPIs.Invoiced Revenue (SAR)",
+              "nativeQueryRef": "Invoiced Revenue (SAR)",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_KPIs"
+                    }
+                  },
+                  "Property": "Finance Variance (SAR)"
+                }
+              },
+              "queryRef": "_KPIs.Finance Variance (SAR)",
+              "nativeQueryRef": "Finance Variance (SAR)",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "valueAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "lineStyles": [
+        {
+          "properties": {
+            "strokeWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "2D"
+                }
+              }
+            },
+            "showMarker": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Collected vs Invoiced Trend'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "1723c690d14d3292bbc8",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "source_marts fct_finance_reconciliation_monthly"
+              }
+            },
+            "Property": "reconciliation_month"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "ef29920434924c5cb8a8",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_KPIs"
+              }
+            },
+            "Property": "Collected Revenue (SAR)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "96ae6b10a25c71063757",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_KPIs"
+              }
+            },
+            "Property": "Invoiced Revenue (SAR)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "0345332b4527190469b4",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_KPIs"
+              }
+            },
+            "Property": "Finance Variance (SAR)"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

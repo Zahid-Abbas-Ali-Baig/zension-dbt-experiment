@@ -1,0 +1,246 @@
+table 'source_marts fct_payments'
+	lineageTag: 8c4aa079-675f-44bc-a237-7fc9409f1ece
+
+	column payment_id
+		dataType: string
+		lineageTag: ce7bcb11-8ec6-4207-a8d0-43c3b4a2cb66
+		summarizeBy: none
+		sourceColumn: payment_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_id
+		dataType: string
+		lineageTag: 6cb5f77b-0b3f-4ba6-a989-caa0ef8ca940
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_id
+		dataType: string
+		lineageTag: e7fd60c9-d60d-482d-a20c-5980951be958
+		summarizeBy: none
+		sourceColumn: invoice_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: 5c9cb3a9-56b0-4b76-85b4-f42c7d44246d
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column subscription_id
+		dataType: string
+		lineageTag: 25071959-ef7e-4dfb-a943-3842feb699f4
+		summarizeBy: none
+		sourceColumn: subscription_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_id
+		dataType: string
+		lineageTag: 249b88ea-a28a-4647-b6fd-f27fa29a0302
+		summarizeBy: none
+		sourceColumn: program_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_partner_id
+		dataType: string
+		lineageTag: 3be4ec78-919e-4ce1-a811-a2b85433c0dc
+		summarizeBy: none
+		sourceColumn: channel_partner_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column psp_payment_id
+		dataType: string
+		lineageTag: 2c67ce57-5683-4aea-b7df-609dbe0aadab
+		summarizeBy: none
+		sourceColumn: psp_payment_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: db0e484e-6bfa-48e4-a76f-0128694a9ede
+		summarizeBy: none
+		sourceColumn: payment_date
+
+		variation Variation
+			isDefault
+			relationship: b54cbb86-ea66-4e14-ac7e-3d71024fd168
+			defaultHierarchy: LocalDateTable_988ffdc6-491e-4225-87e5-a54783605932.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column payment_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a4ceba29-b05b-42f7-b1ce-84f1bfc9c617
+		summarizeBy: none
+		sourceColumn: payment_timestamp
+
+		variation Variation
+			isDefault
+			relationship: 3dde2e13-d375-4052-866f-a3dac1538701
+			defaultHierarchy: LocalDateTable_78af24cf-b13c-4c7a-967e-a58145d3b33d.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column paid_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f8d18beb-0820-48e7-8cd6-fc64084090f0
+		summarizeBy: none
+		sourceColumn: paid_at
+
+		variation Variation
+			isDefault
+			relationship: 7512f106-951f-4447-b144-25367ddad8f3
+			defaultHierarchy: LocalDateTable_a6f8db7a-3f6a-40db-b052-43b4bd6ee40f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_status
+		dataType: string
+		lineageTag: 289d1c7c-0ec7-41e5-a133-a089bdf8a31b
+		summarizeBy: none
+		sourceColumn: payment_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_type
+		dataType: string
+		lineageTag: 806c9079-374a-499c-8ea6-2a67d14b4c58
+		summarizeBy: none
+		sourceColumn: payment_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column refund_status
+		dataType: string
+		lineageTag: aa93e0b8-51b7-4e25-810b-35527af8f914
+		summarizeBy: none
+		sourceColumn: refund_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_collected
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8c0edf14-c603-4c7e-8194-f65bacb834eb
+		summarizeBy: none
+		sourceColumn: is_collected
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_failed
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 6a776bcb-504b-49c2-915e-cf194447ffb6
+		summarizeBy: none
+		sourceColumn: is_failed
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_refunded
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 222764f0-15c2-4660-9c5e-f99d6d817108
+		summarizeBy: none
+		sourceColumn: is_refunded
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_valid_order
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0dcd0a8c-4928-4a41-9976-c51d6ea5118f
+		summarizeBy: none
+		sourceColumn: has_valid_order
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_valid_customer
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0ab78d8f-371e-4893-b854-bdb53e3912d9
+		summarizeBy: none
+		sourceColumn: has_valid_customer
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_psp_reconciled
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 5febaf0a-9357-4e47-8efb-671188ea75d7
+		summarizeBy: none
+		sourceColumn: is_psp_reconciled
+
+		annotation SummarizationSetBy = Automatic
+
+	column psp_reconciliation_status
+		dataType: string
+		lineageTag: 188d6b7f-fe81-47fc-8b1e-b9942264f5ee
+		summarizeBy: none
+		sourceColumn: psp_reconciliation_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column reconciliation_gap_reason
+		dataType: string
+		lineageTag: 83568911-5131-403c-a189-acb43882dd38
+		summarizeBy: none
+		sourceColumn: reconciliation_gap_reason
+
+		annotation SummarizationSetBy = Automatic
+
+	column collected_amount_sar
+		dataType: double
+		lineageTag: 48d4781a-a554-414e-af8c-1cb74bafbf4c
+		summarizeBy: sum
+		sourceColumn: collected_amount_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column refund_amount_sar
+		dataType: double
+		lineageTag: 4ddea97f-6acb-431d-a643-7dacf37638ca
+		summarizeBy: sum
+		sourceColumn: refund_amount_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column psp_payment_amount
+		dataType: double
+		lineageTag: b1d79a0f-18e1-4064-bb24-6c4ab365ab95
+		summarizeBy: sum
+		sourceColumn: psp_payment_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'source_marts fct_payments' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_fct_payments = Source{[Schema="source_marts",Item="fct_payments"]}[Data]
+				in
+				    source_marts_fct_payments
+
+	annotation PBI_ResultType = Table
+

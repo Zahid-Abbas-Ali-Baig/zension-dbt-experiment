@@ -1,0 +1,151 @@
+table 'source_marts dim_device_skus'
+	lineageTag: 35c23733-00e7-44e7-a99a-1b54affe3f96
+
+	column master_sku_id
+		dataType: string
+		lineageTag: 9e2e6e2a-5f7c-4da2-9e6b-0b9dbf35d9c4
+		summarizeBy: none
+		sourceColumn: master_sku_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column master_sku_name
+		dataType: string
+		lineageTag: 4350bde4-aaa9-4e4e-a075-4c4fc7d1dfa1
+		summarizeBy: none
+		sourceColumn: master_sku_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4f726e74-b3a0-4f56-8efe-8971775d53a0
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 164b5268-62c2-4bb2-adf5-8b5d9e1cbbc5
+			defaultHierarchy: LocalDateTable_77d8f130-2422-410f-9826-2dba4f3bc796.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ee384486-1b2f-4d10-9bba-57e089836975
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: fe3b22d1-ccda-4c42-a375-8ac135d6e8d9
+			defaultHierarchy: LocalDateTable_fe018eb9-7e28-43f9-b904-fdef7891b9ea.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column brand
+		dataType: string
+		lineageTag: 7c3f13f5-5f9b-4f10-bdf7-431eab06a94c
+		summarizeBy: none
+		sourceColumn: brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column model
+		dataType: string
+		lineageTag: c7d0bfc2-91ae-4841-b740-c039e9ee97ec
+		summarizeBy: none
+		sourceColumn: model
+
+		annotation SummarizationSetBy = Automatic
+
+	column memory
+		dataType: string
+		lineageTag: 67b5181e-d8e2-4155-9f35-3023a4e7324e
+		summarizeBy: none
+		sourceColumn: memory
+
+		annotation SummarizationSetBy = Automatic
+
+	column color
+		dataType: string
+		lineageTag: c092159b-436b-4d18-a26b-7c2a43eb1e9c
+		summarizeBy: none
+		sourceColumn: color
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: 6b1e6039-6ccb-4f80-a52b-158c6159cc24
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column sku_master_uid
+		dataType: string
+		lineageTag: cb8988a3-b217-424e-b7ac-ca14b1ee860c
+		summarizeBy: none
+		sourceColumn: sku_master_uid
+
+		annotation SummarizationSetBy = Automatic
+
+	column device_sku_key
+		dataType: string
+		lineageTag: 8d9e80f4-202c-40a2-b58f-36c5ff1aa288
+		summarizeBy: none
+		sourceColumn: device_sku_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_item_count
+		dataType: int64
+		formatString: 0
+		lineageTag: f1bc10e9-84eb-49ab-b643-a2ffefa2b868
+		summarizeBy: sum
+		sourceColumn: order_item_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column units_ordered
+		dataType: double
+		lineageTag: fb00c386-3f14-481e-8638-ee1e8edbf47e
+		summarizeBy: sum
+		sourceColumn: units_ordered
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column order_item_revenue_sar
+		dataType: double
+		lineageTag: 17d2ce06-970e-45a5-a2a4-c577eda46915
+		summarizeBy: sum
+		sourceColumn: order_item_revenue_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column sku_sales_segment
+		dataType: string
+		lineageTag: 50bb93d9-5b7e-4449-aac0-3a243d0e22cc
+		summarizeBy: none
+		sourceColumn: sku_sales_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts dim_device_skus' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_dim_device_skus = Source{[Schema="source_marts",Item="dim_device_skus"]}[Data]
+				in
+				    source_marts_dim_device_skus
+
+	annotation PBI_ResultType = Table
+

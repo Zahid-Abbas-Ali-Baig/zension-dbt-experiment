@@ -1,0 +1,163 @@
+table 'source_marts fct_invoice_line_items'
+	lineageTag: fae29ff0-8747-40a7-ada4-b2d74cc2bc6a
+
+	column invoice_line_item_id
+		dataType: string
+		lineageTag: 7399b86d-a652-4fe6-93cf-91e3fefdf24f
+		summarizeBy: none
+		sourceColumn: invoice_line_item_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_id
+		dataType: string
+		lineageTag: 42e58b4d-abbe-473d-9f20-0a8e147403be
+		summarizeBy: none
+		sourceColumn: invoice_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column subscription_id
+		dataType: string
+		lineageTag: e4c5e395-ed91-447a-8c0e-b9f60070194f
+		summarizeBy: none
+		sourceColumn: subscription_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_item_id
+		dataType: string
+		lineageTag: 51781d80-0910-4c4c-9a2d-97d192e18f4f
+		summarizeBy: none
+		sourceColumn: order_item_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: f3bcf32c-6d0b-4db8-89f8-6dc1b9a4438d
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 8817c526-4fc9-4b8b-a164-c447f1b27193
+		summarizeBy: none
+		sourceColumn: invoice_date
+
+		variation Variation
+			isDefault
+			relationship: 9ed71158-4ce5-450a-b7be-5245026e5e0a
+			defaultHierarchy: LocalDateTable_f62e49df-850e-45c3-9084-ef109cb6e11c.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column invoice_status
+		dataType: string
+		lineageTag: 1a08ac04-d088-46d4-8cb2-54aeaf8ef5f0
+		summarizeBy: none
+		sourceColumn: invoice_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_paid
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: e721d242-6ec0-419c-a478-ad6b225d017b
+		summarizeBy: none
+		sourceColumn: is_paid
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_valid_invoice
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: bb78699d-afb5-4407-9ba9-2accc43ba67c
+		summarizeBy: none
+		sourceColumn: has_valid_invoice
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_valid_subscription
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 9fa9c581-303a-446e-aae6-68aa4812d659
+		summarizeBy: none
+		sourceColumn: has_valid_subscription
+
+		annotation SummarizationSetBy = Automatic
+
+	column quantity
+		dataType: double
+		lineageTag: b3e12c16-c554-4219-a57c-6c104405b880
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column product_type
+		dataType: string
+		lineageTag: 2a059329-7552-4b58-9431-d2cb72070515
+		summarizeBy: none
+		sourceColumn: product_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column line_amount_sar
+		dataType: double
+		lineageTag: 4b0d9fc1-a045-4187-b156-5c9399996ea5
+		summarizeBy: sum
+		sourceColumn: line_amount_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column line_amount_ex_vat_sar
+		dataType: double
+		lineageTag: 6fc4aaa5-2dda-4b01-9a69-65876c69db8c
+		summarizeBy: sum
+		sourceColumn: line_amount_ex_vat_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column vat_amount_sar
+		dataType: double
+		lineageTag: 987289fa-e15b-4e0f-b85b-d6da21490c86
+		summarizeBy: sum
+		sourceColumn: vat_amount_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column line_amount_incl_vat_sar
+		dataType: double
+		lineageTag: f11dfa41-f321-49c4-96dc-92a9e1aac858
+		summarizeBy: sum
+		sourceColumn: line_amount_incl_vat_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'source_marts fct_invoice_line_items' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_fct_invoice_line_items = Source{[Schema="source_marts",Item="fct_invoice_line_items"]}[Data]
+				in
+				    source_marts_fct_invoice_line_items
+
+	annotation PBI_ResultType = Table
+

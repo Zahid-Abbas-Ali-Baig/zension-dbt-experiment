@@ -1,0 +1,361 @@
+table _KPIs
+	lineageTag: f3a8b2c1-9d4e-4f7a-b6c3-8e1d2a4f5b6c
+
+	measure Orders =
+			CALCULATE(
+			    COUNTROWS( 'source_marts fct_orders' ),
+			    'source_marts fct_orders'[is_gmv_eligible] = TRUE()
+			)
+		formatString: #,0
+		displayFolder: Sales & Orders
+		lineageTag: 48b749ee-aac1-48e6-80bf-e73ecefd4f3b
+
+	measure 'GMV (SAR)' =
+			CALCULATE(
+			    SUM( 'source_marts fct_orders'[gmv_amount_sar] ),
+			    'source_marts fct_orders'[is_gmv_eligible] = TRUE()
+			)
+		formatString: #,0.00
+		displayFolder: Sales & Orders
+		lineageTag: 087b7bfa-5e4c-4317-a100-dd98e701c719
+
+	measure 'Pre-order Share' =
+			VAR EligibleOrders =
+			    CALCULATE(
+			        COUNTROWS( 'source_marts fct_orders' ),
+			        'source_marts fct_orders'[is_gmv_eligible] = TRUE()
+			    )
+			VAR Preorders =
+			    CALCULATE(
+			        COUNTROWS( 'source_marts fct_orders' ),
+			        'source_marts fct_orders'[is_gmv_eligible] = TRUE(),
+			        'source_marts fct_orders'[is_preorder] = TRUE()
+			    )
+			RETURN
+			    IF( EligibleOrders = 0, 0, DIVIDE( Preorders, EligibleOrders, 0 ) )
+		formatString: 0.0%
+		displayFolder: Sales & Orders
+		lineageTag: 9daee785-4699-4fcd-bce2-c7c784a93d87
+
+	measure 'Avg Days Payment to Delivery' =
+			AVERAGEX(
+			    FILTER(
+			        'source_marts fct_orders',
+			        'source_marts fct_orders'[is_gmv_eligible] = TRUE()
+			            && NOT ISBLANK( 'source_marts fct_orders'[delivered_at] )
+			            && NOT ISBLANK( 'source_marts fct_orders'[first_paid_at] )
+			    ),
+			    DATEDIFF(
+			        'source_marts fct_orders'[first_paid_at],
+			        'source_marts fct_orders'[delivered_at],
+			        DAY
+			    )
+			)
+		formatString: 0.0
+		displayFolder: Sales & Orders
+		lineageTag: 2307a7f0-30a2-4bc9-a91f-bf0d3a69849c
+
+	measure 'Median Order to Delivery (Days)' =
+			MEDIANX(
+			    FILTER(
+			        'source_marts fct_orders',
+			        NOT ISBLANK( 'source_marts fct_orders'[delivered_at] )
+			            && NOT ISBLANK( 'source_marts fct_orders'[order_date] )
+			    ),
+			    DATEDIFF(
+			        'source_marts fct_orders'[order_date],
+			        'source_marts fct_orders'[delivered_at],
+			        DAY
+			    )
+			)
+		formatString: 0.0
+		displayFolder: Operations & Partners
+		lineageTag: 2ac91796-83ff-464c-84c8-6d2f9642efdc
+
+	measure 'Order Items' = COUNTROWS( 'source_marts fct_order_items' )
+		formatString: #,0
+		displayFolder: Sales & Orders
+		lineageTag: 10129b37-8286-4176-81b4-07e1b3f538ed
+
+	measure Subscriptions = COUNTROWS( 'source_marts fct_subscriptions' )
+		formatString: #,0
+		displayFolder: Subscriptions
+		lineageTag: 49b2f0ea-c22e-4264-8b6d-f298f90a1966
+
+	measure 'Active Subscriptions' =
+			CALCULATE(
+			    COUNTROWS( 'source_marts fct_subscriptions' ),
+			    'source_marts fct_subscriptions'[is_active_subscription] = TRUE()
+			)
+		formatString: #,0
+		displayFolder: Subscriptions
+		lineageTag: 27bcdd91-5473-4257-8605-62d1093b2df0
+
+	measure 'MRR (SAR)' =
+			CALCULATE(
+			    SUM( 'source_marts fct_subscriptions'[monthly_recurring_amount_sar] ),
+			    'source_marts fct_subscriptions'[is_mrr_eligible] = TRUE()
+			)
+		formatString: #,0.00
+		displayFolder: Subscriptions
+		lineageTag: 35336258-5a94-40b8-ae5e-023ecda511b9
+
+	measure 'Avg Subscription Term (Months)' =
+			AVERAGEX(
+			    FILTER(
+			        'source_marts fct_subscriptions',
+			        'source_marts fct_subscriptions'[is_mrr_eligible] = TRUE()
+			    ),
+			    'source_marts fct_subscriptions'[subscription_term_months]
+			)
+		formatString: 0.0
+		displayFolder: Subscriptions
+		lineageTag: 206ee629-d3b4-47cc-8114-62880df99bb5
+
+	measure 'Churn Rate' =
+			VAR EffectiveQuarter =
+			    SELECTEDVALUE(
+			        'source_marts fct_subscription_monthly_snapshots'[snapshot_quarter],
+			        CALCULATE(
+			            MAX( 'source_marts fct_subscription_monthly_snapshots'[snapshot_quarter] ),
+			            ALL( 'source_marts fct_subscription_monthly_snapshots'[snapshot_quarter] )
+			        )
+			    )
+			VAR Churned =
+			    CALCULATE(
+			        COUNTROWS( 'source_marts fct_subscription_monthly_snapshots' ),
+			        'source_marts fct_subscription_monthly_snapshots'[snapshot_quarter] = EffectiveQuarter,
+			        'source_marts fct_subscription_monthly_snapshots'[is_churned] = TRUE()
+			    )
+			VAR ActiveAtStart =
+			    CALCULATE(
+			        COUNTROWS( 'source_marts fct_subscription_monthly_snapshots' ),
+			        'source_marts fct_subscription_monthly_snapshots'[snapshot_quarter] = EffectiveQuarter,
+			        'source_marts fct_subscription_monthly_snapshots'[is_active_at_quarter_start] = TRUE()
+			    )
+			RETURN
+			    IF( ActiveAtStart = 0, 0, DIVIDE( Churned, ActiveAtStart, 0 ) )
+		formatString: 0.00%
+		displayFolder: Subscriptions
+		lineageTag: 92cf1002-fb61-435c-9b3a-3210accec455
+
+	measure 'Upgrade Rate' =
+			VAR EffectiveQuarter =
+			    SELECTEDVALUE(
+			        'source_marts fct_subscription_monthly_snapshots'[snapshot_quarter],
+			        CALCULATE(
+			            MAX( 'source_marts fct_subscription_monthly_snapshots'[snapshot_quarter] ),
+			            ALL( 'source_marts fct_subscription_monthly_snapshots'[snapshot_quarter] )
+			        )
+			    )
+			VAR Upgraded =
+			    CALCULATE(
+			        COUNTROWS( 'source_marts fct_subscription_monthly_snapshots' ),
+			        'source_marts fct_subscription_monthly_snapshots'[snapshot_quarter] = EffectiveQuarter,
+			        (
+			            'source_marts fct_subscription_monthly_snapshots'[is_upgraded] = TRUE()
+			                || 'source_marts fct_subscription_monthly_snapshots'[is_kifed] = TRUE()
+			        )
+			    )
+			VAR EligibleAtStart =
+			    CALCULATE(
+			        COUNTROWS( 'source_marts fct_subscription_monthly_snapshots' ),
+			        'source_marts fct_subscription_monthly_snapshots'[snapshot_quarter] = EffectiveQuarter,
+			        'source_marts fct_subscription_monthly_snapshots'[is_active_at_quarter_start] = TRUE()
+			    )
+			RETURN
+			    IF( EligibleAtStart = 0, 0, DIVIDE( Upgraded, EligibleAtStart, 0 ) )
+		formatString: 0.00%
+		displayFolder: Subscriptions
+		lineageTag: 9a1cbb5f-72ec-4b21-9fb7-288a84d5731d
+
+	measure 'Collected Revenue (SAR)' =
+			CALCULATE(
+			    SUM( 'source_marts fct_payments'[collected_amount_sar] ),
+			    'source_marts fct_payments'[is_collected] = TRUE()
+			)
+		formatString: #,0.00
+		displayFolder: Finance & Payments
+		lineageTag: ec9a291e-33c2-46ba-95fe-24d11f5353f7
+
+	measure 'Invoiced Revenue (SAR)' =
+			CALCULATE(
+			    SUM( 'source_marts fct_invoices'[invoice_amount_sar] ),
+			    'source_marts fct_invoices'[is_paid] = TRUE()
+			)
+		formatString: #,0.00
+		displayFolder: Finance & Payments
+		lineageTag: cfff7992-453d-43c9-adff-c9f07e528892
+
+	measure 'Finance Variance (SAR)' = SUM( 'source_marts fct_finance_reconciliation_monthly'[finance_variance_sar] )
+		formatString: #,0.00
+		displayFolder: Finance & Payments
+		lineageTag: dc9e0b02-254c-4154-81fa-05ab9c9798e3
+
+	measure 'Payment Failure Rate' =
+			VAR Failed =
+			    CALCULATE(
+			        COUNTROWS( 'source_marts fct_payment_attempts' ),
+			        'source_marts fct_payment_attempts'[is_recurring_installment] = TRUE(),
+			        'source_marts fct_payment_attempts'[is_failed_attempt] = TRUE()
+			    )
+			VAR Total =
+			    CALCULATE(
+			        COUNTROWS( 'source_marts fct_payment_attempts' ),
+			        'source_marts fct_payment_attempts'[is_recurring_installment] = TRUE()
+			    )
+			RETURN
+			    IF( Total = 0, 0, DIVIDE( Failed, Total, 0 ) )
+		formatString: 0.0%
+		displayFolder: Finance & Payments
+		lineageTag: 3e2f56e0-feaa-402e-a246-e62b535d049c
+
+	measure 'Customers on Retry' =
+			CALCULATE(
+			    DISTINCTCOUNT( 'source_marts fct_payment_attempts'[customer_id] ),
+			    'source_marts fct_payment_attempts'[is_outstanding_retry_failure] = TRUE(),
+			    NOT ISBLANK( 'source_marts fct_payment_attempts'[customer_id] )
+			)
+		formatString: #,0
+		displayFolder: Finance & Payments
+		lineageTag: 19c6332e-d93f-4f78-a5c5-bd517c8bacd5
+
+	measure 'Refund Amount (SAR)' = SUM( 'source_marts fct_refunds'[refund_amount_sar] )
+		formatString: #,0.00
+		displayFolder: Finance & Payments
+		lineageTag: 981146b6-2604-4bc8-b75a-dd2477cab8b1
+
+	measure 'Credit Notes' = COUNTROWS( 'source_marts fct_credit_notes' )
+		formatString: #,0
+		displayFolder: Finance & Payments
+		lineageTag: 8d51afb3-6f07-4c2e-a03f-a3f1fb56a06a
+
+	measure 'Credit Note Value (SAR)' = SUM( 'source_marts fct_credit_notes'[credit_value_sar] )
+		formatString: #,0.00
+		displayFolder: Finance & Payments
+		lineageTag: 81eba9cc-e09a-4d0f-bc63-4f1ff5b39d47
+
+	measure 'Verified Customers' =
+			CALCULATE(
+			    COUNTROWS( 'source_marts dim_customers' ),
+			    'source_marts dim_customers'[is_fully_verified] = TRUE()
+			)
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: 363deaa4-f67e-4e32-9a91-db00fd452e86
+
+	measure 'Avg Devices per Customer' =
+			AVERAGEX(
+			    VALUES( 'source_marts dim_customers'[customer_id] ),
+			    'source_marts dim_customers'[device_count]
+			)
+		formatString: 0.0
+		displayFolder: Customers
+		lineageTag: 85f50408-77b8-4b01-b17e-d8af68ffe4c8
+
+	measure 'Program Subscription Utilization' =
+			AVERAGEX(
+			    FILTER(
+			        'source_marts dim_programs',
+			        NOT ISBLANK( 'source_marts dim_programs'[subscription_limit] )
+			            && 'source_marts dim_programs'[subscription_limit] > 0
+			    ),
+			    DIVIDE(
+			        'source_marts dim_programs'[utilization_subscription_count],
+			        'source_marts dim_programs'[subscription_limit],
+			        0
+			    )
+			)
+		formatString: 0.0%
+		displayFolder: Customers
+		lineageTag: 8195723d-469d-4cf7-8c09-56cc0dc8f9b2
+
+	measure 'Customers with Outstanding Payments' =
+			VAR UnpaidCustomers =
+			    CALCULATETABLE(
+			        VALUES( 'source_marts fct_invoices'[customer_id] ),
+			        'source_marts fct_invoices'[is_paid] = FALSE(),
+			        NOT ISBLANK( 'source_marts fct_invoices'[customer_id] )
+			    )
+			VAR RetryCustomers =
+			    CALCULATETABLE(
+			        VALUES( 'source_marts fct_payment_attempts'[customer_id] ),
+			        'source_marts fct_payment_attempts'[is_outstanding_retry_failure] = TRUE(),
+			        NOT ISBLANK( 'source_marts fct_payment_attempts'[customer_id] )
+			    )
+			RETURN
+			    COUNTROWS(
+			        SUMMARIZE(
+			            UNION( UnpaidCustomers, RetryCustomers ),
+			            [customer_id]
+			        )
+			    )
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: 0ceecd32-8b02-441a-9b9c-07b1637d327a
+
+	measure 'Expired Payment Methods' =
+			CALCULATE(
+			    COUNTROWS( 'source_marts dim_payment_methods' ),
+			    'source_marts dim_payment_methods'[is_expired] = TRUE()
+			)
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: 024826c4-e29d-492b-b21c-ffed2b85d1b6
+
+	measure 'Partner API Failure Rate' =
+			VAR TotalCalls = COUNTROWS( 'source_marts fct_partner_api_events' )
+			VAR Failures =
+			    CALCULATE(
+			        COUNTROWS( 'source_marts fct_partner_api_events' ),
+			        'source_marts fct_partner_api_events'[is_failure] = TRUE()
+			    )
+			RETURN
+			    IF( TotalCalls = 0, 0, DIVIDE( Failures, TotalCalls, 0 ) )
+		formatString: 0.0%
+		displayFolder: Operations & Partners
+		lineageTag: 0d2c0f39-25e0-401a-b4be-c3f072be7f39
+
+	measure 'Partner API Failures' =
+			CALCULATE(
+			    SUM( 'source_marts fct_partner_api_events'[failure_count] ),
+			    'source_marts fct_partner_api_events'[is_failure] = TRUE()
+			)
+		formatString: #,0
+		displayFolder: Operations & Partners
+		lineageTag: c0e0a67e-f298-4a65-90c5-2d75c0b32c92
+
+	measure 'Programs Over Limit' =
+			COALESCE(
+			    CALCULATE(
+			        COUNTROWS( 'source_marts dim_programs' ),
+			        'source_marts dim_programs'[is_over_subscription_limit] = TRUE()
+			    ),
+			    0
+			)
+		formatString: #,0
+		displayFolder: Operations & Partners
+		lineageTag: 2bf224f1-33e7-467a-ae41-80445acf77a9
+
+	measure 'Disabled Programs' =
+			COALESCE(
+			    CALCULATE(
+			        COUNTROWS( 'source_marts dim_programs' ),
+			        'source_marts dim_programs'[is_disabled_program] = TRUE()
+			    ),
+			    0
+			)
+		formatString: #,0
+		displayFolder: Operations & Partners
+		lineageTag: 45dbdeec-3165-4184-a2ec-243847a19f7a
+
+	partition _KPIs = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows({})
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+

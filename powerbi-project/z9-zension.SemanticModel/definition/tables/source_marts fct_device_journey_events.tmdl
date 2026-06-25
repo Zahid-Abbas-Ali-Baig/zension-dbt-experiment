@@ -1,0 +1,125 @@
+table 'source_marts fct_device_journey_events'
+	lineageTag: a1a335b9-f6b0-4724-b74b-a3c1f39d8d20
+
+	column device_journey_id
+		dataType: string
+		lineageTag: 61507f32-1096-4cee-95ab-3a6edd4f04d9
+		summarizeBy: none
+		sourceColumn: device_journey_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column device_id
+		dataType: string
+		lineageTag: 1a2f81f2-fd64-4d17-b2e7-6c79dbafe646
+		summarizeBy: none
+		sourceColumn: device_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_item_id
+		dataType: string
+		lineageTag: 3793da9c-f801-4aa9-946b-f4cf098864b0
+		summarizeBy: none
+		sourceColumn: order_item_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_id
+		dataType: string
+		lineageTag: 9d108469-a971-45e9-9b77-6d6ded5159bd
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: c53f997e-337e-4413-a8a6-27d30074e141
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column subscription_id
+		dataType: string
+		lineageTag: 4ef409a0-6b68-4d1b-ae92-e49d71eda95a
+		summarizeBy: none
+		sourceColumn: subscription_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_id
+		dataType: string
+		lineageTag: c81926cf-f6cf-40c8-b85d-c814992b86b2
+		summarizeBy: none
+		sourceColumn: program_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_partner_id
+		dataType: string
+		lineageTag: 2c9fbf1f-11ae-4f8f-9ed9-d929cafe06ca
+		summarizeBy: none
+		sourceColumn: channel_partner_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column movement_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 10bb17cf-9692-4106-85e2-8abfa70da9dd
+		summarizeBy: none
+		sourceColumn: movement_date
+
+		variation Variation
+			isDefault
+			relationship: f80b7ca3-44db-4457-b22b-30d7bd7b58ab
+			defaultHierarchy: LocalDateTable_8fc28de4-bdef-48ac-a719-28cd8c901f51.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column device_movement
+		dataType: string
+		lineageTag: 4b85ea7c-54f6-40e6-9597-aeaf6dcffafc
+		summarizeBy: none
+		sourceColumn: device_movement
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_recorded_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b3d267e2-28ce-4485-9a16-a95fdbbbca01
+		summarizeBy: none
+		sourceColumn: event_recorded_at
+
+		variation Variation
+			isDefault
+			relationship: 54fd8134-0ffc-404d-b292-90c5c05667e0
+			defaultHierarchy: LocalDateTable_37e05628-d207-412d-bc6f-523c0c2badc8.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_valid_device
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: e17edfd0-7c5e-4e7d-88cd-6a24b04b4a01
+		summarizeBy: none
+		sourceColumn: has_valid_device
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts fct_device_journey_events' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_fct_device_journey_events = Source{[Schema="source_marts",Item="fct_device_journey_events"]}[Data]
+				in
+				    source_marts_fct_device_journey_events
+
+	annotation PBI_ResultType = Table
+

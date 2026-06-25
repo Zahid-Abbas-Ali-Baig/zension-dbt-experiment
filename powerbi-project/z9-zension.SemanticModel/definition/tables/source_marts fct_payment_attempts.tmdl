@@ -1,0 +1,214 @@
+table 'source_marts fct_payment_attempts'
+	lineageTag: 35e53a94-f2d2-435f-aa46-f3beebf3cf54
+
+	column payment_history_id
+		dataType: string
+		lineageTag: 6219a5ef-ad35-4a45-82be-bb676363afc5
+		summarizeBy: none
+		sourceColumn: payment_history_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_id
+		dataType: string
+		lineageTag: de2b25e5-f280-4a45-91ef-110fa5fc1299
+		summarizeBy: none
+		sourceColumn: payment_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_method_id
+		dataType: string
+		lineageTag: 4e906eff-0eab-46ec-8e60-87fa5b028cba
+		summarizeBy: none
+		sourceColumn: payment_method_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_id
+		dataType: string
+		lineageTag: 27979799-5a58-4b6c-98e4-bc8baebc2173
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: 95366a96-37c0-48fc-a080-5dcef9b821bb
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_id
+		dataType: string
+		lineageTag: 365d2be5-9973-4b2e-8b00-664aa7ecddec
+		summarizeBy: none
+		sourceColumn: program_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_partner_id
+		dataType: string
+		lineageTag: 5147377a-a2ed-4d1e-be06-007419def398
+		summarizeBy: none
+		sourceColumn: channel_partner_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column attempt_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 6b627ee5-c4a6-4ee9-a6d9-356bdc46c6d2
+		summarizeBy: none
+		sourceColumn: attempt_date
+
+		variation Variation
+			isDefault
+			relationship: b0f5558b-6a06-43df-8b7d-376294c912d8
+			defaultHierarchy: LocalDateTable_f7ad0729-ff53-4cb1-9e50-54ad0df4db90.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column payment_attempt_status
+		dataType: string
+		lineageTag: 8506b366-457e-4f1c-8565-757c91164e01
+		summarizeBy: none
+		sourceColumn: payment_attempt_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column error_code
+		dataType: string
+		lineageTag: bcc52dc3-00c7-41b2-a2f3-57520094cc33
+		summarizeBy: none
+		sourceColumn: error_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column error_reason
+		dataType: string
+		lineageTag: cf73ea72-e4f9-4d10-b9f2-04831375c202
+		summarizeBy: none
+		sourceColumn: error_reason
+
+		annotation SummarizationSetBy = Automatic
+
+	column card_last_four
+		dataType: string
+		lineageTag: 605747b8-8174-44bf-8ffd-9886c7579f4b
+		summarizeBy: none
+		sourceColumn: card_last_four
+
+		annotation SummarizationSetBy = Automatic
+
+	column expiry_month
+		dataType: int64
+		formatString: 0
+		lineageTag: c27afc80-ebe3-4b99-8e11-866868a47173
+		summarizeBy: sum
+		sourceColumn: expiry_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column expiry_year
+		dataType: int64
+		formatString: 0
+		lineageTag: 86875cf0-8283-41a4-a35d-145960de9652
+		summarizeBy: sum
+		sourceColumn: expiry_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column action
+		dataType: string
+		lineageTag: 0bfcff3f-88d7-4372-95f1-0e6c167377ad
+		summarizeBy: none
+		sourceColumn: action
+
+		annotation SummarizationSetBy = Automatic
+
+	column funding_type
+		dataType: string
+		lineageTag: d06082b4-2566-49d4-9705-94106ba42885
+		summarizeBy: none
+		sourceColumn: funding_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_successful_attempt
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 78c16656-da1b-42c1-a097-f59cdd394b85
+		summarizeBy: none
+		sourceColumn: is_successful_attempt
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_failed_attempt
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 80ec24de-287a-4830-87d2-a571bd966b52
+		summarizeBy: none
+		sourceColumn: is_failed_attempt
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_recurring_installment
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 99a7cd68-98e6-459d-9c9b-8a8f7274bfbc
+		summarizeBy: none
+		sourceColumn: is_recurring_installment
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_valid_payment
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 017aec15-d27b-4f3e-b51e-55c56706773e
+		summarizeBy: none
+		sourceColumn: has_valid_payment
+
+		annotation SummarizationSetBy = Automatic
+
+	column psp_reconciliation_status
+		dataType: string
+		lineageTag: 16fcfe70-faac-48bb-8e95-8d930a3e9c5d
+		summarizeBy: none
+		sourceColumn: psp_reconciliation_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column psp_is_retry_queue
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 81d01ac6-82c5-4d03-adc4-5429dce4790c
+		summarizeBy: none
+		sourceColumn: psp_is_retry_queue
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_outstanding_retry_failure
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: eb1b1c96-c238-431c-939d-541ecda2933f
+		summarizeBy: none
+		sourceColumn: is_outstanding_retry_failure
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts fct_payment_attempts' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_fct_payment_attempts = Source{[Schema="source_marts",Item="fct_payment_attempts"]}[Data]
+				in
+				    source_marts_fct_payment_attempts
+
+	annotation PBI_ResultType = Table
+

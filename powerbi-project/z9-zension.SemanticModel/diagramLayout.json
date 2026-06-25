@@ -1,0 +1,360 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 963.57970352507357,
+            "y": 1373.9238168965771
+          },
+          "nodeIndex": "source_marts bridge_cp_skus",
+          "nodeLineageTag": "bde955d9-5f0d-4ff9-9f92-f7844a988404",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1539.8206869362248,
+            "y": 1562.3028974530753
+          },
+          "nodeIndex": "source_marts dim_channel_partners",
+          "nodeLineageTag": "3e9a38ce-faff-4b32-8222-2b6c8a12d9d8",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1829.3082029141233,
+            "y": 1296.7154896254171
+          },
+          "nodeIndex": "source_marts dim_corporate_companies",
+          "nodeLineageTag": "82a96ec4-2efd-4c6f-97e6-59282108f6ed",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 933.93629959632835,
+            "y": 1729.2083766818746
+          },
+          "nodeIndex": "source_marts dim_customers",
+          "nodeLineageTag": "c6550c73-9437-4abd-8c6b-a90ca2df854b",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2063.3082029141233,
+            "y": 1169.5620527342471
+          },
+          "nodeIndex": "source_marts dim_dates",
+          "nodeLineageTag": "1bf0e7e6-b1a7-47e3-b9e4-bc05e76fb149",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 154.74410804811532,
+            "y": 563.26494023974692
+          },
+          "nodeIndex": "source_marts dim_device_skus",
+          "nodeLineageTag": "35c23733-00e7-44e7-a99a-1b54affe3f96",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1437.2127703965834,
+            "y": 2024.4425555052717
+          },
+          "nodeIndex": "source_marts dim_payment_methods",
+          "nodeLineageTag": "0da85272-0f27-4553-b14d-bcf10c229839",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 564.29833727900836,
+            "y": 1015.3042316398039
+          },
+          "nodeIndex": "source_marts dim_programs",
+          "nodeLineageTag": "f73201c2-e04a-4137-b677-5cfee9a24df1",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 715.24333636862855,
+            "y": 658.48482731738568
+          },
+          "nodeIndex": "source_marts dim_subscription_durations",
+          "nodeLineageTag": "b3f94e0b-742b-4046-9336-d3b79e76eac9",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 580.69060931749721,
+            "y": -50
+          },
+          "nodeIndex": "source_marts dim_subscription_pricing",
+          "nodeLineageTag": "08a2150c-b257-4811-a1ff-da9057c99b82",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1541.1429444313849,
+            "y": 1074.0109364088166
+          },
+          "nodeIndex": "source_marts fct_credit_notes",
+          "nodeLineageTag": "c1c03a17-61ad-4209-96a6-e46917d58e91",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2347.3082029141233,
+            "y": 1169.5620527342471
+          },
+          "nodeIndex": "source_marts fct_device_journey_events",
+          "nodeLineageTag": "a1a335b9-f6b0-4724-b74b-a3c1f39d8d20",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 318.43417630501244,
+            "y": 1372.3969303477108
+          },
+          "nodeIndex": "source_marts fct_devices",
+          "nodeLineageTag": "481504fd-b4a0-4d3e-ae41-5678aacc0dbd",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2631.3082029141233,
+            "y": 1171.5620527342471
+          },
+          "nodeIndex": "source_marts fct_finance_reconciliation_monthly",
+          "nodeLineageTag": "7ecb3131-f27a-45a7-bfcf-360867c6447b",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 868.12187100816823,
+            "y": 1019.2784749060936
+          },
+          "nodeIndex": "source_marts fct_invoice_line_items",
+          "nodeLineageTag": "fae29ff0-8747-40a7-ada4-b2d74cc2bc6a",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1253.1402909595056,
+            "y": 1073.9769935268475
+          },
+          "nodeIndex": "source_marts fct_invoices",
+          "nodeLineageTag": "916e5a5d-90fc-4ac8-bb6b-4fd9d9b4e506",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 919.20699160926233
+          },
+          "nodeIndex": "source_marts fct_order_items",
+          "nodeLineageTag": "aee14e8d-9f18-4af6-b8d7-153a056cb3f6",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 606.44790472631007,
+            "y": 1372.5857547397181
+          },
+          "nodeIndex": "source_marts fct_orders",
+          "nodeLineageTag": "a9abd4dc-bca8-46f7-b31e-52a4244e3378",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1506.0029554598323,
+            "y": 716.62675315766091
+          },
+          "nodeIndex": "source_marts fct_partner_api_events",
+          "nodeLineageTag": "f2cf6452-5c97-4842-a407-7f5e4c1c36f0",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 544.5753675750899,
+            "y": 2289.1241054684951
+          },
+          "nodeIndex": "source_marts fct_payment_attempts",
+          "nodeLineageTag": "35e53a94-f2d2-435f-aa46-f3beebf3cf54",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 646.54427483658276,
+            "y": 1932.0001469383151
+          },
+          "nodeIndex": "source_marts fct_payments",
+          "nodeLineageTag": "8c4aa079-675f-44bc-a237-7fc9409f1ece",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2915.3082029141233,
+            "y": 1169.5620527342471
+          },
+          "nodeIndex": "source_marts fct_psp_transactions",
+          "nodeLineageTag": "079acd23-f5e4-435e-be55-11b9bf9f0f3f",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1252.7576427287254,
+            "y": 1669.9149889159899
+          },
+          "nodeIndex": "source_marts fct_refunds",
+          "nodeLineageTag": "63aca450-4864-4d81-aebf-6fa2ae948030",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1019.1840852915241,
+            "y": 639.25039297572539
+          },
+          "nodeIndex": "source_marts fct_subscription_monthly_snapshots",
+          "nodeLineageTag": "666e1e98-02c5-4d5a-b43c-8f6b6002327c",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 442.80927587626434,
+            "y": 305.94564865080974
+          },
+          "nodeIndex": "source_marts fct_subscriptions",
+          "nodeLineageTag": "12b5c444-53f8-4511-b129-7ac4f9c8b491",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3149.3082029141233,
+            "y": 1169.5620527342476
+          },
+          "nodeIndex": "_KPIs",
+          "nodeLineageTag": "f3a8b2c1-9d4e-4f7a-b6c3-8e1d2a4f5b6c",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

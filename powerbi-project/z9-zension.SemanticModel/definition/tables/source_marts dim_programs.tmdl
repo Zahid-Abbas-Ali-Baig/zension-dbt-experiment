@@ -1,0 +1,213 @@
+table 'source_marts dim_programs'
+	lineageTag: f73201c2-e04a-4137-b677-5cfee9a24df1
+
+	column program_id
+		dataType: string
+		lineageTag: d89166dd-4f65-4392-b514-d1c5970da2ed
+		summarizeBy: none
+		sourceColumn: program_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_name
+		dataType: string
+		lineageTag: b5e2fd2e-1444-4c56-b362-ec269ece98fb
+		summarizeBy: none
+		sourceColumn: program_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b8f9c236-89e8-4cf9-a744-27c7b8d220d7
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 15bf5cdc-658f-45ea-bdb7-e2e748535105
+			defaultHierarchy: LocalDateTable_4e0e3fa7-303e-46e8-b688-2932b4ae793d.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: decc4fc1-0f5c-4201-96b0-2f626adb4516
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: f5cd60d4-841a-4fd4-9bf4-ef056bcd074b
+			defaultHierarchy: LocalDateTable_2d282d68-30b6-4879-85cf-399ff6656a29.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_status
+		dataType: string
+		lineageTag: 639e50f0-552f-4436-8909-508599ef8317
+		summarizeBy: none
+		sourceColumn: program_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_partner_id
+		dataType: string
+		lineageTag: bf42616d-6925-4433-a4cf-6116abcf02b4
+		summarizeBy: none
+		sourceColumn: channel_partner_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_uid
+		dataType: string
+		lineageTag: ef7b7b35-0f4f-4c76-aa58-1f318dbd621c
+		summarizeBy: none
+		sourceColumn: program_uid
+
+		annotation SummarizationSetBy = Automatic
+
+	column subscription_limit
+		dataType: int64
+		formatString: 0
+		lineageTag: a2203219-523a-4326-9095-9cbdaf09b5bd
+		summarizeBy: sum
+		sourceColumn: subscription_limit
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_methods_limit
+		dataType: int64
+		formatString: 0
+		lineageTag: 08af9b31-2b23-4c93-bfe4-afa6d2131d46
+		summarizeBy: sum
+		sourceColumn: payment_methods_limit
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_start_date
+		dataType: string
+		lineageTag: 76c06d0e-7c48-4d72-8d07-f214f6f90a71
+		summarizeBy: none
+		sourceColumn: program_start_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_end_date
+		dataType: string
+		lineageTag: 3ac8f664-0c76-43c9-8091-15130b3b9bea
+		summarizeBy: none
+		sourceColumn: program_end_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_fnf_program
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 6bddf376-2525-4c3f-91ed-94df65f1a801
+		summarizeBy: none
+		sourceColumn: is_fnf_program
+
+		annotation SummarizationSetBy = Automatic
+
+	column partner_name
+		dataType: string
+		lineageTag: 9f79d950-bc53-4e02-b20f-67d47cc4e621
+		summarizeBy: none
+		sourceColumn: partner_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column partner_type
+		dataType: string
+		lineageTag: f511ee85-a612-48af-86bc-9c5ca46b8ce4
+		summarizeBy: none
+		sourceColumn: partner_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column active_subscription_count
+		dataType: int64
+		formatString: 0
+		lineageTag: a73b526a-24a9-4871-a207-27a22506d564
+		summarizeBy: sum
+		sourceColumn: active_subscription_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column waiting_for_delivery_subscription_count
+		dataType: int64
+		formatString: 0
+		lineageTag: ccc2527d-525b-47d9-83c4-422dc96ee476
+		summarizeBy: sum
+		sourceColumn: waiting_for_delivery_subscription_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column utilization_subscription_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 55dc4ad9-c6d3-4409-9594-494185ce8449
+		summarizeBy: sum
+		sourceColumn: utilization_subscription_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_subscription_utilization_pct
+		dataType: double
+		lineageTag: 3a5c4c2e-6be5-4b40-8813-6617972cb9af
+		summarizeBy: sum
+		sourceColumn: program_subscription_utilization_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column is_over_subscription_limit
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 1b0ccfd6-f982-41d2-8fe9-eff261ef975f
+		summarizeBy: none
+		sourceColumn: is_over_subscription_limit
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_disabled_program
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 320b09e2-8c6e-46d3-b2bc-8fa5ccf12759
+		summarizeBy: none
+		sourceColumn: is_disabled_program
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_valid_channel_partner
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: f76e4ea1-73b3-4339-952c-bdd3760713f9
+		summarizeBy: none
+		sourceColumn: has_valid_channel_partner
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_limit_segment
+		dataType: string
+		lineageTag: d486f8c0-2246-4c03-a879-afaebbba2e99
+		summarizeBy: none
+		sourceColumn: program_limit_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts dim_programs' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_dim_programs = Source{[Schema="source_marts",Item="dim_programs"]}[Data]
+				in
+				    source_marts_dim_programs
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,118 @@
+table 'source_marts fct_refunds'
+	lineageTag: 63aca450-4864-4d81-aebf-6fa2ae948030
+
+	column refund_id
+		dataType: string
+		lineageTag: cfd9c8b3-1505-430f-aa8d-3bbb8b0a5650
+		summarizeBy: none
+		sourceColumn: refund_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column refund_event_id
+		dataType: string
+		lineageTag: 072b4cc0-dc8d-4987-9c41-7b95617999d7
+		summarizeBy: none
+		sourceColumn: refund_event_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column refund_source
+		dataType: string
+		lineageTag: 7e8e031e-54b5-4585-ba66-e7a0e4673afe
+		summarizeBy: none
+		sourceColumn: refund_source
+
+		annotation SummarizationSetBy = Automatic
+
+	column refund_amount_sar
+		dataType: double
+		lineageTag: f48f81b5-a023-4453-9d52-1ca07b0390ad
+		summarizeBy: sum
+		sourceColumn: refund_amount_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column refund_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e7736b8e-b795-4931-9fef-12eb3a99dece
+		summarizeBy: none
+		sourceColumn: refund_date
+
+		variation Variation
+			isDefault
+			relationship: f13e9957-9c4a-40d4-896f-d185e9e1fd73
+			defaultHierarchy: LocalDateTable_4cb11400-0af3-478d-8c79-9d0f5f9a4003.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column refunded_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ed1d69dc-64d1-4e72-b10f-812759c1c8e3
+		summarizeBy: none
+		sourceColumn: refunded_at
+
+		variation Variation
+			isDefault
+			relationship: 2c0c22d2-9cb8-42ef-9337-2521a9078891
+			defaultHierarchy: LocalDateTable_7748382a-9d8e-4b71-8826-46a8c8bf29bb.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: a5d8ea34-ed79-4f03-8a5c-97d87ccb800a
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_id
+		dataType: string
+		lineageTag: e7a2797d-ba5a-4020-a00e-94a207e8485b
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_partner_id
+		dataType: string
+		lineageTag: 3d29b42c-59a4-4e5c-b107-3a3028dd57f3
+		summarizeBy: none
+		sourceColumn: channel_partner_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_id
+		dataType: string
+		lineageTag: 8bef0313-e171-4362-9363-ce06c1f45e65
+		summarizeBy: none
+		sourceColumn: program_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column partner_name
+		dataType: string
+		lineageTag: dfe222c2-951d-4bf5-aabb-61404873f295
+		summarizeBy: none
+		sourceColumn: partner_name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts fct_refunds' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_fct_refunds = Source{[Schema="source_marts",Item="fct_refunds"]}[Data]
+				in
+				    source_marts_fct_refunds
+
+	annotation PBI_ResultType = Table
+

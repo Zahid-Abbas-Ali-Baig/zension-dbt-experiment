@@ -1,0 +1,116 @@
+table 'source_marts dim_corporate_companies'
+	lineageTag: 82a96ec4-2efd-4c6f-97e6-59282108f6ed
+
+	column corporate_company_id
+		dataType: string
+		lineageTag: da9511c4-1f27-4101-bcb2-e6ebf009b0b4
+		summarizeBy: none
+		sourceColumn: corporate_company_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column company_name
+		dataType: string
+		lineageTag: 0b3906e4-365a-416f-a18e-71434e1d59ba
+		summarizeBy: none
+		sourceColumn: company_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 692f23af-c599-4817-a76b-cf83bbe764b4
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 0c0f1972-1780-4cb9-bf7b-5341e32a9c37
+			defaultHierarchy: LocalDateTable_3a7dc2e4-4584-4abc-80fa-fbc51761288b.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6531217e-27ac-4945-bdce-5957b50ca6b1
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: 713044fe-3fd9-4684-85b9-9c425cefcc24
+			defaultHierarchy: LocalDateTable_f4b62484-6563-40cd-89b8-5ac1a36df887.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column allowed_email_domains
+		dataType: string
+		lineageTag: 3d94da9f-af46-4a84-a344-95a830594fc1
+		summarizeBy: none
+		sourceColumn: allowed_email_domains
+
+		annotation SummarizationSetBy = Automatic
+
+	column company_status
+		dataType: string
+		lineageTag: 6c49c0d6-fdb2-487b-afec-56ad96a24905
+		summarizeBy: none
+		sourceColumn: company_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_partner_id
+		dataType: string
+		lineageTag: b4dd4387-9c84-465b-8971-1c3d201da795
+		summarizeBy: none
+		sourceColumn: channel_partner_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column company_type
+		dataType: string
+		lineageTag: 86c9b9aa-5188-4edf-8be4-93fa5fa1b7ee
+		summarizeBy: none
+		sourceColumn: company_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column verified_customer_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 1249b08f-23c7-48b8-8fd2-c0e7d27561a4
+		summarizeBy: sum
+		sourceColumn: verified_customer_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 70c302e5-89cd-42ef-a469-58eaa414deda
+		summarizeBy: sum
+		sourceColumn: customer_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column cep_verification_segment
+		dataType: string
+		lineageTag: 6d7f2496-1a7f-4f32-82d5-003b4b36b61c
+		summarizeBy: none
+		sourceColumn: cep_verification_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'source_marts dim_corporate_companies' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_dim_corporate_companies = Source{[Schema="source_marts",Item="dim_corporate_companies"]}[Data]
+				in
+				    source_marts_dim_corporate_companies
+
+	annotation PBI_ResultType = Table
+

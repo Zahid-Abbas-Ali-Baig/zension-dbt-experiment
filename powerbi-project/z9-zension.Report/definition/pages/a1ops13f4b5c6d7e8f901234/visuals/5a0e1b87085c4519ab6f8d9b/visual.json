@@ -1,0 +1,172 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "5a0e1b87085c4519ab6f8d9b",
+  "position": {
+    "x": 20,
+    "y": 460,
+    "z": 0,
+    "height": 240,
+    "width": 1170,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "source_marts dim_programs"
+                    }
+                  },
+                  "Property": "program_name"
+                }
+              },
+              "queryRef": "source_marts dim_programs.program_name",
+              "nativeQueryRef": "program_name",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "source_marts dim_programs"
+                    }
+                  },
+                  "Property": "partner_name"
+                }
+              },
+              "queryRef": "source_marts dim_programs.partner_name",
+              "nativeQueryRef": "partner_name",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "source_marts dim_programs"
+                    }
+                  },
+                  "Property": "subscription_limit"
+                }
+              },
+              "queryRef": "source_marts dim_programs.subscription_limit",
+              "nativeQueryRef": "subscription_limit",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "source_marts dim_programs"
+                    }
+                  },
+                  "Property": "utilization_subscription_count"
+                }
+              },
+              "queryRef": "source_marts dim_programs.utilization_subscription_count",
+              "nativeQueryRef": "utilization_subscription_count",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "source_marts dim_programs"
+                    }
+                  },
+                  "Property": "is_over_subscription_limit"
+                }
+              },
+              "queryRef": "source_marts dim_programs.is_over_subscription_limit",
+              "nativeQueryRef": "is_over_subscription_limit",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Programs Over Limit Detail'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

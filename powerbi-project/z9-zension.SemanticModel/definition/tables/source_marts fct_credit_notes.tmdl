@@ -1,0 +1,123 @@
+table 'source_marts fct_credit_notes'
+	lineageTag: c1c03a17-61ad-4209-96a6-e46917d58e91
+
+	column credit_note_id
+		dataType: string
+		lineageTag: afa014a8-726b-4a4c-843d-eff9414203bf
+		summarizeBy: none
+		sourceColumn: credit_note_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_id
+		dataType: string
+		lineageTag: b4178864-3bbd-40cc-bc21-cb0e21d842d4
+		summarizeBy: none
+		sourceColumn: invoice_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: 283703ec-c832-49dd-a4b9-db2cd4723a53
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_partner_id
+		dataType: string
+		lineageTag: 0f6c3bac-fd33-4b9b-a8a4-9c557e9c6373
+		summarizeBy: none
+		sourceColumn: channel_partner_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column program_id
+		dataType: string
+		lineageTag: c69698ed-0a18-47f3-b5a0-1e6d72451fd6
+		summarizeBy: none
+		sourceColumn: program_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column credit_note_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 071b6e35-c96a-40f4-b590-153cb372f715
+		summarizeBy: none
+		sourceColumn: credit_note_date
+
+		variation Variation
+			isDefault
+			relationship: 99fad036-af9c-48fe-af28-3a56fbef67dc
+			defaultHierarchy: LocalDateTable_1485d13c-782e-413a-858f-f57f66105493.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column zoho_credit_note_id
+		dataType: string
+		lineageTag: 0fa69504-d742-4459-a074-d5417eb7cbf8
+		summarizeBy: none
+		sourceColumn: zoho_credit_note_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column zoho_status
+		dataType: string
+		lineageTag: 65c6d051-4dc4-4ed6-8158-33fc566505fd
+		summarizeBy: none
+		sourceColumn: zoho_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column credit_note_zoho_url
+		dataType: string
+		lineageTag: 8a2c9fd5-1e2a-4fc5-aee9-672762ac3f4e
+		summarizeBy: none
+		sourceColumn: credit_note_zoho_url
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_valid_invoice
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0f61fb04-8e43-4195-aedb-85dbcbc8aea1
+		summarizeBy: none
+		sourceColumn: has_valid_invoice
+
+		annotation SummarizationSetBy = Automatic
+
+	column related_invoice_amount_sar
+		dataType: double
+		lineageTag: 608db05b-8657-4975-82cd-6d38f74665eb
+		summarizeBy: sum
+		sourceColumn: related_invoice_amount_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column credit_value_sar
+		dataType: double
+		lineageTag: a32d2e5f-eb81-4326-ac77-80c3a5b237c2
+		summarizeBy: sum
+		sourceColumn: credit_value_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'source_marts fct_credit_notes' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("localhost", "zension"),
+				    source_marts_fct_credit_notes = Source{[Schema="source_marts",Item="fct_credit_notes"]}[Data]
+				in
+				    source_marts_fct_credit_notes
+
+	annotation PBI_ResultType = Table
+
